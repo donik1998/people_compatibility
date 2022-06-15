@@ -1,0 +1,104 @@
+import 'package:flutter/material.dart';
+import 'package:people_compatibility/core/routes/app_routes.dart';
+import 'package:people_compatibility/presentation/custom_widgets/app_body_back.dart';
+import 'package:people_compatibility/presentation/custom_widgets/comparison_card.dart';
+import 'package:people_compatibility/presentation/custom_widgets/content_card.dart';
+import 'package:people_compatibility/presentation/custom_widgets/custom_button.dart';
+import 'package:people_compatibility/presentation/pages/main_page/state/main_page_state.dart';
+import 'package:people_compatibility/presentation/theme/app_colors.dart';
+import 'package:people_compatibility/presentation/theme/app_insets.dart';
+import 'package:people_compatibility/presentation/theme/app_spacing.dart';
+import 'package:provider/provider.dart';
+
+class MainPage extends StatelessWidget {
+  const MainPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Consumer<MainPageState>(
+        builder: (context, state, child) => AppBodyBackground(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (!state.fullSizedMode) AppSpacing.verticalSpace24,
+              if (!state.fullSizedMode) AppSpacing.verticalSpace24,
+              if (!state.fullSizedMode) AppSpacing.verticalSpace24,
+              if (!state.fullSizedMode)
+                TappableColoredCardWrap(
+                  color: AppColors.white.withOpacity(0.1),
+                  content: RichText(
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.bodyText1,
+                      children: const [
+                        TextSpan(text: 'Пройдите тест на совместимость со своим настоящим, прошлым или будущим партнёром.\n'),
+                        TextSpan(
+                          text:
+                              '\nКоэффициент не показывает личностные качества человека, он даёт оценку ваших шансов быть вместе. Программа не учитывает воспитание, окружение, факторы наследственности. И прежде всего, в делах сердечных прислушайтесь к своей интуиции, тогда у вас все получится!',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              AppSpacing.verticalSpace24,
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'История сравнений',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  if (state.fullSizedMode)
+                    TextButton(
+                      onPressed: () => state.setFullSized(false),
+                      child: Text(
+                        'Свернуть',
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                    ),
+                ],
+              ),
+              AppSpacing.verticalSpace24,
+              if (state.sharedPreferences != null)
+                if (state.historyIsNotEmpty)
+                  Expanded(
+                    child: ListView.separated(
+                      itemBuilder: (context, index) => TappableColoredCardWrap(
+                        color: AppColors.white.withOpacity(0.1),
+                        onTap: () => state.setFullSized(true),
+                        content: ComparisonCard(
+                          data: state.history.elementAt(index),
+                        ),
+                      ),
+                      separatorBuilder: (context, index) => AppSpacing.verticalSpace16,
+                      itemCount: state.fullSizedMode ? state.history.length : 2,
+                    ),
+                  ),
+              if (state.sharedPreferences != null)
+                if (!state.historyIsNotEmpty)
+                  TappableColoredCardWrap(
+                    content: const Center(child: Text('Здесь пока ничего нет')),
+                    color: AppColors.white.withOpacity(0.1),
+                  ),
+              if (state.sharedPreferences == null)
+                TappableColoredCardWrap(
+                  content: const Center(child: CircularProgressIndicator()),
+                  color: AppColors.white.withOpacity(0.1),
+                ),
+              AppSpacing.verticalSpace32,
+            ],
+          ),
+        ),
+      ),
+      bottomSheet: SafeArea(
+        minimum: AppInsets.paddingAll16,
+        child: CustomButton(
+          text: 'Рассчитать совместимость',
+          onTap: () => Navigator.pushNamed(context, AppRoutes.comparisonData),
+        ),
+      ),
+    );
+  }
+}
