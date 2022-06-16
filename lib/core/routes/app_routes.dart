@@ -3,4 +3,5 @@ class AppRoutes {
 
   static const initial = '/';
   static const comparisonData = '/comparison_data';
+  static const calculateCompatibility = '/calculate_compatibility';
 }

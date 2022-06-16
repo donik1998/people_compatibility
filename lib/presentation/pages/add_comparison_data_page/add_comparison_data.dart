@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:people_compatibility/core/models/birthday_data.dart';
+import 'package:people_compatibility/core/routes/app_routes.dart';
 import 'package:people_compatibility/presentation/custom_widgets/app_body_back.dart';
+import 'package:people_compatibility/presentation/custom_widgets/calendar_dialog.dart';
 import 'package:people_compatibility/presentation/custom_widgets/comparison_data_switcher.dart';
 import 'package:people_compatibility/presentation/custom_widgets/content_card.dart';
 import 'package:people_compatibility/presentation/custom_widgets/custom_back_button.dart';
 import 'package:people_compatibility/presentation/custom_widgets/custom_button.dart';
 import 'package:people_compatibility/presentation/custom_widgets/custom_text_field.dart';
 import 'package:people_compatibility/presentation/pages/add_comparison_data_page/state/comparison_data_page_state.dart';
+import 'package:people_compatibility/presentation/pages/calculate_compatibility_page/calculate_compatibility_page.dart';
 import 'package:people_compatibility/presentation/theme/app_border_radius.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_insets.dart';
@@ -64,13 +68,11 @@ class ComparisonDataPage extends StatelessWidget {
                                 Icons.calendar_month,
                                 color: AppColors.white,
                               ),
-                              onPressed: () => showDatePicker(
+                              onPressed: () => showDialog<BirthdayData>(
                                 context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime.now().subtract(const Duration(days: 3650)),
-                                lastDate: DateTime.now().add(const Duration(days: 3650)),
+                                builder: (context) => const CalendarDialog(),
                               ).then((value) {
-                                if (value != null) state.updateDate(value);
+                                if (value != null) state.updateBirthday(value);
                               }),
                             ),
                           ],
@@ -160,8 +162,10 @@ class ComparisonDataPage extends StatelessWidget {
                                   itemBuilder: (context, index) => GestureDetector(
                                     onTap: () {
                                       state.setCity(
-                                        state.searchResponse!.predictedCities.elementAt(index).structuredFormatting?.mainText ??
-                                            'null',
+                                        placeId: state.searchResponse!.predictedCities.elementAt(index).placeId ?? '',
+                                        cityTitle:
+                                            state.searchResponse!.predictedCities.elementAt(index).structuredFormatting?.mainText ??
+                                                '',
                                       );
                                       FocusScope.of(context).unfocus();
                                     },
@@ -208,7 +212,14 @@ class ComparisonDataPage extends StatelessWidget {
       bottomSheet: SafeArea(
         minimum: AppInsets.paddingAll16,
         child: CustomButton(
-          onTap: () {},
+          onTap: () => Navigator.pushNamed(
+            context,
+            AppRoutes.calculateCompatibility,
+            arguments: CalculateCompatibilityPageArguments(
+              maleData: context.read<ComparisonDataPageState>().male,
+              femaleData: context.read<ComparisonDataPageState>().female,
+            ),
+          ),
           text: 'Далее',
         ),
       ),

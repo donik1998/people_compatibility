@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'api.dart';
+part of 'places_api.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,9 +8,9 @@ part of 'api.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps
 
-class _ApiClient implements ApiClient {
-  _ApiClient(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'https://maps.googleapis.com/maps/api/place';
+class _GooglePlacesApiClient implements GooglePlacesApiClient {
+  _GooglePlacesApiClient(this._dio, {this.baseUrl}) {
+    baseUrl ??= 'https://maps.googleapis.com/maps/api';
   }
 
   final Dio _dio;
@@ -30,10 +30,26 @@ class _ApiClient implements ApiClient {
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<CitySearchResponse>(
             Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, '/queryautocomplete/json',
+                .compose(_dio.options, '/place/queryautocomplete/json',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = CitySearchResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<CityGeocodeResponse> getCityLocation(placeId) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'place_id': placeId};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CityGeocodeResponse>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/geocode/json',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CityGeocodeResponse.fromJson(_result.data!);
     return value;
   }
 

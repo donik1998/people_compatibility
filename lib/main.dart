@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:people_compatibility/core/routes/app_routes.dart';
 import 'package:people_compatibility/presentation/pages/add_comparison_data_page/add_comparison_data.dart';
 import 'package:people_compatibility/presentation/pages/add_comparison_data_page/state/comparison_data_page_state.dart';
+import 'package:people_compatibility/presentation/pages/calculate_compatibility_page/calculate_compatibility_page.dart';
+import 'package:people_compatibility/presentation/pages/calculate_compatibility_page/state/calculate_compatibility_page_state.dart';
 import 'package:people_compatibility/presentation/pages/main_page/main_page.dart';
 import 'package:people_compatibility/presentation/pages/main_page/state/main_page_state.dart';
 import 'package:people_compatibility/presentation/theme/app_border_radius.dart';
@@ -10,7 +13,8 @@ import 'package:people_compatibility/presentation/theme/app_insets.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+  initializeDateFormatting();
   // final sp = await SharedPreferences.getInstance();
   // await sp.clear();
   // sp.setString(
@@ -139,6 +143,10 @@ class MyApp extends StatelessWidget {
         AppRoutes.comparisonData: (context) => ChangeNotifierProvider(
               create: (_) => ComparisonDataPageState(),
               child: const ComparisonDataPage(),
+            ),
+        AppRoutes.calculateCompatibility: (context) => ChangeNotifierProvider(
+              create: (_) => CalculateCompatibilityPageState(),
+              child: const CalculateCompatibilityPage(),
             ),
       },
       initialRoute: '/',

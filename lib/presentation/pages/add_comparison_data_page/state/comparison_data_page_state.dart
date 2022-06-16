@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:people_compatibility/core/models/birthday_data.dart';
+import 'package:people_compatibility/core/models/city_geocode_response.dart';
 import 'package:people_compatibility/core/models/city_search_response.dart';
 import 'package:people_compatibility/core/models/person_details.dart';
 import 'package:people_compatibility/domain/remote/search_place_repository.dart';
@@ -12,26 +14,29 @@ import 'package:people_compatibility/presentation/utils/enums.dart';
 class ComparisonDataPageState extends BaseNotifier {
   late final TextEditingController nameController = TextEditingController(text: male.name);
   late final TextEditingController countryController = TextEditingController(text: male.country);
-  late final TextEditingController cityController = TextEditingController(text: male.city);
+  late final TextEditingController cityController = TextEditingController(text: male.city.title);
   Completer completer = Completer();
   CitySearchResponse? searchResponse;
   bool searchError = false;
+  CityGeocodeResponse? cityLocationResponse;
   final Debouncer callDebouncer = Debouncer(milliseconds: 250);
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String errorMessage = '';
 
   PersonDetails male = PersonDetails(
+    exactTimeKnown: false,
     dateOfBirth: DateTime.now().subtract(const Duration(days: 365 * 18)),
     name: '',
     country: '',
-    city: '',
+    city: BirthLocation(title: '', lat: 0, lon: 0),
   );
 
   PersonDetails female = PersonDetails(
+    exactTimeKnown: false,
     dateOfBirth: DateTime.now().subtract(const Duration(days: 365 * 18)),
     name: '',
     country: '',
-    city: '',
+    city: BirthLocation(title: '', lat: 0, lon: 0),
   );
 
   GenderSwitcherState genderSwitcherState = GenderSwitcherState.male;
@@ -43,6 +48,11 @@ class ComparisonDataPageState extends BaseNotifier {
   bool get canShowCityResults => searchResponse != null && cityController.text.isNotEmpty && !cityIsChosen && !inProgress;
 
   bool get canSearchForCity => genderSwitcherState == GenderSwitcherState.male ? male.country.isNotEmpty : female.country.isNotEmpty;
+
+  void setCityLocationResponse(CityGeocodeResponse response) {
+    cityLocationResponse = response;
+    notifyListeners();
+  }
 
   void setErrorMessage(String error) {
     errorMessage = error;
@@ -72,7 +82,6 @@ class ComparisonDataPageState extends BaseNotifier {
       setSearchMode(PlaceSearchMode.country);
     }
     if (type == 'cities') {
-      setCity('');
       setSearchMode(PlaceSearchMode.city);
     }
     Future.delayed(
@@ -101,22 +110,20 @@ class ComparisonDataPageState extends BaseNotifier {
       female = female.copyWith(
         name: nameController.text,
         country: countryController.text,
-        city: cityController.text,
       );
       nameController.text = male.name;
       countryController.text = male.country;
-      cityController.text = male.city;
+      cityController.text = male.city.title;
       notifyListeners();
     }
     if (genderSwitcherState == GenderSwitcherState.female) {
       male = male.copyWith(
         name: nameController.text,
         country: countryController.text,
-        city: cityController.text,
       );
       nameController.text = female.name;
       countryController.text = female.country;
-      cityController.text = female.city;
+      cityController.text = female.city.title;
       notifyListeners();
     }
   }
@@ -127,7 +134,7 @@ class ComparisonDataPageState extends BaseNotifier {
         dateOfBirth: DateTime.now().subtract(const Duration(days: 365 * 18)),
         name: '',
         country: '',
-        city: '',
+        city: BirthLocation(title: '', lat: 0, lon: 0),
       );
     }
     if (genderSwitcherState == GenderSwitcherState.female) {
@@ -135,7 +142,7 @@ class ComparisonDataPageState extends BaseNotifier {
         dateOfBirth: DateTime.now().subtract(const Duration(days: 365 * 18)),
         name: '',
         country: '',
-        city: '',
+        city: BirthLocation(title: '', lat: 0, lon: 0),
       );
     }
     nameController.clear();
@@ -152,13 +159,13 @@ class ComparisonDataPageState extends BaseNotifier {
     super.dispose();
   }
 
-  void updateDate(DateTime value) {
+  void updateBirthday(BirthdayData value) {
     if (genderSwitcherState == GenderSwitcherState.male) {
-      male = male.copyWith(dateOfBirth: value);
+      male = male.copyWith(dateOfBirth: value.date, exactTimeKnown: value.exactTimeKnown);
       notifyListeners();
     }
     if (genderSwitcherState == GenderSwitcherState.female) {
-      female = female.copyWith(dateOfBirth: value);
+      female = female.copyWith(dateOfBirth: value.date, exactTimeKnown: value.exactTimeKnown);
       notifyListeners();
     }
   }
@@ -168,7 +175,7 @@ class ComparisonDataPageState extends BaseNotifier {
       : DateFormat('dd.MM.yyyy').format(female.dateOfBirth);
 
   bool get countryIsChosen => genderSwitcherState == GenderSwitcherState.male ? male.country.isNotEmpty : female.country.isNotEmpty;
-  bool get cityIsChosen => genderSwitcherState == GenderSwitcherState.male ? male.city.isNotEmpty : female.city.isNotEmpty;
+  bool get cityIsChosen => genderSwitcherState == GenderSwitcherState.male ? male.city.title.isNotEmpty : female.city.title.isNotEmpty;
 
   void setCountry(String country) {
     if (genderSwitcherState == GenderSwitcherState.male) {
@@ -183,15 +190,28 @@ class ComparisonDataPageState extends BaseNotifier {
     notifyListeners();
   }
 
-  void setCity(String city) {
+  void setCity({
+    required String placeId,
+    required String cityTitle,
+  }) async {
+    final city = await SearchPlaceService.instance.getCityLocationById(placeId);
+    city.fold(
+      (err) {
+        setSearchError(true);
+        setErrorMessage(err.message);
+      },
+      (r) => setCityLocationResponse(r),
+    );
+    final lat = cityLocationResponse!.results!.first.geometry?.location?.lat ?? 0;
+    final lon = cityLocationResponse!.results!.first.geometry?.location?.lng ?? 0;
     if (genderSwitcherState == GenderSwitcherState.male) {
-      male = male.copyWith(city: city);
-      if (city.isNotEmpty) cityController.text = male.city;
+      male = male.copyWith(city: BirthLocation(title: cityTitle, lat: lat, lon: lon));
+      cityController.text = male.city.title;
       notifyListeners();
     }
     if (genderSwitcherState == GenderSwitcherState.female) {
-      female = female.copyWith(city: city);
-      if (city.isNotEmpty) cityController.text = female.city;
+      female = female.copyWith(city: BirthLocation(title: cityTitle, lat: lat, lon: lon));
+      cityController.text = female.city.title;
       notifyListeners();
     }
   }

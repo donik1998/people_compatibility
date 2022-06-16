@@ -4,16 +4,20 @@ import 'package:people_compatibility/presentation/theme/app_insets.dart';
 
 class TappableColoredCardWrap extends StatelessWidget {
   final Widget content;
-  final Color color;
-  final EdgeInsets? padding;
+  final Color? color;
+  final EdgeInsets padding;
+  final BorderRadius borderRadius;
   final VoidCallback? onTap;
+  final Gradient? gradient;
 
   const TappableColoredCardWrap({
     Key? key,
     required this.content,
     this.onTap,
-    required this.color,
-    this.padding,
+    this.gradient,
+    this.color,
+    this.padding = AppInsets.paddingAll16,
+    this.borderRadius = AppBorderRadius.borderAll16,
   }) : super(key: key);
 
   @override
@@ -21,10 +25,11 @@ class TappableColoredCardWrap extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: padding ?? AppInsets.paddingAll16,
+        padding: padding,
         decoration: BoxDecoration(
           color: color,
-          borderRadius: AppBorderRadius.borderAll16,
+          gradient: gradient,
+          borderRadius: borderRadius,
         ),
         child: content,
       ),
