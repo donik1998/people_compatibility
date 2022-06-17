@@ -94,7 +94,7 @@ class MainPage extends StatelessWidget {
       ),
       bottomSheet: SafeArea(
         minimum: AppInsets.paddingAll16,
-        child: CustomButton(
+        child: CustomButton.text(
           text: 'Рассчитать совместимость',
           onTap: () => Navigator.pushNamed(context, AppRoutes.comparisonData),
         ),

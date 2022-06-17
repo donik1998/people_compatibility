@@ -34,8 +34,10 @@ class BirthLocation {
   final double lat, lon;
 
   BirthLocation({
-    required this.title,
-    required this.lat,
-    required this.lon,
+    this.title = '',
+    this.lat = 0,
+    this.lon = 0,
   });
+
+  bool get isValidLocation => title != '' && lat != 0 && lon != 0;
 }

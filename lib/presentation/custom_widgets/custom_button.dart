@@ -6,12 +6,36 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onTap;
   final String text;
   final double? width;
-  const CustomButton({
+  final Widget? child;
+
+  const CustomButton._({
     Key? key,
     required this.onTap,
-    required this.text,
+    this.text = '',
     this.width,
+    this.child,
   }) : super(key: key);
+
+  factory CustomButton.text({
+    required String text,
+    required VoidCallback onTap,
+    double? width,
+  }) =>
+      CustomButton._(
+        onTap: onTap,
+        text: text,
+      );
+
+  factory CustomButton.child({
+    required Widget child,
+    required VoidCallback onTap,
+    double? width,
+  }) =>
+      CustomButton._(
+        onTap: onTap,
+        child: child,
+        width: width,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +61,11 @@ class CustomButton extends StatelessWidget {
             ),
           ),
           child: Center(
-            child: Text(
-              text,
-              style: Theme.of(context).textTheme.headline6,
-            ),
+            child: child ??
+                Text(
+                  text,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
           ),
         ),
       ),

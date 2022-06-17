@@ -10,6 +10,7 @@ import 'package:people_compatibility/domain/remote/search_place_repository.dart'
 import 'package:people_compatibility/presentation/provider/base_notifier.dart';
 import 'package:people_compatibility/presentation/utils/async_debouncer.dart';
 import 'package:people_compatibility/presentation/utils/enums.dart';
+import 'package:people_compatibility/presentation/utils/extensions.dart';
 
 class ComparisonDataPageState extends BaseNotifier {
   late final TextEditingController nameController = TextEditingController(text: male.name);
@@ -25,29 +26,43 @@ class ComparisonDataPageState extends BaseNotifier {
 
   PersonDetails male = PersonDetails(
     exactTimeKnown: false,
-    dateOfBirth: DateTime.now().subtract(const Duration(days: 365 * 18)),
+    dateOfBirth: DateTime.now(),
     name: '',
     country: '',
-    city: BirthLocation(title: '', lat: 0, lon: 0),
+    city: BirthLocation(),
   );
 
   PersonDetails female = PersonDetails(
     exactTimeKnown: false,
-    dateOfBirth: DateTime.now().subtract(const Duration(days: 365 * 18)),
+    dateOfBirth: DateTime.now(),
     name: '',
     country: '',
-    city: BirthLocation(title: '', lat: 0, lon: 0),
+    city: BirthLocation(),
   );
+
+  String validationErrorMessage = '';
 
   GenderSwitcherState genderSwitcherState = GenderSwitcherState.male;
 
   PlaceSearchMode searchMode = PlaceSearchMode.country;
+
+  bool hasValidationError = false;
 
   bool get canShowCountryResults => searchResponse != null && countryController.text.isNotEmpty && !countryIsChosen && !inProgress;
 
   bool get canShowCityResults => searchResponse != null && cityController.text.isNotEmpty && !cityIsChosen && !inProgress;
 
   bool get canSearchForCity => genderSwitcherState == GenderSwitcherState.male ? male.country.isNotEmpty : female.country.isNotEmpty;
+
+  void setHasValidationError(bool value) {
+    hasValidationError = value;
+    notifyListeners();
+  }
+
+  void setValidationErrorMessage(String message) {
+    validationErrorMessage = message;
+    notifyListeners();
+  }
 
   void setCityLocationResponse(CityGeocodeResponse response) {
     cityLocationResponse = response;
@@ -134,7 +149,7 @@ class ComparisonDataPageState extends BaseNotifier {
         dateOfBirth: DateTime.now().subtract(const Duration(days: 365 * 18)),
         name: '',
         country: '',
-        city: BirthLocation(title: '', lat: 0, lon: 0),
+        city: BirthLocation(),
       );
     }
     if (genderSwitcherState == GenderSwitcherState.female) {
@@ -142,7 +157,7 @@ class ComparisonDataPageState extends BaseNotifier {
         dateOfBirth: DateTime.now().subtract(const Duration(days: 365 * 18)),
         name: '',
         country: '',
-        city: BirthLocation(title: '', lat: 0, lon: 0),
+        city: BirthLocation(),
       );
     }
     nameController.clear();
@@ -213,6 +228,44 @@ class ComparisonDataPageState extends BaseNotifier {
       female = female.copyWith(city: BirthLocation(title: cityTitle, lat: lat, lon: lon));
       cityController.text = female.city.title;
       notifyListeners();
+    }
+  }
+
+  bool validateData() {
+    setHasValidationError(false);
+    setValidationErrorMessage('');
+    final maleLocationIsValid = male.city.isValidLocation && male.country.isNotEmpty;
+    final femaleLocationIsValid = female.city.isValidLocation && female.country.isNotEmpty;
+    final maleNameValid = male.name.isNotEmpty;
+    final femaleNameValid = female.name.isNotEmpty;
+    final maleBirthdayIsValid = male.dateOfBirth.isBefore(DateTime.now()) && !male.dateOfBirth.isSameDay(DateTime.now());
+    final femaleBirthdayIsValid = female.dateOfBirth.isBefore(DateTime.now()) && !female.dateOfBirth.isSameDay(DateTime.now());
+    if (!maleLocationIsValid) {
+      setHasValidationError(true);
+      setValidationErrorMessage('У партнера мужчины не указаны координаты места проживания');
+      return false;
+    } else if (!femaleLocationIsValid) {
+      setHasValidationError(true);
+      setValidationErrorMessage('У партнера женщины не указаны координаты места проживания');
+      return false;
+    } else if (!maleNameValid) {
+      setHasValidationError(true);
+      setValidationErrorMessage('У партнера мужчины не указано имя');
+      return false;
+    } else if (!femaleNameValid) {
+      setHasValidationError(true);
+      setValidationErrorMessage('У партнера женщины не указано имя');
+      return false;
+    } else if (!maleBirthdayIsValid) {
+      setHasValidationError(true);
+      setValidationErrorMessage('У партнера мужчины неправильно указан день рождения');
+      return false;
+    } else if (!femaleBirthdayIsValid) {
+      setHasValidationError(true);
+      setValidationErrorMessage('У партнера мужчины неправильно указан день рождения');
+      return false;
+    } else {
+      return true;
     }
   }
 }
