@@ -18,6 +18,7 @@ class CalendarDialog extends StatefulWidget {
 class _CalendarDialogState extends State<CalendarDialog> {
   bool exactTimeKnown = false;
   DateTime _selectedDate = DateTime.now();
+  CalendarDialogMode _dialogMode = CalendarDialogMode.month;
 
   @override
   Widget build(BuildContext context) {
@@ -33,48 +34,72 @@ class _CalendarDialogState extends State<CalendarDialog> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
-            TableCalendar(
-              locale: Localizations.localeOf(context).languageCode,
-              calendarStyle: CalendarStyle(
-                todayDecoration: const BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      AppColors.darkBlue,
-                      AppColors.purple,
-                    ],
+            AnimatedCrossFade(
+              crossFadeState: _dialogMode == CalendarDialogMode.month ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+              firstChild: TableCalendar(
+                locale: Localizations.localeOf(context).languageCode,
+                calendarStyle: CalendarStyle(
+                  todayDecoration: const BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        AppColors.darkBlue,
+                        AppColors.purple,
+                      ],
+                    ),
+                  ),
+                  weekendTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: AppColors.grey),
+                  disabledTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: AppColors.grey.withOpacity(0.1)),
+                ),
+                onHeaderTapped: (focusedDate) => setState(() => _dialogMode = CalendarDialogMode.year),
+                currentDay: _selectedDate,
+                focusedDay: _selectedDate,
+                onDaySelected: (selectedDate, focusedDate) => setState(() => _selectedDate = selectedDate),
+                firstDay: DateTime.now().subtract(const Duration(days: 36500)),
+                lastDay: DateTime.now(),
+                headerVisible: true,
+                startingDayOfWeek: StartingDayOfWeek.monday,
+                daysOfWeekStyle: DaysOfWeekStyle(
+                  weekdayStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: AppColors.grey),
+                  weekendStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: AppColors.grey),
+                ),
+                headerStyle: HeaderStyle(
+                  titleCentered: true,
+                  formatButtonVisible: false,
+                  formatButtonShowsNext: false,
+                  titleTextStyle: Theme.of(context).textTheme.headline6!.copyWith(
+                        fontSize: 18,
+                        color: AppColors.dirtyWhite,
+                        fontWeight: FontWeight.w400,
+                      ),
+                  headerMargin: const EdgeInsets.only(bottom: 36),
+                  leftChevronIcon: const Icon(Icons.chevron_left, color: AppColors.dirtyWhite, size: 24),
+                  rightChevronIcon: const Icon(Icons.chevron_right, color: AppColors.dirtyWhite, size: 24),
+                ),
+              ),
+              secondChild: SizedBox(
+                height: 276,
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 16,
+                    childAspectRatio: (MediaQuery.of(context).size.width / 3) / 64,
+                  ),
+                  itemCount: 100,
+                  itemBuilder: (context, index) => TappableColoredCardWrap(
+                    content: Center(child: Text('${_selectedDate.year - index}')),
+                    color: AppColors.deepPurple,
+                    onTap: () => setState(() {
+                      _dialogMode = CalendarDialogMode.month;
+                      _selectedDate = DateTime(_selectedDate.year - index);
+                    }),
                   ),
                 ),
-                weekendTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: AppColors.grey),
-                disabledTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: AppColors.dirtyWhite),
               ),
-              onHeaderTapped: (focusedDate) {},
-              currentDay: _selectedDate,
-              focusedDay: _selectedDate,
-              onDaySelected: (selectedDate, focusedDate) => setState(() => _selectedDate = selectedDate),
-              firstDay: DateTime.now().subtract(const Duration(days: 36500)),
-              lastDay: DateTime.now().add(const Duration(days: 36500)),
-              headerVisible: true,
-              startingDayOfWeek: StartingDayOfWeek.monday,
-              daysOfWeekStyle: DaysOfWeekStyle(
-                weekdayStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: AppColors.grey),
-                weekendStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: AppColors.grey),
-              ),
-              headerStyle: HeaderStyle(
-                titleCentered: true,
-                formatButtonVisible: false,
-                formatButtonShowsNext: false,
-                titleTextStyle: Theme.of(context).textTheme.headline6!.copyWith(
-                      fontSize: 18,
-                      color: AppColors.dirtyWhite,
-                      fontWeight: FontWeight.w400,
-                    ),
-                headerMargin: const EdgeInsets.only(bottom: 36),
-                leftChevronIcon: const Icon(Icons.chevron_left, color: AppColors.dirtyWhite, size: 24),
-                rightChevronIcon: const Icon(Icons.chevron_right, color: AppColors.dirtyWhite, size: 24),
-              ),
+              duration: const Duration(milliseconds: 250),
             ),
             AppSpacing.verticalSpace16,
             Row(
@@ -89,11 +114,14 @@ class _CalendarDialogState extends State<CalendarDialog> {
                   side: BorderSide(color: AppColors.white.withOpacity(0.5), width: 2),
                 ),
                 AppSpacing.horizontalSpace8,
-                Text(
-                  'Неизвестно время рождения',
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                        color: AppColors.white.withOpacity(0.6),
-                      ),
+                GestureDetector(
+                  onTap: () => setState(() => exactTimeKnown = !exactTimeKnown),
+                  child: Text(
+                    'Неизвестно время рождения',
+                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                          color: AppColors.white.withOpacity(0.6),
+                        ),
+                  ),
                 ),
               ],
             ),
@@ -165,3 +193,5 @@ class _CalendarDialogState extends State<CalendarDialog> {
     );
   }
 }
+
+enum CalendarDialogMode { month, year }

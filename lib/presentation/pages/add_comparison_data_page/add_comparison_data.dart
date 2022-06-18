@@ -180,7 +180,7 @@ class ComparisonDataPage extends StatelessWidget {
                     ),
                     AppSpacing.verticalSpace16,
                     CustomTextField(
-                      onChanged: (value) {},
+                      onChanged: (value) => state.changePartnerName(value),
                       controller: state.nameController,
                       hint: 'Введите имя',
                     ),
@@ -210,24 +210,36 @@ class ComparisonDataPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomSheet: SafeArea(
-        minimum: AppInsets.paddingAll16,
-        child: CustomButton.text(
-          onTap: () {
-            final dataIsValid = context.read<ComparisonDataPageState>().validateData();
-            if (dataIsValid) {
-              Navigator.pushNamed(
-                context,
-                AppRoutes.calculateCompatibility,
-                arguments: CalculateCompatibilityPageArguments(
-                  maleData: context.read<ComparisonDataPageState>().male,
-                  femaleData: context.read<ComparisonDataPageState>().female,
-                ),
-              );
-            }
-          },
-          text: 'Далее',
-        ),
+      bottomSheet: Consumer<ComparisonDataPageState>(
+        builder: (context, state, child) {
+          return SafeArea(
+            minimum: AppInsets.paddingAll16,
+            child: CustomButton.text(
+              onTap: () {
+                if (state.genderSwitcherState == GenderSwitcherState.male) {
+                  state.validateMaleData();
+                  if (state.maleDataIsValid) {
+                    state.setGenderSwitcherState(GenderSwitcherState.female);
+                  }
+                }
+                if (state.genderSwitcherState == GenderSwitcherState.female) {
+                  state.validateFemaleData();
+                  if (state.maleDataIsValid && state.femaleDataIsValid) {
+                    Navigator.pushNamed(
+                      context,
+                      AppRoutes.calculateCompatibility,
+                      arguments: CalculateCompatibilityPageArguments(
+                        maleData: context.read<ComparisonDataPageState>().male,
+                        femaleData: context.read<ComparisonDataPageState>().female,
+                      ),
+                    );
+                  }
+                }
+              },
+              text: state.genderSwitcherState == GenderSwitcherState.male ? 'Далее' : 'Рассчитать',
+            ),
+          );
+        },
       ),
     );
   }

@@ -24,7 +24,8 @@ class TappableColoredCardWrap extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
         padding: padding,
         decoration: BoxDecoration(
           color: color,

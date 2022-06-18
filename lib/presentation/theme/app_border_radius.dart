@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 class AppBorderRadius {
   AppBorderRadius._();
 
+  static const borderAll4 = BorderRadius.all(Radius.circular(4));
   static const borderAll6 = BorderRadius.all(Radius.circular(6));
   static const borderAll10 = BorderRadius.all(Radius.circular(10));
   static const borderAll12 = BorderRadius.all(Radius.circular(12));

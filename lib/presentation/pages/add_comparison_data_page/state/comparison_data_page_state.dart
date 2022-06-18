@@ -48,6 +48,10 @@ class ComparisonDataPageState extends BaseNotifier {
 
   bool hasValidationError = false;
 
+  bool maleDataIsValid = false;
+
+  bool femaleDataIsValid = false;
+
   bool get canShowCountryResults => searchResponse != null && countryController.text.isNotEmpty && !countryIsChosen && !inProgress;
 
   bool get canShowCityResults => searchResponse != null && cityController.text.isNotEmpty && !cityIsChosen && !inProgress;
@@ -176,11 +180,11 @@ class ComparisonDataPageState extends BaseNotifier {
 
   void updateBirthday(BirthdayData value) {
     if (genderSwitcherState == GenderSwitcherState.male) {
-      male = male.copyWith(dateOfBirth: value.date, exactTimeKnown: value.exactTimeKnown);
+      male = male.copyWith(dateOfBirth: value.date, exactTimeKnown: !value.exactTimeKnown);
       notifyListeners();
     }
     if (genderSwitcherState == GenderSwitcherState.female) {
-      female = female.copyWith(dateOfBirth: value.date, exactTimeKnown: value.exactTimeKnown);
+      female = female.copyWith(dateOfBirth: value.date, exactTimeKnown: !value.exactTimeKnown);
       notifyListeners();
     }
   }
@@ -231,41 +235,63 @@ class ComparisonDataPageState extends BaseNotifier {
     }
   }
 
-  bool validateData() {
+  void validateMaleData() {
+    final maleLocationIsValid = male.city.isValidLocation && male.country.isNotEmpty;
+    final maleNameValid = male.name.isNotEmpty;
+    final maleBirthdayIsValid = male.dateOfBirth.isBefore(DateTime.now()) && !male.dateOfBirth.isSameDay(DateTime.now());
+    maleDataIsValid = maleLocationIsValid && maleNameValid && maleBirthdayIsValid;
+    notifyListeners();
+
+    // if (!maleLocationIsValid) {
+    //   setHasValidationError(true);
+    //   setValidationErrorMessage('У партнера мужчины не указаны координаты места проживания');
+    //   return false;
+    // } else if (!maleNameValid) {
+    //   setHasValidationError(true);
+    //   setValidationErrorMessage('У партнера мужчины не указано имя');
+    //   return false;
+    // } else if (!maleBirthdayIsValid) {
+    //   setHasValidationError(true);
+    //   setValidationErrorMessage('У партнера мужчины неправильно указан день рождения');
+    //   return false;
+    // } else {
+    //   return true;
+    // }
+  }
+
+  void validateFemaleData() {
     setHasValidationError(false);
     setValidationErrorMessage('');
-    final maleLocationIsValid = male.city.isValidLocation && male.country.isNotEmpty;
     final femaleLocationIsValid = female.city.isValidLocation && female.country.isNotEmpty;
-    final maleNameValid = male.name.isNotEmpty;
     final femaleNameValid = female.name.isNotEmpty;
-    final maleBirthdayIsValid = male.dateOfBirth.isBefore(DateTime.now()) && !male.dateOfBirth.isSameDay(DateTime.now());
     final femaleBirthdayIsValid = female.dateOfBirth.isBefore(DateTime.now()) && !female.dateOfBirth.isSameDay(DateTime.now());
-    if (!maleLocationIsValid) {
-      setHasValidationError(true);
-      setValidationErrorMessage('У партнера мужчины не указаны координаты места проживания');
-      return false;
-    } else if (!femaleLocationIsValid) {
-      setHasValidationError(true);
-      setValidationErrorMessage('У партнера женщины не указаны координаты места проживания');
-      return false;
-    } else if (!maleNameValid) {
-      setHasValidationError(true);
-      setValidationErrorMessage('У партнера мужчины не указано имя');
-      return false;
-    } else if (!femaleNameValid) {
-      setHasValidationError(true);
-      setValidationErrorMessage('У партнера женщины не указано имя');
-      return false;
-    } else if (!maleBirthdayIsValid) {
-      setHasValidationError(true);
-      setValidationErrorMessage('У партнера мужчины неправильно указан день рождения');
-      return false;
-    } else if (!femaleBirthdayIsValid) {
-      setHasValidationError(true);
-      setValidationErrorMessage('У партнера мужчины неправильно указан день рождения');
-      return false;
-    } else {
-      return true;
+    femaleDataIsValid = femaleLocationIsValid && femaleNameValid && femaleBirthdayIsValid;
+    notifyListeners();
+    // if (!femaleLocationIsValid) {
+    //   setHasValidationError(true);
+    //   setValidationErrorMessage('У партнера женщины не указаны координаты места проживания');
+    //   return false;
+    // } else if (!femaleNameValid) {
+    //   setHasValidationError(true);
+    //   setValidationErrorMessage('У партнера женщины не указано имя');
+    //   return false;
+    // } else if (!femaleBirthdayIsValid) {
+    //   setHasValidationError(true);
+    //   setValidationErrorMessage('У партнера мужчины неправильно указан день рождения');
+    //   return false;
+    // } else {
+    //   return true;
+    // }
+  }
+
+  void changePartnerName(String value) {
+    if (genderSwitcherState == GenderSwitcherState.male) {
+      male = male.copyWith(name: value);
+      notifyListeners();
+    }
+    if (genderSwitcherState == GenderSwitcherState.female) {
+      female = female.copyWith(name: value);
+      notifyListeners();
     }
   }
 }

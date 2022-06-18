@@ -6,6 +6,7 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onTap;
   final String text;
   final double? width;
+  final double? height;
   final Widget? child;
 
   const CustomButton._({
@@ -13,6 +14,7 @@ class CustomButton extends StatelessWidget {
     required this.onTap,
     this.text = '',
     this.width,
+    this.height,
     this.child,
   }) : super(key: key);
 
@@ -20,21 +22,26 @@ class CustomButton extends StatelessWidget {
     required String text,
     required VoidCallback onTap,
     double? width,
+    double? height,
   }) =>
       CustomButton._(
         onTap: onTap,
         text: text,
+        height: height,
+        width: width,
       );
 
   factory CustomButton.child({
     required Widget child,
     required VoidCallback onTap,
     double? width,
+    double? height,
   }) =>
       CustomButton._(
         onTap: onTap,
         child: child,
         width: width,
+        height: height,
       );
 
   @override
@@ -46,7 +53,7 @@ class CustomButton extends StatelessWidget {
         borderRadius: AppBorderRadius.borderAll12,
         onTap: onTap,
         child: Ink(
-          height: 48,
+          height: height ?? 48,
           width: width ?? MediaQuery.of(context).size.width,
           padding: const EdgeInsets.all(13),
           decoration: const BoxDecoration(
