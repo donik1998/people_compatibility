@@ -1,29 +1,25 @@
-import 'package:people_compatibility/core/models/compatibility_response.dart';
+import 'package:people_compatibility/core/models/person_details.dart';
 
 class CompatibilityData {
-  final String femaleName;
-  final String maleName;
+  final PersonDetails female;
+  final PersonDetails male;
   final DateTime date;
-  final CompatibilityResponse result;
 
   CompatibilityData({
-    required this.femaleName,
-    required this.maleName,
+    required this.female,
+    required this.male,
     required this.date,
-    required this.result,
   });
 
   factory CompatibilityData.fromJson(Map<String, dynamic> json) => CompatibilityData(
-        femaleName: json['female_name'],
-        maleName: json['male_name'],
+        female: PersonDetails.fromJson(json['female']),
+        male: PersonDetails.fromJson(json['male']),
         date: DateTime.parse(json['date']),
-        result: CompatibilityResponse.fromJson(json['result']),
       );
 
   Map<String, dynamic> get toMap => {
-        'female_name': femaleName,
-        'male_name': maleName,
+        'female_name': female.asMap,
+        'male_name': male.asMap,
         'date': date.toIso8601String(),
-        'result': result.toJson(),
       };
 }

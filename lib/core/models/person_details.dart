@@ -28,6 +28,22 @@ class PersonDetails {
         exactTimeKnown: exactTimeKnown ?? this.exactTimeKnown,
       );
 
+  factory PersonDetails.fromJson(Map<String, dynamic> json) => PersonDetails(
+        dateOfBirth: DateTime.parse(json['date_of_birth']),
+        name: json['name'],
+        country: json['country'],
+        exactTimeKnown: json['exact_time_known'],
+        city: BirthLocation.fromJson(json['city']),
+      );
+
+  Map<String, dynamic> get asMap => {
+        'name': name,
+        'country': country,
+        'exact_time_known': exactTimeKnown,
+        'date_of_birth': dateOfBirth.toIso8601String(),
+        'city': city.asMap,
+      };
+
   ZodiacData zodiacName() {
     /// Aries (March 21 – April 19)
     final aries = (dateOfBirth.month == DateTime.march && dateOfBirth.day >= 21) ||
@@ -115,6 +131,18 @@ class BirthLocation {
     this.lat = 0,
     this.lon = 0,
   });
+
+  factory BirthLocation.fromJson(Map<String, dynamic> json) => BirthLocation(
+        title: json['title'],
+        lat: json['lat'],
+        lon: json['lon'],
+      );
+
+  Map<String, dynamic> get asMap => {
+        'title': title,
+        'lat': lat,
+        'lon': lon,
+      };
 
   bool get isValidLocation => title != '' && lat != 0 && lon != 0;
 }

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:people_compatibility/core/models/compatibility_response.dart';
+import 'package:people_compatibility/data/uri_interceptor.dart';
 import 'package:people_compatibility/presentation/utils/constants.dart';
 import 'package:retrofit/http.dart';
 
@@ -10,7 +11,10 @@ abstract class PeopleCompatibilityApiClient {
   static PeopleCompatibilityApiClient get instance => _PeopleCompatibilityApiClient(_dio);
 
   static final Dio _dio = Dio()
-    ..interceptors.add(LogInterceptor(responseBody: true))
+    ..interceptors.addAll([
+      LogInterceptor(responseBody: true),
+      UriInterceptor(),
+    ])
     ..options = BaseOptions(
       queryParameters: {'key': Constants.peopleCompatibilityApiKey},
     );
@@ -25,10 +29,10 @@ abstract class PeopleCompatibilityApiClient {
     @Query('month2') int secondGenderMonthOfBirth,
     @Query('year1') int firstGenderYearOfBirth,
     @Query('year2') int secondGenderYearOfBirth,
-    @Query('hour1') int firstGenderHourOfBirth,
-    @Query('hour2') int secondGenderHourOfBirth,
-    @Query('minute1') int firstGenderMinuteOfBirth,
-    @Query('minute2') int secondGenderMinuteOfBirth,
+    @Query('hour1') int? firstGenderHourOfBirth,
+    @Query('hour2') int? secondGenderHourOfBirth,
+    @Query('minute1') int? firstGenderMinuteOfBirth,
+    @Query('minute2') int? secondGenderMinuteOfBirth,
     @Query('notime1') int firstGenderBirthTimeUnknown,
     @Query('notime2') int secondGenderBirthTimeUnknown,
     @Query('name1') String firstGenderName,

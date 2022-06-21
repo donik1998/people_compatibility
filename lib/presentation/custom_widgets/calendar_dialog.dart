@@ -12,21 +12,28 @@ import 'package:people_compatibility/presentation/utils/extensions.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarDialog extends StatefulWidget {
-  const CalendarDialog({Key? key}) : super(key: key);
+  final DateTime initialDate;
+  final bool exactTimeKnownInitially;
+
+  const CalendarDialog({
+    Key? key,
+    required this.initialDate,
+    required this.exactTimeKnownInitially,
+  }) : super(key: key);
 
   @override
   State<CalendarDialog> createState() => _CalendarDialogState();
 }
 
 class _CalendarDialogState extends State<CalendarDialog> {
-  bool exactTimeKnown = false;
-  DateTime _selectedDate = DateTime.now();
+  late bool exactTimeKnown = widget.exactTimeKnownInitially;
+  late DateTime _selectedDate = widget.initialDate;
   CalendarDialogMode _dialogMode = CalendarDialogMode.month;
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      insetPadding: AppInsets.paddingAll16,
+      insetPadding: AppInsets.horizontal24,
       shape: const RoundedRectangleBorder(
         borderRadius: AppBorderRadius.borderAll30,
       ),
@@ -40,7 +47,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
             AnimatedCrossFade(
               crossFadeState: _dialogMode == CalendarDialogMode.month ? CrossFadeState.showFirst : CrossFadeState.showSecond,
               firstChild: TableCalendar(
-                locale: Localizations.localeOf(context).languageCode,
+                locale: 'ru',
                 calendarStyle: CalendarStyle(
                   todayDecoration: const BoxDecoration(
                     shape: BoxShape.rectangle,
@@ -56,7 +63,19 @@ class _CalendarDialogState extends State<CalendarDialog> {
                   weekendTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: AppColors.grey),
                   disabledTextStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: AppColors.grey.withOpacity(0.1)),
                 ),
-                onHeaderTapped: (focusedDate) => setState(() => _dialogMode = CalendarDialogMode.year),
+                calendarBuilders: CalendarBuilders(
+                  headerTitleBuilder: (context, day) {
+                    return GestureDetector(
+                      onTap: () => setState(() => _dialogMode = CalendarDialogMode.year),
+                      child: Center(
+                        child: Text(
+                          DateFormat('MMMM y', 'ru').format(day),
+                          style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                    );
+                  },
+                ),
                 currentDay: _selectedDate,
                 focusedDay: _selectedDate,
                 onDaySelected: (selectedDate, focusedDate) => setState(() => _selectedDate = selectedDate),
@@ -143,7 +162,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
                 GestureDetector(
                   onTap: () => setState(() => exactTimeKnown = !exactTimeKnown),
                   child: Text(
-                    'Неизвестно время рождения',
+                    'Время рождения неизвестно',
                     style: Theme.of(context).textTheme.bodyText1?.copyWith(
                           color: AppColors.white.withOpacity(0.6),
                         ),

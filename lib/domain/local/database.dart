@@ -3,8 +3,8 @@ import 'package:moor_flutter/moor_flutter.dart';
 part 'database.g.dart';
 
 class Comparisons extends Table {
-  TextColumn get maleName => text()();
-  TextColumn get femaleName => text()();
+  TextColumn get male => text()();
+  TextColumn get female => text()();
   TextColumn get responseJson => text()();
 
   /// [timeStamp] stores last edited date

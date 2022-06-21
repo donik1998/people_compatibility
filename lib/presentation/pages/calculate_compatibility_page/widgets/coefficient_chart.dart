@@ -5,24 +5,17 @@ import 'package:people_compatibility/presentation/theme/app_border_radius.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_spacing.dart';
 
-class CoefficientChart extends StatefulWidget {
+class CoefficientChart extends StatelessWidget {
   final List<int> coefficients;
   final ValueChanged<int> onBarSelected;
-  final int? initialIndex;
+  final int initialIndex;
 
   const CoefficientChart({
     Key? key,
     required this.coefficients,
     required this.onBarSelected,
-    this.initialIndex,
+    required this.initialIndex,
   }) : super(key: key);
-
-  @override
-  State<CoefficientChart> createState() => _CoefficientChartState();
-}
-
-class _CoefficientChartState extends State<CoefficientChart> {
-  late int _selectedIndex = widget.initialIndex ?? -1;
 
   @override
   Widget build(BuildContext context) {
@@ -43,24 +36,23 @@ class _CoefficientChartState extends State<CoefficientChart> {
                 ),
             ],
           ),
-          if (widget.coefficients.isEmpty)
+          if (coefficients.isEmpty)
             Center(
               child: Text(
                 'Нет данных',
                 style: Theme.of(context).textTheme.headline6,
               ),
             ),
-          if (widget.coefficients.isNotEmpty)
+          if (coefficients.isNotEmpty)
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                for (int i = 0; i < widget.coefficients.length; i++)
+                for (int i = 0; i < coefficients.length; i++)
                   GestureDetector(
                     onTap: () {
-                      widget.onBarSelected(i);
-                      setState(() => _selectedIndex = i);
+                      onBarSelected(i);
                     },
                     child: SizedBox(
                       width: 20,
@@ -69,11 +61,11 @@ class _CoefficientChartState extends State<CoefficientChart> {
                         children: [
                           Container(
                             width: 20,
-                            height: max((widget.coefficients.elementAt(i) / maxCoefficient()) * 160, 24),
+                            height: max((coefficients.elementAt(i) / maxCoefficient()) * 160, 24),
                             padding: const EdgeInsets.only(top: 6),
                             decoration: BoxDecoration(
-                              color: _selectedIndex == i ? null : AppColors.chartBarColor,
-                              gradient: _selectedIndex == i
+                              color: initialIndex == i ? null : AppColors.chartBarColor,
+                              gradient: initialIndex == i
                                   ? const LinearGradient(
                                       begin: Alignment.centerLeft,
                                       end: Alignment.centerRight,
@@ -86,11 +78,11 @@ class _CoefficientChartState extends State<CoefficientChart> {
                               borderRadius: AppBorderRadius.borderAll4,
                             ),
                             child: Text(
-                              widget.coefficients.elementAt(i).toString(),
+                              coefficients.elementAt(i).toString(),
                               style: Theme.of(context).textTheme.bodyText1?.copyWith(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 11,
-                                    color: _selectedIndex == i ? AppColors.white : AppColors.white.withOpacity(0.4),
+                                    color: initialIndex == i ? AppColors.white : AppColors.white.withOpacity(0.4),
                                   ),
                               textAlign: TextAlign.center,
                             ),
@@ -101,7 +93,7 @@ class _CoefficientChartState extends State<CoefficientChart> {
                             style: Theme.of(context).textTheme.bodyText1?.copyWith(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 11,
-                                  color: _selectedIndex == i ? AppColors.white : AppColors.white.withOpacity(0.4),
+                                  color: initialIndex == i ? AppColors.white : AppColors.white.withOpacity(0.4),
                                 ),
                           ),
                         ],
@@ -117,7 +109,7 @@ class _CoefficientChartState extends State<CoefficientChart> {
 
   int maxCoefficient() {
     int max = 0;
-    for (final coeff in widget.coefficients) {
+    for (final coeff in coefficients) {
       if (coeff > max) max = coeff;
     }
     return max;

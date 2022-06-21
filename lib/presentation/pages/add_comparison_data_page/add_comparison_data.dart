@@ -67,7 +67,10 @@ class ComparisonDataPage extends StatelessWidget {
                             ),
                             onPressed: () => showDialog<BirthdayData>(
                               context: context,
-                              builder: (context) => const CalendarDialog(),
+                              builder: (context) => CalendarDialog(
+                                initialDate: state.selectedPersonDateOfBirth,
+                                exactTimeKnownInitially: state.selectedPersonExactTimeKnown,
+                              ),
                             ).then((value) {
                               if (value != null) state.updateBirthday(value);
                             }),
@@ -217,6 +220,7 @@ class ComparisonDataPage extends StatelessWidget {
               onTap: () {
                 if (state.genderSwitcherState == GenderSwitcherState.male) {
                   state.validateMaleData();
+                  state.setGenderSwitcherState(GenderSwitcherState.female);
                 } else {
                   state.validateMaleData();
                   state.validateFemaleData();

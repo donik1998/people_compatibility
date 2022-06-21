@@ -35,13 +35,13 @@ class ComparisonCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                data.femaleName,
+                data.female.name,
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               AppSpacing.verticalSpace24,
               AppSpacing.verticalSpace24,
               Text(
-                data.maleName,
+                data.male.name,
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ],

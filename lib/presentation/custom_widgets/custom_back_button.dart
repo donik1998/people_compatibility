@@ -5,7 +5,12 @@ import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_insets.dart';
 
 class CustomBackButton extends StatelessWidget {
-  const CustomBackButton({Key? key}) : super(key: key);
+  final VoidCallback? onTap;
+
+  const CustomBackButton({
+    Key? key,
+    this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +23,13 @@ class CustomBackButton extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
-        onTap: () => Navigator.pop(context),
+        onTap: () {
+          if (onTap != null) {
+            onTap!.call();
+          } else {
+            Navigator.pop(context);
+          }
+        },
         child: Ink(
           height: 40,
           width: 40,

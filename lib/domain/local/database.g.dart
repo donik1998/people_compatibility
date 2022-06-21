@@ -8,25 +8,25 @@ part of 'database.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
 class Comparison extends DataClass implements Insertable<Comparison> {
-  final String maleName;
-  final String femaleName;
+  final String male;
+  final String female;
   final String responseJson;
 
   /// [timeStamp] stores last edited date
   final String timeStamp;
   Comparison(
-      {required this.maleName,
-      required this.femaleName,
+      {required this.male,
+      required this.female,
       required this.responseJson,
       required this.timeStamp});
   factory Comparison.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Comparison(
-      maleName: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}male_name'])!,
-      femaleName: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}female_name'])!,
+      male: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}male'])!,
+      female: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}female'])!,
       responseJson: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}response_json'])!,
       timeStamp: const StringType()
@@ -36,8 +36,8 @@ class Comparison extends DataClass implements Insertable<Comparison> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['male_name'] = Variable<String>(maleName);
-    map['female_name'] = Variable<String>(femaleName);
+    map['male'] = Variable<String>(male);
+    map['female'] = Variable<String>(female);
     map['response_json'] = Variable<String>(responseJson);
     map['time_stamp'] = Variable<String>(timeStamp);
     return map;
@@ -45,8 +45,8 @@ class Comparison extends DataClass implements Insertable<Comparison> {
 
   ComparisonsCompanion toCompanion(bool nullToAbsent) {
     return ComparisonsCompanion(
-      maleName: Value(maleName),
-      femaleName: Value(femaleName),
+      male: Value(male),
+      female: Value(female),
       responseJson: Value(responseJson),
       timeStamp: Value(timeStamp),
     );
@@ -56,8 +56,8 @@ class Comparison extends DataClass implements Insertable<Comparison> {
       {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Comparison(
-      maleName: serializer.fromJson<String>(json['maleName']),
-      femaleName: serializer.fromJson<String>(json['femaleName']),
+      male: serializer.fromJson<String>(json['male']),
+      female: serializer.fromJson<String>(json['female']),
       responseJson: serializer.fromJson<String>(json['responseJson']),
       timeStamp: serializer.fromJson<String>(json['timeStamp']),
     );
@@ -66,29 +66,29 @@ class Comparison extends DataClass implements Insertable<Comparison> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'maleName': serializer.toJson<String>(maleName),
-      'femaleName': serializer.toJson<String>(femaleName),
+      'male': serializer.toJson<String>(male),
+      'female': serializer.toJson<String>(female),
       'responseJson': serializer.toJson<String>(responseJson),
       'timeStamp': serializer.toJson<String>(timeStamp),
     };
   }
 
   Comparison copyWith(
-          {String? maleName,
-          String? femaleName,
+          {String? male,
+          String? female,
           String? responseJson,
           String? timeStamp}) =>
       Comparison(
-        maleName: maleName ?? this.maleName,
-        femaleName: femaleName ?? this.femaleName,
+        male: male ?? this.male,
+        female: female ?? this.female,
         responseJson: responseJson ?? this.responseJson,
         timeStamp: timeStamp ?? this.timeStamp,
       );
   @override
   String toString() {
     return (StringBuffer('Comparison(')
-          ..write('maleName: $maleName, ')
-          ..write('femaleName: $femaleName, ')
+          ..write('male: $male, ')
+          ..write('female: $female, ')
           ..write('responseJson: $responseJson, ')
           ..write('timeStamp: $timeStamp')
           ..write(')'))
@@ -96,60 +96,59 @@ class Comparison extends DataClass implements Insertable<Comparison> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(maleName, femaleName, responseJson, timeStamp);
+  int get hashCode => Object.hash(male, female, responseJson, timeStamp);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Comparison &&
-          other.maleName == this.maleName &&
-          other.femaleName == this.femaleName &&
+          other.male == this.male &&
+          other.female == this.female &&
           other.responseJson == this.responseJson &&
           other.timeStamp == this.timeStamp);
 }
 
 class ComparisonsCompanion extends UpdateCompanion<Comparison> {
-  final Value<String> maleName;
-  final Value<String> femaleName;
+  final Value<String> male;
+  final Value<String> female;
   final Value<String> responseJson;
   final Value<String> timeStamp;
   const ComparisonsCompanion({
-    this.maleName = const Value.absent(),
-    this.femaleName = const Value.absent(),
+    this.male = const Value.absent(),
+    this.female = const Value.absent(),
     this.responseJson = const Value.absent(),
     this.timeStamp = const Value.absent(),
   });
   ComparisonsCompanion.insert({
-    required String maleName,
-    required String femaleName,
+    required String male,
+    required String female,
     required String responseJson,
     required String timeStamp,
-  })  : maleName = Value(maleName),
-        femaleName = Value(femaleName),
+  })  : male = Value(male),
+        female = Value(female),
         responseJson = Value(responseJson),
         timeStamp = Value(timeStamp);
   static Insertable<Comparison> custom({
-    Expression<String>? maleName,
-    Expression<String>? femaleName,
+    Expression<String>? male,
+    Expression<String>? female,
     Expression<String>? responseJson,
     Expression<String>? timeStamp,
   }) {
     return RawValuesInsertable({
-      if (maleName != null) 'male_name': maleName,
-      if (femaleName != null) 'female_name': femaleName,
+      if (male != null) 'male': male,
+      if (female != null) 'female': female,
       if (responseJson != null) 'response_json': responseJson,
       if (timeStamp != null) 'time_stamp': timeStamp,
     });
   }
 
   ComparisonsCompanion copyWith(
-      {Value<String>? maleName,
-      Value<String>? femaleName,
+      {Value<String>? male,
+      Value<String>? female,
       Value<String>? responseJson,
       Value<String>? timeStamp}) {
     return ComparisonsCompanion(
-      maleName: maleName ?? this.maleName,
-      femaleName: femaleName ?? this.femaleName,
+      male: male ?? this.male,
+      female: female ?? this.female,
       responseJson: responseJson ?? this.responseJson,
       timeStamp: timeStamp ?? this.timeStamp,
     );
@@ -158,11 +157,11 @@ class ComparisonsCompanion extends UpdateCompanion<Comparison> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (maleName.present) {
-      map['male_name'] = Variable<String>(maleName.value);
+    if (male.present) {
+      map['male'] = Variable<String>(male.value);
     }
-    if (femaleName.present) {
-      map['female_name'] = Variable<String>(femaleName.value);
+    if (female.present) {
+      map['female'] = Variable<String>(female.value);
     }
     if (responseJson.present) {
       map['response_json'] = Variable<String>(responseJson.value);
@@ -176,8 +175,8 @@ class ComparisonsCompanion extends UpdateCompanion<Comparison> {
   @override
   String toString() {
     return (StringBuffer('ComparisonsCompanion(')
-          ..write('maleName: $maleName, ')
-          ..write('femaleName: $femaleName, ')
+          ..write('male: $male, ')
+          ..write('female: $female, ')
           ..write('responseJson: $responseJson, ')
           ..write('timeStamp: $timeStamp')
           ..write(')'))
@@ -191,15 +190,15 @@ class $ComparisonsTable extends Comparisons
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ComparisonsTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _maleNameMeta = const VerificationMeta('maleName');
+  final VerificationMeta _maleMeta = const VerificationMeta('male');
   @override
-  late final GeneratedColumn<String?> maleName = GeneratedColumn<String?>(
-      'male_name', aliasedName, false,
+  late final GeneratedColumn<String?> male = GeneratedColumn<String?>(
+      'male', aliasedName, false,
       type: const StringType(), requiredDuringInsert: true);
-  final VerificationMeta _femaleNameMeta = const VerificationMeta('femaleName');
+  final VerificationMeta _femaleMeta = const VerificationMeta('female');
   @override
-  late final GeneratedColumn<String?> femaleName = GeneratedColumn<String?>(
-      'female_name', aliasedName, false,
+  late final GeneratedColumn<String?> female = GeneratedColumn<String?>(
+      'female', aliasedName, false,
       type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _responseJsonMeta =
       const VerificationMeta('responseJson');
@@ -213,8 +212,7 @@ class $ComparisonsTable extends Comparisons
       'time_stamp', aliasedName, false,
       type: const StringType(), requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns =>
-      [maleName, femaleName, responseJson, timeStamp];
+  List<GeneratedColumn> get $columns => [male, female, responseJson, timeStamp];
   @override
   String get aliasedName => _alias ?? 'comparisons';
   @override
@@ -224,19 +222,17 @@ class $ComparisonsTable extends Comparisons
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('male_name')) {
-      context.handle(_maleNameMeta,
-          maleName.isAcceptableOrUnknown(data['male_name']!, _maleNameMeta));
-    } else if (isInserting) {
-      context.missing(_maleNameMeta);
-    }
-    if (data.containsKey('female_name')) {
+    if (data.containsKey('male')) {
       context.handle(
-          _femaleNameMeta,
-          femaleName.isAcceptableOrUnknown(
-              data['female_name']!, _femaleNameMeta));
+          _maleMeta, male.isAcceptableOrUnknown(data['male']!, _maleMeta));
     } else if (isInserting) {
-      context.missing(_femaleNameMeta);
+      context.missing(_maleMeta);
+    }
+    if (data.containsKey('female')) {
+      context.handle(_femaleMeta,
+          female.isAcceptableOrUnknown(data['female']!, _femaleMeta));
+    } else if (isInserting) {
+      context.missing(_femaleMeta);
     }
     if (data.containsKey('response_json')) {
       context.handle(

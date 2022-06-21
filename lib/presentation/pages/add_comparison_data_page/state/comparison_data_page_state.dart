@@ -59,6 +59,9 @@ class ComparisonDataPageState extends BaseNotifier {
 
   bool get canSearchForCity => genderSwitcherState == GenderSwitcherState.male ? male.country.isNotEmpty : female.country.isNotEmpty;
 
+  bool get selectedPersonExactTimeKnown =>
+      genderSwitcherState == GenderSwitcherState.male ? male.exactTimeKnown : female.exactTimeKnown;
+
   void setHasValidationError(bool value) {
     hasValidationError = value;
     notifyListeners();
@@ -196,11 +199,11 @@ class ComparisonDataPageState extends BaseNotifier {
 
   void updateBirthday(BirthdayData value) {
     if (genderSwitcherState == GenderSwitcherState.male) {
-      male = male.copyWith(dateOfBirth: value.date, exactTimeKnown: !value.exactTimeKnown);
+      male = male.copyWith(dateOfBirth: value.date, exactTimeKnown: value.exactTimeKnown);
       notifyListeners();
     }
     if (genderSwitcherState == GenderSwitcherState.female) {
-      female = female.copyWith(dateOfBirth: value.date, exactTimeKnown: !value.exactTimeKnown);
+      female = female.copyWith(dateOfBirth: value.date, exactTimeKnown: value.exactTimeKnown);
       notifyListeners();
     }
   }
@@ -208,6 +211,8 @@ class ComparisonDataPageState extends BaseNotifier {
   String get selectedPersonBirthday => genderSwitcherState == GenderSwitcherState.male
       ? DateFormat('dd.MM.yyyy').format(male.dateOfBirth)
       : DateFormat('dd.MM.yyyy').format(female.dateOfBirth);
+
+  DateTime get selectedPersonDateOfBirth => genderSwitcherState == GenderSwitcherState.male ? male.dateOfBirth : female.dateOfBirth;
 
   bool get countryIsChosen => genderSwitcherState == GenderSwitcherState.male ? male.country.isNotEmpty : female.country.isNotEmpty;
   bool get cityIsChosen => genderSwitcherState == GenderSwitcherState.male ? male.city.title.isNotEmpty : female.city.title.isNotEmpty;
@@ -268,10 +273,6 @@ class ComparisonDataPageState extends BaseNotifier {
       setHasValidationError(true);
       setValidationErrorMessage('У партнера мужчины неправильно указан день рождения');
     }
-    if (maleDataIsValid) {
-      saveMaleData();
-      setGenderSwitcherState(GenderSwitcherState.female);
-    }
   }
 
   void validateFemaleData() {
@@ -290,10 +291,6 @@ class ComparisonDataPageState extends BaseNotifier {
     } else if (!femaleBirthdayIsValid) {
       setHasValidationError(true);
       setValidationErrorMessage('У партнера женщины неправильно указан день рождения');
-    }
-    if (femaleDataIsValid) {
-      saveFemaleData();
-      setGenderSwitcherState(GenderSwitcherState.male);
     }
   }
 

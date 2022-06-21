@@ -9,4 +9,5 @@ class AppInsets {
   static const paddingAll24 = EdgeInsets.all(24);
 
   static const horizontal18 = EdgeInsets.symmetric(horizontal: 18);
+  static const horizontal24 = EdgeInsets.symmetric(horizontal: 24);
 }

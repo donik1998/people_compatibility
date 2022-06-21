@@ -25,10 +25,10 @@ class PeopleCompatibilityService implements PeopleCompatibilityRepository {
               female.dateOfBirth.month,
               male.dateOfBirth.year,
               female.dateOfBirth.year,
-              male.exactTimeKnown ? male.dateOfBirth.hour : 0,
-              female.exactTimeKnown ? female.dateOfBirth.hour : 0,
-              male.exactTimeKnown ? male.dateOfBirth.minute : 0,
-              female.exactTimeKnown ? female.dateOfBirth.minute : 0,
+              male.exactTimeKnown ? male.dateOfBirth.hour : null,
+              female.exactTimeKnown ? female.dateOfBirth.hour : null,
+              male.exactTimeKnown ? male.dateOfBirth.minute : null,
+              female.exactTimeKnown ? female.dateOfBirth.minute : null,
               male.exactTimeKnown ? 0 : 1,
               female.exactTimeKnown ? 0 : 1,
               male.name,
@@ -41,7 +41,9 @@ class PeopleCompatibilityService implements PeopleCompatibilityRepository {
         .attempt()
         .map((a) => a.leftMap((err) {
               Failure failure = Failure(message: 'Ошибка запроса');
-              if (err is DioError) failure = Failure(message: err.message);
+              if (err is DioError) {
+                failure = Failure(message: err.message);
+              }
               return failure;
             }))
         .run();

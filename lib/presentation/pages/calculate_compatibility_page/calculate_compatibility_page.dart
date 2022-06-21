@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:people_compatibility/core/models/compatibility_response.dart';
 import 'package:people_compatibility/core/models/person_details.dart';
+import 'package:people_compatibility/core/routes/app_routes.dart';
 import 'package:people_compatibility/domain/remote/people_compatibility_service.dart';
 import 'package:people_compatibility/presentation/custom_widgets/app_body_back.dart';
 import 'package:people_compatibility/presentation/custom_widgets/content_card.dart';
@@ -31,15 +34,16 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
       final args = ModalRoute.of(context)!.settings.arguments as CalculateCompatibilityPageArguments;
       final state = context.read<CalculateCompatibilityPageState>();
       state.setInProgress(true);
-      final result = await PeopleCompatibilityService.instance.getCompatibility(args.maleData, args.femaleData);
-      result.fold(
-        (l) => state.setError(true),
-        (r) => state.setCalculationResponse(
-          response: r,
-          femaleName: args.femaleData.name,
-          maleName: args.maleData.name,
-        ),
-      );
+      PeopleCompatibilityService.instance.getCompatibility(args.maleData, args.femaleData).then((result) {
+        result.fold((l) => state.setError(true), (r) {
+          state.setCalculationResponse(
+            response: r,
+            female: args.femaleData,
+            male: args.maleData,
+            shouldSaveToDd: args.shouldSaveToLocalDb,
+          );
+        });
+      });
       state.setInProgress(false);
     });
   }
@@ -56,10 +60,16 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
         leadingWidth: 64,
         leading: Row(
           mainAxisSize: MainAxisSize.min,
-          children: const [
+          children: [
             AppSpacing.horizontalSpace16,
             AppSpacing.horizontalSpace8,
-            CustomBackButton(),
+            CustomBackButton(
+              onTap: () => Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.initial,
+                (route) => false,
+              ),
+            ),
           ],
         ),
         actions: [
@@ -69,7 +79,10 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
               child: CustomButton.child(
                 height: 40,
                 width: 40,
-                onTap: () {},
+                onTap: () {
+                  final response = context.read<CalculateCompatibilityPageState>().calculationResponse;
+                  _shareLink(response);
+                },
                 child: SvgPicture.asset('assets/images/svg/share.svg'),
               ),
             ),
@@ -79,7 +92,15 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
       body: AppBodyBackground(
         child: Consumer<CalculateCompatibilityPageState>(
           builder: (context, state, child) {
-            if (state.inProgress) return const Center(child: CircularProgressIndicator());
+            if (state.inProgress || state.calculationResponse == null) return const Center(child: CircularProgressIndicator());
+            if ((state.calculationResponse?.koeff?.isEmpty ?? false) && !state.inProgress) {
+              return Center(
+                child: Text(
+                  'Ошибка запроса',
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+              );
+            }
             return ListView(
               controller: state.scrollController,
               children: [
@@ -189,7 +210,7 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
                       const SizedBox(),
                     ],
                   ),
-                  onTap: () {},
+                  onTap: () => _shareLink(state.calculationResponse),
                 ),
               ],
             );
@@ -198,13 +219,25 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
       ),
     );
   }
+
+  void _shareLink(CompatibilityResponse? response) {
+    print(response != null);
+    if (response != null) {
+      FlutterShare.share(
+        title: 'Поделиться',
+        linkUrl: response.requestUrl ?? '',
+      );
+    }
+  }
 }
 
 class CalculateCompatibilityPageArguments {
   final PersonDetails maleData, femaleData;
+  final bool shouldSaveToLocalDb;
 
   CalculateCompatibilityPageArguments({
     required this.maleData,
     required this.femaleData,
+    this.shouldSaveToLocalDb = true,
   });
 }

@@ -62,6 +62,7 @@ class _PeopleCompatibilityApiClient implements PeopleCompatibilityApiClient {
       r'lat1': firstGenderCityLat,
       r'lat2': secondGenderCityLat
     };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
