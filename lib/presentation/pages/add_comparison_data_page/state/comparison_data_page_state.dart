@@ -26,7 +26,7 @@ class ComparisonDataPageState extends BaseNotifier {
   String errorMessage = '';
 
   PersonDetails male = PersonDetails(
-    exactTimeKnown: false,
+    exactTimeUnknown: false,
     dateOfBirth: DateTime.now(),
     name: '',
     country: '',
@@ -34,7 +34,7 @@ class ComparisonDataPageState extends BaseNotifier {
   );
 
   PersonDetails female = PersonDetails(
-    exactTimeKnown: false,
+    exactTimeUnknown: false,
     dateOfBirth: DateTime.now(),
     name: '',
     country: '',
@@ -60,7 +60,7 @@ class ComparisonDataPageState extends BaseNotifier {
   bool get canSearchForCity => genderSwitcherState == GenderSwitcherState.male ? male.country.isNotEmpty : female.country.isNotEmpty;
 
   bool get selectedPersonExactTimeKnown =>
-      genderSwitcherState == GenderSwitcherState.male ? male.exactTimeKnown : female.exactTimeKnown;
+      genderSwitcherState == GenderSwitcherState.male ? male.exactTimeUnknown : female.exactTimeUnknown;
 
   void setHasValidationError(bool value) {
     hasValidationError = value;
@@ -199,18 +199,22 @@ class ComparisonDataPageState extends BaseNotifier {
 
   void updateBirthday(BirthdayData value) {
     if (genderSwitcherState == GenderSwitcherState.male) {
-      male = male.copyWith(dateOfBirth: value.date, exactTimeKnown: value.exactTimeKnown);
+      male = male.copyWith(dateOfBirth: value.date, exactTimeUnknown: value.exactTimeUnknown);
       notifyListeners();
     }
     if (genderSwitcherState == GenderSwitcherState.female) {
-      female = female.copyWith(dateOfBirth: value.date, exactTimeKnown: value.exactTimeKnown);
+      female = female.copyWith(dateOfBirth: value.date, exactTimeUnknown: value.exactTimeUnknown);
       notifyListeners();
     }
   }
 
   String get selectedPersonBirthday => genderSwitcherState == GenderSwitcherState.male
-      ? DateFormat('dd.MM.yyyy').format(male.dateOfBirth)
-      : DateFormat('dd.MM.yyyy').format(female.dateOfBirth);
+      ? male.exactTimeUnknown
+          ? DateFormat('dd.MM.yyyy').format(male.dateOfBirth)
+          : DateFormat('dd.MM.yyyy, HH:mm').format(male.dateOfBirth)
+      : female.exactTimeUnknown
+          ? DateFormat('dd.MM.yyyy').format(female.dateOfBirth)
+          : DateFormat('dd.MM.yyyy, HH:mm').format(female.dateOfBirth);
 
   DateTime get selectedPersonDateOfBirth => genderSwitcherState == GenderSwitcherState.male ? male.dateOfBirth : female.dateOfBirth;
 

@@ -28,9 +28,7 @@ class ComparisonDataSwitcher extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                if (initialState == GenderSwitcherState.male) {
-                  onSwitched(GenderSwitcherState.female);
-                } else {
+                if (initialState == GenderSwitcherState.female) {
                   onSwitched(GenderSwitcherState.male);
                 }
               },
@@ -51,8 +49,6 @@ class ComparisonDataSwitcher extends StatelessWidget {
               onTap: () {
                 if (initialState == GenderSwitcherState.male) {
                   onSwitched(GenderSwitcherState.female);
-                } else {
-                  onSwitched(GenderSwitcherState.male);
                 }
               },
               child: Container(

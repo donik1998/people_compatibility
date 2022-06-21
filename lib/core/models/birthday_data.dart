@@ -1,9 +1,9 @@
 class BirthdayData {
   final DateTime date;
-  final bool exactTimeKnown;
+  final bool exactTimeUnknown;
 
   BirthdayData({
     required this.date,
-    required this.exactTimeKnown,
+    required this.exactTimeUnknown,
   });
 }

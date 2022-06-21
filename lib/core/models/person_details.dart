@@ -3,13 +3,13 @@ class PersonDetails {
   final String name;
   final String country;
   final BirthLocation city;
-  final bool exactTimeKnown;
+  final bool exactTimeUnknown;
 
   PersonDetails({
     required this.dateOfBirth,
     required this.name,
     required this.country,
-    required this.exactTimeKnown,
+    required this.exactTimeUnknown,
     required this.city,
   });
 
@@ -18,28 +18,28 @@ class PersonDetails {
     String? name,
     String? country,
     BirthLocation? city,
-    bool? exactTimeKnown,
+    bool? exactTimeUnknown,
   }) =>
       PersonDetails(
         dateOfBirth: dateOfBirth ?? this.dateOfBirth,
         name: name ?? this.name,
         country: country ?? this.country,
         city: city ?? this.city,
-        exactTimeKnown: exactTimeKnown ?? this.exactTimeKnown,
+        exactTimeUnknown: exactTimeUnknown ?? this.exactTimeUnknown,
       );
 
   factory PersonDetails.fromJson(Map<String, dynamic> json) => PersonDetails(
         dateOfBirth: DateTime.parse(json['date_of_birth']),
         name: json['name'],
         country: json['country'],
-        exactTimeKnown: json['exact_time_known'],
+        exactTimeUnknown: json['exact_time_known'],
         city: BirthLocation.fromJson(json['city']),
       );
 
   Map<String, dynamic> get asMap => {
         'name': name,
         'country': country,
-        'exact_time_known': exactTimeKnown,
+        'exact_time_known': exactTimeUnknown,
         'date_of_birth': dateOfBirth.toIso8601String(),
         'city': city.asMap,
       };
