@@ -134,25 +134,33 @@ class ComparisonDataPageState extends BaseNotifier {
   void setGenderSwitcherState(GenderSwitcherState value) {
     genderSwitcherState = value;
     if (genderSwitcherState == GenderSwitcherState.male) {
-      female = female.copyWith(
-        name: nameController.text,
-        country: countryController.text,
-      );
-      nameController.text = male.name;
-      countryController.text = male.country;
-      cityController.text = male.city.title;
-      notifyListeners();
+      switchData(male);
+    } else {
+      switchData(female);
     }
-    if (genderSwitcherState == GenderSwitcherState.female) {
-      male = male.copyWith(
-        name: nameController.text,
-        country: countryController.text,
-      );
-      nameController.text = female.name;
-      countryController.text = female.country;
-      cityController.text = female.city.title;
-      notifyListeners();
-    }
+    notifyListeners();
+  }
+
+  void switchData(PersonDetails data) {
+    nameController.text = data.name;
+    countryController.text = data.country;
+    cityController.text = data.city.title;
+  }
+
+  void saveFemaleData() {
+    female = female.copyWith(
+      name: nameController.text,
+      country: countryController.text,
+    );
+    notifyListeners();
+  }
+
+  void saveMaleData() {
+    male = male.copyWith(
+      name: nameController.text,
+      country: countryController.text,
+    );
+    notifyListeners();
   }
 
   void resetData() {
@@ -244,28 +252,26 @@ class ComparisonDataPageState extends BaseNotifier {
   }
 
   void validateMaleData() {
+    setHasValidationError(false);
+    setValidationErrorMessage('');
     final maleLocationIsValid = male.city.isValidLocation && male.country.isNotEmpty;
     final maleNameValid = male.name.isNotEmpty;
     final maleBirthdayIsValid = male.dateOfBirth.isBefore(DateTime.now()) && !male.dateOfBirth.isSameDay(DateTime.now());
     maleDataIsValid = maleLocationIsValid && maleNameValid && maleBirthdayIsValid;
-    print('maleLocationIsValid: $maleLocationIsValid\nmaleNameValid: $maleNameValid\nmaleBirthdayIsValid: $maleBirthdayIsValid');
-    notifyListeners();
-
-    // if (!maleLocationIsValid) {
-    //   setHasValidationError(true);
-    //   setValidationErrorMessage('У партнера мужчины не указаны координаты места проживания');
-    //   return false;
-    // } else if (!maleNameValid) {
-    //   setHasValidationError(true);
-    //   setValidationErrorMessage('У партнера мужчины не указано имя');
-    //   return false;
-    // } else if (!maleBirthdayIsValid) {
-    //   setHasValidationError(true);
-    //   setValidationErrorMessage('У партнера мужчины неправильно указан день рождения');
-    //   return false;
-    // } else {
-    //   return true;
-    // }
+    if (!maleLocationIsValid) {
+      setHasValidationError(true);
+      setValidationErrorMessage('У партнера мужчины не указаны координаты места проживания');
+    } else if (!maleNameValid) {
+      setHasValidationError(true);
+      setValidationErrorMessage('У партнера мужчины не указано имя');
+    } else if (!maleBirthdayIsValid) {
+      setHasValidationError(true);
+      setValidationErrorMessage('У партнера мужчины неправильно указан день рождения');
+    }
+    if (maleDataIsValid) {
+      saveMaleData();
+      setGenderSwitcherState(GenderSwitcherState.female);
+    }
   }
 
   void validateFemaleData() {
@@ -275,22 +281,20 @@ class ComparisonDataPageState extends BaseNotifier {
     final femaleNameValid = female.name.isNotEmpty;
     final femaleBirthdayIsValid = female.dateOfBirth.isBefore(DateTime.now()) && !female.dateOfBirth.isSameDay(DateTime.now());
     femaleDataIsValid = femaleLocationIsValid && femaleNameValid && femaleBirthdayIsValid;
-    notifyListeners();
-    // if (!femaleLocationIsValid) {
-    //   setHasValidationError(true);
-    //   setValidationErrorMessage('У партнера женщины не указаны координаты места проживания');
-    //   return false;
-    // } else if (!femaleNameValid) {
-    //   setHasValidationError(true);
-    //   setValidationErrorMessage('У партнера женщины не указано имя');
-    //   return false;
-    // } else if (!femaleBirthdayIsValid) {
-    //   setHasValidationError(true);
-    //   setValidationErrorMessage('У партнера мужчины неправильно указан день рождения');
-    //   return false;
-    // } else {
-    //   return true;
-    // }
+    if (!femaleLocationIsValid) {
+      setHasValidationError(true);
+      setValidationErrorMessage('У партнера женщины не указаны координаты места проживания');
+    } else if (!femaleNameValid) {
+      setHasValidationError(true);
+      setValidationErrorMessage('У партнера женщины не указано имя');
+    } else if (!femaleBirthdayIsValid) {
+      setHasValidationError(true);
+      setValidationErrorMessage('У партнера женщины неправильно указан день рождения');
+    }
+    if (femaleDataIsValid) {
+      saveFemaleData();
+      setGenderSwitcherState(GenderSwitcherState.male);
+    }
   }
 
   void changePartnerName(String value) {

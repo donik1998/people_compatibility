@@ -3,20 +3,15 @@ import 'package:people_compatibility/presentation/theme/app_border_radius.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/utils/enums.dart';
 
-class ComparisonDataSwitcher extends StatefulWidget {
+class ComparisonDataSwitcher extends StatelessWidget {
   final ValueChanged<GenderSwitcherState> onSwitched;
+  final GenderSwitcherState initialState;
 
   const ComparisonDataSwitcher({
     Key? key,
     required this.onSwitched,
+    required this.initialState,
   }) : super(key: key);
-
-  @override
-  State<ComparisonDataSwitcher> createState() => _ComparisonDataSwitcherState();
-}
-
-class _ComparisonDataSwitcherState extends State<ComparisonDataSwitcher> {
-  GenderSwitcherState switcherState = GenderSwitcherState.male;
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +28,16 @@ class _ComparisonDataSwitcherState extends State<ComparisonDataSwitcher> {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                setState(() => switcherState = GenderSwitcherState.male);
-                widget.onSwitched(switcherState);
+                if (initialState == GenderSwitcherState.male) {
+                  onSwitched(GenderSwitcherState.female);
+                } else {
+                  onSwitched(GenderSwitcherState.male);
+                }
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 18),
                 decoration: BoxDecoration(
-                  color: switcherState == GenderSwitcherState.male ? AppColors.darkPurple : Colors.transparent,
+                  color: initialState == GenderSwitcherState.male ? AppColors.darkPurple : Colors.transparent,
                   borderRadius: AppBorderRadius.max,
                 ),
                 child: const Center(
@@ -51,13 +49,16 @@ class _ComparisonDataSwitcherState extends State<ComparisonDataSwitcher> {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                setState(() => switcherState = GenderSwitcherState.female);
-                widget.onSwitched(switcherState);
+                if (initialState == GenderSwitcherState.male) {
+                  onSwitched(GenderSwitcherState.female);
+                } else {
+                  onSwitched(GenderSwitcherState.male);
+                }
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 18),
                 decoration: BoxDecoration(
-                  color: switcherState == GenderSwitcherState.female ? AppColors.purple : Colors.transparent,
+                  color: initialState == GenderSwitcherState.female ? AppColors.purple : Colors.transparent,
                   borderRadius: AppBorderRadius.max,
                 ),
                 child: const Center(

@@ -41,6 +41,7 @@ class ComparisonDataPage extends StatelessWidget {
                   children: [
                     AppSpacing.verticalSpace16,
                     ComparisonDataSwitcher(
+                      initialState: state.genderSwitcherState,
                       onSwitched: (switcherState) => state.setGenderSwitcherState(switcherState),
                     ),
                     AppSpacing.verticalSpace16,
@@ -216,29 +217,19 @@ class ComparisonDataPage extends StatelessWidget {
               onTap: () {
                 if (state.genderSwitcherState == GenderSwitcherState.male) {
                   state.validateMaleData();
-                  if (state.maleDataIsValid) {
-                    state.setGenderSwitcherState(GenderSwitcherState.female);
-                  } else {
-                    state.setHasValidationError(true);
-                    state.setValidationErrorMessage('Вы неправильно заполнили данные партнера');
-                  }
-                }
-                if (state.genderSwitcherState == GenderSwitcherState.female) {
-                  state.validateFemaleData();
+                } else {
                   state.validateMaleData();
-                  if (state.maleDataIsValid && state.femaleDataIsValid) {
-                    Navigator.pushNamed(
-                      context,
-                      AppRoutes.calculateCompatibility,
-                      arguments: CalculateCompatibilityPageArguments(
-                        maleData: context.read<ComparisonDataPageState>().male,
-                        femaleData: context.read<ComparisonDataPageState>().female,
-                      ),
-                    );
-                  } else {
-                    state.setHasValidationError(true);
-                    state.setValidationErrorMessage('Вы неправильно заполнили данные партнера');
-                  }
+                  state.validateFemaleData();
+                }
+                if (state.maleDataIsValid && state.femaleDataIsValid) {
+                  Navigator.pushNamed(
+                    context,
+                    AppRoutes.calculateCompatibility,
+                    arguments: CalculateCompatibilityPageArguments(
+                      maleData: context.read<ComparisonDataPageState>().male,
+                      femaleData: context.read<ComparisonDataPageState>().female,
+                    ),
+                  );
                 }
               },
               text: state.genderSwitcherState == GenderSwitcherState.male ? 'Далее' : 'Рассчитать',
