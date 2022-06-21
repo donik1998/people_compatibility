@@ -5,7 +5,6 @@ class CompatibilityResponse {
   });
 
   CompatibilityResponse.fromJson(Map<String, dynamic> json) {
-    print(json);
     koeff = json['koeff'] != null ? json['koeff'].cast<int>() : [];
     koeffSum = json['koeff_sum'];
   }

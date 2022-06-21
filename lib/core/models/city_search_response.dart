@@ -46,7 +46,6 @@ class PlaceSearchResponse {
         if (term.value == countryName && (prediction.types?.contains('locality') ?? false)) cities.add(prediction);
       }
     }
-    for (final city in cities) print(city.structuredFormatting?.mainText);
     return cities;
   }
 }
