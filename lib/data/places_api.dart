@@ -17,7 +17,7 @@ abstract class GooglePlacesApiClient {
     );
 
   @GET('/place/queryautocomplete/json')
-  Future<CitySearchResponse> getPlaceByInput(
+  Future<PlaceSearchResponse> getPlaceByInput(
     @Query('input') String input,
     @Query('language') String lang,
     @Query('types') String type,

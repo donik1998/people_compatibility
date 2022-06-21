@@ -6,7 +6,7 @@ import 'package:people_compatibility/data/failure.dart';
 import 'package:people_compatibility/data/places_api.dart';
 
 abstract class SearchPlaceRepository {
-  Future<Either<Failure, CitySearchResponse>> searchPlaceByInput({
+  Future<Either<Failure, PlaceSearchResponse>> searchPlaceByInput({
     required String input,
     String lang = 'ru',
     required String type,
@@ -20,12 +20,12 @@ class SearchPlaceService implements SearchPlaceRepository {
   static SearchPlaceService get instance => SearchPlaceService._();
 
   @override
-  Future<Either<Failure, CitySearchResponse>> searchPlaceByInput({
+  Future<Either<Failure, PlaceSearchResponse>> searchPlaceByInput({
     required String input,
     String lang = 'ru',
     required String type,
   }) async {
-    return await Task<CitySearchResponse>(
+    return await Task<PlaceSearchResponse>(
       () => GooglePlacesApiClient.instance.getPlaceByInput(input, lang, type),
     )
         .attempt()

@@ -5,7 +5,7 @@ import 'package:people_compatibility/core/models/comparison.dart';
 import 'package:people_compatibility/presentation/theme/app_spacing.dart';
 
 class ComparisonCard extends StatelessWidget {
-  final Comparison data;
+  final CompatibilityData data;
 
   const ComparisonCard({
     Key? key,

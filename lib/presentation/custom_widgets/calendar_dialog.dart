@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:people_compatibility/core/models/birthday_data.dart';
 import 'package:people_compatibility/presentation/custom_widgets/content_card.dart';
+import 'package:people_compatibility/presentation/custom_widgets/custom_button.dart';
 import 'package:people_compatibility/presentation/theme/app_border_radius.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_insets.dart';
 import 'package:people_compatibility/presentation/theme/app_spacing.dart';
+import 'package:people_compatibility/presentation/utils/extensions.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarDialog extends StatefulWidget {
@@ -101,6 +104,29 @@ class _CalendarDialogState extends State<CalendarDialog> {
               ),
               duration: const Duration(milliseconds: 250),
             ),
+            if (!exactTimeKnown) AppSpacing.verticalSpace16,
+            if (!exactTimeKnown)
+              CustomButton.text(
+                text: 'Выбрать время',
+                onTap: () => DatePicker.showTimePicker(
+                  context,
+                  locale: LocaleType.ru,
+                  currentTime: _selectedDate,
+                  theme: DatePickerTheme(
+                    backgroundColor: AppColors.deepBlue,
+                    headerColor: AppColors.deepPurple,
+                    itemStyle: Theme.of(context).textTheme.bodyText1!,
+                    cancelStyle: Theme.of(context).textTheme.headline6!,
+                    doneStyle: Theme.of(context).textTheme.headline6!,
+                  ),
+                  showSecondsColumn: false,
+                  onConfirm: (newTime) {
+                    setState(() {
+                      _selectedDate = _selectedDate.copyWith(hour: newTime.hour, minute: newTime.minute);
+                    });
+                  },
+                ),
+              ),
             AppSpacing.verticalSpace16,
             Row(
               mainAxisSize: MainAxisSize.max,
@@ -128,7 +154,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
             AppSpacing.verticalSpace12,
             TappableColoredCardWrap(
               content: Text(
-                DateFormat('dd.MM.yyyy, HH:MM').format(_selectedDate),
+                DateFormat('dd.MM.yyyy, HH:mm').format(_selectedDate),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyText1?.copyWith(color: AppColors.dirtyWhite),
               ),

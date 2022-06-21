@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:people_compatibility/core/routes/app_routes.dart';
 import 'package:people_compatibility/presentation/custom_widgets/app_body_back.dart';
@@ -61,28 +63,28 @@ class MainPage extends StatelessWidget {
                 ],
               ),
               AppSpacing.verticalSpace24,
-              if (state.sharedPreferences != null)
-                if (state.historyIsNotEmpty)
+              if (state.history != null)
+                if (state.history!.isNotEmpty)
                   Expanded(
                     child: ListView.separated(
                       itemBuilder: (context, index) => TappableColoredCardWrap(
                         color: AppColors.white.withOpacity(0.1),
                         onTap: () => state.setFullSized(true),
                         content: ComparisonCard(
-                          data: state.history.elementAt(index),
+                          data: state.history!.elementAt(index),
                         ),
                       ),
                       separatorBuilder: (context, index) => AppSpacing.verticalSpace16,
-                      itemCount: state.fullSizedMode ? state.history.length : 2,
+                      itemCount: state.fullSizedMode ? state.history!.length : min(2, state.history!.length),
                     ),
                   ),
-              if (state.sharedPreferences != null)
-                if (!state.historyIsNotEmpty)
+              if (state.history != null)
+                if (state.history!.isEmpty)
                   TappableColoredCardWrap(
                     content: const Center(child: Text('Здесь пока ничего нет')),
                     color: AppColors.white.withOpacity(0.1),
                   ),
-              if (state.sharedPreferences == null)
+              if (state.inProgress)
                 TappableColoredCardWrap(
                   content: const Center(child: CircularProgressIndicator()),
                   color: AppColors.white.withOpacity(0.1),

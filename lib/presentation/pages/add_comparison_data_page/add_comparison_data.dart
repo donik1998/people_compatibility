@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:people_compatibility/core/models/birthday_data.dart';
 import 'package:people_compatibility/core/routes/app_routes.dart';
@@ -56,9 +57,7 @@ class ComparisonDataPage extends StatelessWidget {
                         children: [
                           Text(
                             state.selectedPersonBirthday,
-                            style: Theme.of(context).textTheme.headline6?.copyWith(
-                                  fontWeight: FontWeight.w400,
-                                ),
+                            style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w400),
                           ),
                           IconButton(
                             icon: const Icon(
@@ -150,23 +149,22 @@ class ComparisonDataPage extends StatelessWidget {
                     if (state.canShowCityResults) AppSpacing.verticalSpace16,
                     if (state.canShowCityResults)
                       TappableColoredCardWrap(
-                        content: state.searchResponse!.predictedCities.isEmpty
+                        content: state.filteredCities.isEmpty
                             ? const Center(child: Text('Ничего не найдено'))
                             : ListView.separated(
                                 shrinkWrap: true,
-                                itemCount: state.searchResponse!.predictedCities.length,
+                                itemCount: state.filteredCities.length,
                                 separatorBuilder: (context, index) => AppSpacing.verticalSpace12,
                                 itemBuilder: (context, index) => GestureDetector(
                                   onTap: () {
                                     state.setCity(
-                                      placeId: state.searchResponse!.predictedCities.elementAt(index).placeId ?? '',
-                                      cityTitle:
-                                          state.searchResponse!.predictedCities.elementAt(index).structuredFormatting?.mainText ?? '',
+                                      placeId: state.filteredCities.elementAt(index).placeId ?? '',
+                                      cityTitle: state.filteredCities.elementAt(index).structuredFormatting?.mainText ?? '',
                                     );
                                     FocusScope.of(context).unfocus();
                                   },
                                   child: Text(
-                                    state.searchResponse!.predictedCities.elementAt(index).structuredFormatting?.mainText ?? 'null',
+                                    state.filteredCities.elementAt(index).structuredFormatting?.mainText ?? 'null',
                                     style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, fontWeight: FontWeight.w400),
                                   ),
                                 ),
@@ -220,10 +218,14 @@ class ComparisonDataPage extends StatelessWidget {
                   state.validateMaleData();
                   if (state.maleDataIsValid) {
                     state.setGenderSwitcherState(GenderSwitcherState.female);
+                  } else {
+                    state.setHasValidationError(true);
+                    state.setValidationErrorMessage('Вы неправильно заполнили данные партнера');
                   }
                 }
                 if (state.genderSwitcherState == GenderSwitcherState.female) {
                   state.validateFemaleData();
+                  state.validateMaleData();
                   if (state.maleDataIsValid && state.femaleDataIsValid) {
                     Navigator.pushNamed(
                       context,
@@ -233,6 +235,9 @@ class ComparisonDataPage extends StatelessWidget {
                         femaleData: context.read<ComparisonDataPageState>().female,
                       ),
                     );
+                  } else {
+                    state.setHasValidationError(true);
+                    state.setValidationErrorMessage('Вы неправильно заполнили данные партнера');
                   }
                 }
               },

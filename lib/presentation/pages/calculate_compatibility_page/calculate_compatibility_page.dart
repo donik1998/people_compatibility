@@ -34,7 +34,11 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
       final result = await PeopleCompatibilityService.instance.getCompatibility(args.maleData, args.femaleData);
       result.fold(
         (l) => state.setError(true),
-        (r) => state.setCalculationResponse(r),
+        (r) => state.setCalculationResponse(
+          response: r,
+          femaleName: args.femaleData.name,
+          maleName: args.maleData.name,
+        ),
       );
       state.setInProgress(false);
     });
@@ -149,11 +153,15 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
                 AppSpacing.verticalSpace20,
                 AppSpacing.verticalSpace20,
                 CoefficientChart(
-                  onBarSelected: (index) => state.scrollController.animateTo(
-                    state.scrollController.offset + index * 150,
-                    duration: const Duration(milliseconds: 250),
-                    curve: Curves.decelerate,
-                  ),
+                  initialIndex: state.selectedIndex,
+                  onBarSelected: (index) {
+                    state.setSelectedIndex(index);
+                    state.scrollController.animateTo(
+                      state.scrollController.offset + index * 150,
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.decelerate,
+                    );
+                  },
                   coefficients: state.calculationResponse?.koeff ?? [],
                 ),
                 AppSpacing.verticalSpace20,

@@ -8,11 +8,13 @@ import 'package:people_compatibility/presentation/theme/app_spacing.dart';
 class CoefficientChart extends StatefulWidget {
   final List<int> coefficients;
   final ValueChanged<int> onBarSelected;
+  final int? initialIndex;
 
   const CoefficientChart({
     Key? key,
     required this.coefficients,
     required this.onBarSelected,
+    this.initialIndex,
   }) : super(key: key);
 
   @override
@@ -20,7 +22,7 @@ class CoefficientChart extends StatefulWidget {
 }
 
 class _CoefficientChartState extends State<CoefficientChart> {
-  int? _selectedIndex;
+  late int _selectedIndex = widget.initialIndex ?? -1;
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +59,8 @@ class _CoefficientChartState extends State<CoefficientChart> {
                 for (int i = 0; i < widget.coefficients.length; i++)
                   GestureDetector(
                     onTap: () {
-                      setState(() => _selectedIndex = i);
                       widget.onBarSelected(i);
+                      setState(() => _selectedIndex = i);
                     },
                     child: SizedBox(
                       width: 20,

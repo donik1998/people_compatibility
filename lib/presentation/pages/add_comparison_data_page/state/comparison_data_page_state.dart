@@ -17,7 +17,8 @@ class ComparisonDataPageState extends BaseNotifier {
   late final TextEditingController countryController = TextEditingController(text: male.country);
   late final TextEditingController cityController = TextEditingController(text: male.city.title);
   Completer completer = Completer();
-  CitySearchResponse? searchResponse;
+  PlaceSearchResponse? searchResponse;
+  List<Predictions> filteredCities = List.empty(growable: true);
   bool searchError = false;
   CityGeocodeResponse? cityLocationResponse;
   final Debouncer callDebouncer = Debouncer(milliseconds: 250);
@@ -88,8 +89,15 @@ class ComparisonDataPageState extends BaseNotifier {
     notifyListeners();
   }
 
-  void setSearchResults(CitySearchResponse response) {
+  void setSearchResults(PlaceSearchResponse response) {
     searchResponse = response;
+    if (searchMode == PlaceSearchMode.city) {
+      if (genderSwitcherState == GenderSwitcherState.male) {
+        filteredCities = searchResponse?.filteredByCountryCities(male.country) ?? [];
+      } else {
+        filteredCities = searchResponse?.filteredByCountryCities(female.country) ?? [];
+      }
+    }
     setInProgress(false);
   }
 
@@ -240,6 +248,7 @@ class ComparisonDataPageState extends BaseNotifier {
     final maleNameValid = male.name.isNotEmpty;
     final maleBirthdayIsValid = male.dateOfBirth.isBefore(DateTime.now()) && !male.dateOfBirth.isSameDay(DateTime.now());
     maleDataIsValid = maleLocationIsValid && maleNameValid && maleBirthdayIsValid;
+    print('maleLocationIsValid: $maleLocationIsValid\nmaleNameValid: $maleNameValid\nmaleBirthdayIsValid: $maleBirthdayIsValid');
     notifyListeners();
 
     // if (!maleLocationIsValid) {

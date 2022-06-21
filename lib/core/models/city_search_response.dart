@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-class CitySearchResponse {
-  CitySearchResponse({
+class PlaceSearchResponse {
+  PlaceSearchResponse({
     this.predictions,
     this.status,
   });
 
-  CitySearchResponse.fromJson(dynamic json) {
+  PlaceSearchResponse.fromJson(dynamic json) {
     if (json['predictions'] != null) {
       predictions = [];
       json['predictions'].forEach((v) {
@@ -17,11 +17,11 @@ class CitySearchResponse {
   }
   List<Predictions>? predictions;
   String? status;
-  CitySearchResponse copyWith({
+  PlaceSearchResponse copyWith({
     List<Predictions>? predictions,
     String? status,
   }) =>
-      CitySearchResponse(
+      PlaceSearchResponse(
         predictions: predictions ?? this.predictions,
         status: status ?? this.status,
       );
@@ -34,10 +34,21 @@ class CitySearchResponse {
     return map;
   }
 
-  List<Predictions> get predictedCities =>
-      predictions?.where((element) => element.types?.contains('locality') ?? false).toList() ?? [];
+  /*List<Predictions> get predictedCities =>
+      predictions?.where((element) => element.types?.contains('locality') ?? false).toList() ?? [];*/
   List<Predictions> get predictedCountries =>
       predictions?.where((element) => element.types?.contains('country') ?? false).toList() ?? [];
+
+  List<Predictions> filteredByCountryCities(String countryName) {
+    final cities = List<Predictions>.empty(growable: true);
+    for (Predictions prediction in predictions ?? []) {
+      for (Terms term in prediction.terms ?? []) {
+        if (term.value == countryName && (prediction.types?.contains('locality') ?? false)) cities.add(prediction);
+      }
+    }
+    for (final city in cities) print(city.structuredFormatting?.mainText);
+    return cities;
+  }
 }
 
 class Predictions {

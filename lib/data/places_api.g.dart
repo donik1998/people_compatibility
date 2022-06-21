@@ -18,7 +18,7 @@ class _GooglePlacesApiClient implements GooglePlacesApiClient {
   String? baseUrl;
 
   @override
-  Future<CitySearchResponse> getPlaceByInput(input, lang, type) async {
+  Future<PlaceSearchResponse> getPlaceByInput(input, lang, type) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'input': input,
@@ -28,12 +28,12 @@ class _GooglePlacesApiClient implements GooglePlacesApiClient {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<CitySearchResponse>(
+        _setStreamType<PlaceSearchResponse>(
             Options(method: 'GET', headers: _headers, extra: _extra)
                 .compose(_dio.options, '/place/queryautocomplete/json',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = CitySearchResponse.fromJson(_result.data!);
+    final value = PlaceSearchResponse.fromJson(_result.data!);
     return value;
   }
 

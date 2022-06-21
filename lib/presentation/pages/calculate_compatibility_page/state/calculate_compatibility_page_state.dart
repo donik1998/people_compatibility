@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:people_compatibility/core/models/compatibility_response.dart';
+import 'package:people_compatibility/data/database_repository.dart';
 import 'package:people_compatibility/presentation/provider/base_notifier.dart';
 
 class CalculateCompatibilityPageState extends BaseNotifier {
   CompatibilityResponse? calculationResponse;
 
   bool hasError = false;
+
+  int? selectedIndex;
 
   final List<String> compatibilityLevelTitles = [
     'Единство взглядов',
@@ -39,13 +42,24 @@ class CalculateCompatibilityPageState extends BaseNotifier {
 
   ScrollController scrollController = ScrollController();
 
-  void setCalculationResponse(CompatibilityResponse response) {
+  void setCalculationResponse({required CompatibilityResponse response, required String maleName, required String femaleName}) {
     calculationResponse = response;
+    DatabaseService.instance.saveData(
+      maleName: maleName,
+      femaleName: femaleName,
+      date: DateTime.now(),
+      response: response,
+    );
     notifyListeners();
   }
 
   void setError(bool value) {
     hasError = value;
+    notifyListeners();
+  }
+
+  void setSelectedIndex(int index) {
+    selectedIndex = index;
     notifyListeners();
   }
 }
