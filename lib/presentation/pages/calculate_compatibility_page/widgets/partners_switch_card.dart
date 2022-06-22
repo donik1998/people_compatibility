@@ -108,8 +108,8 @@ class _PartnersSwitchCardState extends State<PartnersSwitchCard> {
                       ),
                       TextSpan(
                         text: _selectedDetails.exactTimeUnknown
-                            ? DateFormat('HH:mm').format(_selectedDetails.dateOfBirth)
-                            : 'Неизвестно',
+                            ? 'Неизвестно'
+                            : DateFormat('HH:mm').format(_selectedDetails.dateOfBirth),
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ],

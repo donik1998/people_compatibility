@@ -69,7 +69,7 @@ class _TimePickerSheetState extends State<TimePickerSheet> {
                     onSelectedItemChanged: (index) => setState(() => _selectedDate = _selectedDate.copyWith(hour: index)),
                     itemBuilder: (context, index) {
                       return Text(
-                        '$index',
+                        '$index'.padLeft(2,'0'),
                         style: Theme.of(context).textTheme.headline6,
                       );
                     },
@@ -89,7 +89,8 @@ class _TimePickerSheetState extends State<TimePickerSheet> {
                     onSelectedItemChanged: (index) => setState(() => _selectedDate = _selectedDate.copyWith(minute: index)),
                     itemBuilder: (context, index) {
                       return Text(
-                        '$index',
+                        '$index'.padLeft(2,'0'),
+
                         style: Theme.of(context).textTheme.headline6,
                       );
                     },

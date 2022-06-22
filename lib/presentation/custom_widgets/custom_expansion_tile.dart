@@ -7,12 +7,14 @@ class ExpandableDescriptionItem extends StatefulWidget {
   final String title;
   final String description;
   final String descriptionTitle;
+  final bool initiallyExpanded;
 
   const ExpandableDescriptionItem({
     Key? key,
     required this.title,
     required this.description,
     required this.descriptionTitle,
+    required this.initiallyExpanded,
   }) : super(key: key);
 
   @override
@@ -20,7 +22,7 @@ class ExpandableDescriptionItem extends StatefulWidget {
 }
 
 class _ExpandableDescriptionItemState extends State<ExpandableDescriptionItem> {
-  bool _expanded = false;
+  late bool _expanded = widget.initiallyExpanded;
 
   @override
   Widget build(BuildContext context) {
