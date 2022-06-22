@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:people_compatibility/core/models/birthday_data.dart';
 import 'package:people_compatibility/core/routes/app_routes.dart';
 import 'package:people_compatibility/presentation/custom_widgets/app_body_back.dart';
@@ -73,42 +72,7 @@ class ComparisonDataPage extends StatelessWidget {
                                 exactTimeKnownInitially: state.selectedPersonExactTimeKnown,
                               ),
                             ).then((birthdayData) async {
-                              if (birthdayData != null) {
-                                if (birthdayData.exactTimeUnknown) {
-                                  state.updateBirthday(birthdayData);
-                                } else {
-                                  final time = await DatePicker.showTimePicker(
-                                    context,
-                                    locale: LocaleType.ru,
-                                    currentTime: DateTime.now(),
-                                    theme: DatePickerTheme(
-                                      backgroundColor: AppColors.deepBlue,
-                                      headerColor: AppColors.deepPurple,
-                                      itemStyle: Theme.of(context).textTheme.bodyText1!,
-                                      cancelStyle: Theme.of(context).textTheme.headline6!,
-                                      doneStyle: Theme.of(context).textTheme.headline6!,
-                                    ),
-                                    showSecondsColumn: false,
-                                  );
-                                  if (time != null) {
-                                    state.updateBirthday(
-                                      BirthdayData(
-                                        date: DateTime(
-                                          birthdayData.date.year,
-                                          birthdayData.date.month,
-                                          birthdayData.date.day,
-                                          time.hour,
-                                          time.minute,
-                                          time.second,
-                                          time.millisecond,
-                                          time.microsecond,
-                                        ),
-                                        exactTimeUnknown: false,
-                                      ),
-                                    );
-                                  }
-                                }
-                              }
+                              if (birthdayData != null) state.updateBirthday(birthdayData);
                             }),
                           ),
                         ],

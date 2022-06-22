@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:people_compatibility/core/models/birthday_data.dart';
 import 'package:people_compatibility/presentation/custom_widgets/content_card.dart';
+import 'package:people_compatibility/presentation/custom_widgets/time_picker_sheet.dart';
 import 'package:people_compatibility/presentation/theme/app_border_radius.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_insets.dart';
@@ -25,7 +27,8 @@ class CalendarDialog extends StatefulWidget {
 class _CalendarDialogState extends State<CalendarDialog> {
   late bool exactTimeUnknown = widget.exactTimeKnownInitially;
   late DateTime _selectedDate = widget.initialDate;
-  CalendarDialogMode _dialogMode = CalendarDialogMode.month;
+  Duration animDuration = const Duration(milliseconds: 250);
+  CalendarDialogMode _dialogMode = CalendarDialogMode.day;
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +44,8 @@ class _CalendarDialogState extends State<CalendarDialog> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
-            AnimatedCrossFade(
-              crossFadeState: _dialogMode == CalendarDialogMode.month ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-              firstChild: TableCalendar(
+            if (_dialogMode == CalendarDialogMode.day)
+              TableCalendar(
                 locale: 'ru',
                 calendarStyle: CalendarStyle(
                   todayDecoration: const BoxDecoration(
@@ -98,7 +100,8 @@ class _CalendarDialogState extends State<CalendarDialog> {
                   rightChevronIcon: const Icon(Icons.chevron_right, color: AppColors.dirtyWhite, size: 24),
                 ),
               ),
-              secondChild: SizedBox(
+            if (_dialogMode == CalendarDialogMode.year)
+              SizedBox(
                 height: 276,
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -118,8 +121,28 @@ class _CalendarDialogState extends State<CalendarDialog> {
                   ),
                 ),
               ),
-              duration: const Duration(milliseconds: 250),
-            ),
+            if (_dialogMode == CalendarDialogMode.month)
+              SizedBox(
+                height: 250,
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 16,
+                    childAspectRatio: (MediaQuery.of(context).size.width / 3) / 64,
+                  ),
+                  itemCount: 12,
+                  itemBuilder: (context, index) => TappableColoredCardWrap(
+                    content: Center(
+                        child: Text(DateFormat('MMMM', 'ru').format(DateTime(_selectedDate.year, _selectedDate.month + index)))),
+                    color: AppColors.deepPurple,
+                    onTap: () => setState(() {
+                      _dialogMode = CalendarDialogMode.day;
+                      _selectedDate = DateTime(_selectedDate.year, _selectedDate.month + index);
+                    }),
+                  ),
+                ),
+              ),
             AppSpacing.verticalSpace16,
             Row(
               mainAxisSize: MainAxisSize.max,
@@ -178,13 +201,79 @@ class _CalendarDialogState extends State<CalendarDialog> {
                   Expanded(
                     child: TappableColoredCardWrap(
                       borderRadius: BorderRadius.zero,
-                      onTap: () => Navigator.pop(
-                        context,
-                        BirthdayData(
-                          date: _selectedDate,
-                          exactTimeUnknown: exactTimeUnknown,
-                        ),
-                      ),
+                      onTap: () {
+                        if (exactTimeUnknown) {
+                          Navigator.pop(
+                            context,
+                            BirthdayData(
+                              date: _selectedDate,
+                              exactTimeUnknown: exactTimeUnknown,
+                            ),
+                          );
+                        } else {
+                          showModalBottomSheet(
+                            isDismissible: false,
+                            context: context,
+                            builder: (context) => const TimePickerSheet(),
+                          ).then((time) {
+                            if (time is DateTime) {
+                              Navigator.pop(
+                                context,
+                                BirthdayData(
+                                  date: DateTime(
+                                    _selectedDate.year,
+                                    _selectedDate.month,
+                                    _selectedDate.day,
+                                    time.hour,
+                                    time.minute,
+                                    time.second,
+                                    time.millisecond,
+                                    time.microsecond,
+                                  ),
+                                  exactTimeUnknown: false,
+                                ),
+                              );
+                            }
+                          });
+                          // DatePicker.showTimePicker(
+                          //   context,
+                          //   locale: LocaleType.ru,
+                          //   currentTime: DateTime.now(),
+                          //   onCancel: () {
+                          //     print('cancel');
+                          //   },
+                          //   onConfirm: (time) {},
+                          //   onChanged: (time) {},
+                          //   theme: DatePickerTheme(
+                          //     backgroundColor: AppColors.deepBlue,
+                          //     headerColor: AppColors.deepPurple,
+                          //     itemStyle: Theme.of(context).textTheme.bodyText1!,
+                          //     cancelStyle: Theme.of(context).textTheme.headline6!,
+                          //     doneStyle: Theme.of(context).textTheme.headline6!,
+                          //   ),
+                          //   showSecondsColumn: false,
+                          // ).then((time) {
+                          //   if (time != null) {
+                          //     Navigator.pop(
+                          //       context,
+                          //       BirthdayData(
+                          //         date: DateTime(
+                          //           _selectedDate.year,
+                          //           _selectedDate.month,
+                          //           _selectedDate.day,
+                          //           time.hour,
+                          //           time.minute,
+                          //           time.second,
+                          //           time.millisecond,
+                          //           time.microsecond,
+                          //         ),
+                          //         exactTimeUnknown: false,
+                          //       ),
+                          //     );
+                          //   }
+                          // });
+                        }
+                      },
                       gradient: const LinearGradient(
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
@@ -196,7 +285,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
                       padding: EdgeInsets.zero,
                       content: Center(
                         child: Text(
-                          'Подтвердить',
+                          exactTimeUnknown ? 'Подтвердить' : 'Указать время',
                           style: Theme.of(context).textTheme.bodyText1?.copyWith(color: AppColors.textGray),
                         ),
                       ),
@@ -213,4 +302,4 @@ class _CalendarDialogState extends State<CalendarDialog> {
   }
 }
 
-enum CalendarDialogMode { month, year }
+enum CalendarDialogMode { day, month, year }
