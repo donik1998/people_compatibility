@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:people_compatibility/core/models/birthday_data.dart';
 import 'package:people_compatibility/core/routes/app_routes.dart';
 import 'package:people_compatibility/presentation/custom_widgets/app_body_back.dart';
@@ -28,194 +28,207 @@ class ComparisonDataPage extends StatelessWidget {
         title: const Text('Ваши данные'),
       ),
       body: Consumer<ComparisonDataPageState>(
-        builder: (context, state, child) => AppBodyBackground(
-          child: ListView(
-            children: [
-              AppSpacing.verticalSpace20,
-              AppSpacing.verticalSpace20,
-              TappableColoredCardWrap(
-                padding: AppInsets.paddingAll16,
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    AppSpacing.verticalSpace16,
-                    ComparisonDataSwitcher(
-                      initialState: state.genderSwitcherState,
-                      onSwitched: (switcherState) => state.setGenderSwitcherState(switcherState),
-                    ),
-                    AppSpacing.verticalSpace16,
-                    Text(
-                      'Дата и время рождения',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    AppSpacing.verticalSpace16,
-                    TappableColoredCardWrap(
-                      padding: AppInsets.horizontal18,
-                      content: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            state.selectedPersonBirthday,
-                            style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w400),
-                          ),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.calendar_month,
-                              color: AppColors.white,
+        builder: (context, state, child) => KeyboardVisibilityProvider(
+          controller: state.keyboardVisibilityController,
+          child: AppBodyBackground(
+            child: ListView(
+              controller: state.scrollController,
+              children: [
+                AppSpacing.verticalSpace20,
+                AppSpacing.verticalSpace20,
+                TappableColoredCardWrap(
+                  padding: AppInsets.paddingAll16,
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      AppSpacing.verticalSpace16,
+                      ComparisonDataSwitcher(
+                        initialState: state.genderSwitcherState,
+                        onSwitched: (switcherState) => state.setGenderSwitcherState(switcherState),
+                      ),
+                      AppSpacing.verticalSpace16,
+                      Text(
+                        'Дата и время рождения',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      AppSpacing.verticalSpace16,
+                      TappableColoredCardWrap(
+                        padding: AppInsets.horizontal18,
+                        content: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              state.selectedPersonBirthday,
+                              style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w400),
                             ),
-                            onPressed: () => showDialog<BirthdayData>(
-                              context: context,
-                              builder: (context) => CalendarDialog(
-                                initialDate: state.selectedPersonDateOfBirth,
-                                exactTimeKnownInitially: state.selectedPersonExactTimeKnown,
+                            IconButton(
+                              icon: const Icon(
+                                Icons.calendar_month,
+                                color: AppColors.white,
                               ),
-                            ).then((birthdayData) async {
-                              if (birthdayData != null) state.updateBirthday(birthdayData);
-                            }),
-                          ),
-                        ],
-                      ),
-                      color: AppColors.white.withOpacity(0.1),
-                    ),
-                    AppSpacing.verticalSpace24,
-                    Text(
-                      'Место рождения',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    AppSpacing.verticalSpace16,
-                    CustomTextField(
-                      onChanged: (value) => state.onSearchRequested(value, 'country'),
-                      controller: state.countryController,
-                      hint: 'Введите страну',
-                    ),
-                    if (state.inProgress && state.searchMode == PlaceSearchMode.country) AppSpacing.verticalSpace16,
-                    if (state.inProgress && state.searchMode == PlaceSearchMode.country)
-                      TappableColoredCardWrap(
+                              onPressed: () => showDialog<BirthdayData>(
+                                context: context,
+                                builder: (context) => CalendarDialog(
+                                  initialDate: state.selectedPersonDateOfBirth,
+                                  exactTimeKnownInitially: state.selectedPersonExactTimeKnown,
+                                ),
+                              ).then((birthdayData) async {
+                                if (birthdayData != null) state.updateBirthday(birthdayData);
+                              }),
+                            ),
+                          ],
+                        ),
                         color: AppColors.white.withOpacity(0.1),
-                        content: const Center(child: CircularProgressIndicator()),
                       ),
-                    if (state.searchError && state.searchMode == PlaceSearchMode.country) AppSpacing.verticalSpace16,
-                    if (state.searchError && state.searchMode == PlaceSearchMode.country)
-                      TappableColoredCardWrap(
-                        color: AppColors.white.withOpacity(0.1),
-                        content: Center(child: Text(state.errorMessage)),
+                      AppSpacing.verticalSpace24,
+                      Text(
+                        'Место рождения',
+                        style: Theme.of(context).textTheme.headline6,
                       ),
-                    if (state.canShowCountryResults) AppSpacing.verticalSpace16,
-                    if (state.canShowCountryResults)
-                      TappableColoredCardWrap(
-                        content: state.searchResponse!.predictedCountries.isEmpty
-                            ? const Center(child: Text('Ничего не найдено'))
-                            : ListView.separated(
-                                shrinkWrap: true,
-                                itemCount: state.searchResponse!.predictedCountries.length,
-                                separatorBuilder: (context, index) => AppSpacing.verticalSpace12,
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      state.setCountry(
+                      AppSpacing.verticalSpace16,
+                      CustomTextField(
+                        onChanged: (value) => state.onSearchRequested(value, 'country'),
+                        controller: state.countryController,
+                        hint: 'Введите страну',
+                      ),
+                      if (state.inProgress && state.searchMode == PlaceSearchMode.country) AppSpacing.verticalSpace16,
+                      if (state.inProgress && state.searchMode == PlaceSearchMode.country)
+                        TappableColoredCardWrap(
+                          color: AppColors.white.withOpacity(0.1),
+                          content: const Center(child: CircularProgressIndicator()),
+                        ),
+                      if (state.searchError && state.searchMode == PlaceSearchMode.country) AppSpacing.verticalSpace16,
+                      if (state.searchError && state.searchMode == PlaceSearchMode.country)
+                        TappableColoredCardWrap(
+                          color: AppColors.white.withOpacity(0.1),
+                          content: Center(child: Text(state.errorMessage)),
+                        ),
+                      if (state.canShowCountryResults) AppSpacing.verticalSpace16,
+                      if (state.canShowCountryResults)
+                        TappableColoredCardWrap(
+                          content: state.searchResponse!.predictedCountries.isEmpty
+                              ? const Center(child: Text('Ничего не найдено'))
+                              : ListView.separated(
+                                  shrinkWrap: true,
+                                  itemCount: state.searchResponse!.predictedCountries.length,
+                                  separatorBuilder: (context, index) => AppSpacing.verticalSpace12,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        state.setCountry(
+                                          state.searchResponse!.predictedCountries.elementAt(index).structuredFormatting?.mainText ??
+                                              'null',
+                                        );
+                                        FocusScope.of(context).unfocus();
+                                      },
+                                      child: Text(
                                         state.searchResponse!.predictedCountries.elementAt(index).structuredFormatting?.mainText ??
                                             'null',
+                                        style:
+                                            Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, fontWeight: FontWeight.w400),
+                                      ),
+                                    );
+                                  },
+                                ),
+                          color: AppColors.white.withOpacity(0.1),
+                        ),
+                      AppSpacing.verticalSpace16,
+                      if (state.canSearchForCity)
+                        CustomTextField(
+                          onChanged: (value) => state.onSearchRequested(value, 'cities'),
+                          controller: state.cityController,
+                          hint: 'Введите город',
+                        ),
+                      if (state.inProgress && state.searchMode == PlaceSearchMode.city) AppSpacing.verticalSpace16,
+                      if (state.inProgress && state.searchMode == PlaceSearchMode.city)
+                        TappableColoredCardWrap(
+                          color: AppColors.white.withOpacity(0.1),
+                          content: const Center(child: CircularProgressIndicator()),
+                        ),
+                      if (state.searchError && state.searchMode == PlaceSearchMode.city) AppSpacing.verticalSpace16,
+                      if (state.searchError && state.searchMode == PlaceSearchMode.city)
+                        TappableColoredCardWrap(
+                          color: AppColors.white.withOpacity(0.1),
+                          content: Center(child: Text(state.errorMessage)),
+                        ),
+                      if (state.canShowCityResults) AppSpacing.verticalSpace16,
+                      if (state.canShowCityResults)
+                        TappableColoredCardWrap(
+                          content: state.filteredCities.isEmpty
+                              ? const Center(child: Text('Ничего не найдено'))
+                              : ListView.separated(
+                                  shrinkWrap: true,
+                                  itemCount: state.filteredCities.length,
+                                  separatorBuilder: (context, index) => AppSpacing.verticalSpace12,
+                                  itemBuilder: (context, index) => GestureDetector(
+                                    onTap: () {
+                                      state.setCity(
+                                        placeId: state.filteredCities.elementAt(index).placeId ?? '',
+                                        cityTitle: state.filteredCities.elementAt(index).structuredFormatting?.mainText ?? '',
                                       );
                                       FocusScope.of(context).unfocus();
                                     },
                                     child: Text(
-                                      state.searchResponse!.predictedCountries.elementAt(index).structuredFormatting?.mainText ??
-                                          'null',
+                                      state.filteredCities.elementAt(index).structuredFormatting?.mainText ?? 'null',
                                       style:
                                           Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, fontWeight: FontWeight.w400),
                                     ),
-                                  );
-                                },
-                              ),
-                        color: AppColors.white.withOpacity(0.1),
-                      ),
-                    AppSpacing.verticalSpace16,
-                    if (state.canSearchForCity)
-                      CustomTextField(
-                        onChanged: (value) => state.onSearchRequested(value, 'cities'),
-                        controller: state.cityController,
-                        hint: 'Введите город',
-                      ),
-                    if (state.inProgress && state.searchMode == PlaceSearchMode.city) AppSpacing.verticalSpace16,
-                    if (state.inProgress && state.searchMode == PlaceSearchMode.city)
-                      TappableColoredCardWrap(
-                        color: AppColors.white.withOpacity(0.1),
-                        content: const Center(child: CircularProgressIndicator()),
-                      ),
-                    if (state.searchError && state.searchMode == PlaceSearchMode.city) AppSpacing.verticalSpace16,
-                    if (state.searchError && state.searchMode == PlaceSearchMode.city)
-                      TappableColoredCardWrap(
-                        color: AppColors.white.withOpacity(0.1),
-                        content: Center(child: Text(state.errorMessage)),
-                      ),
-                    if (state.canShowCityResults) AppSpacing.verticalSpace16,
-                    if (state.canShowCityResults)
-                      TappableColoredCardWrap(
-                        content: state.filteredCities.isEmpty
-                            ? const Center(child: Text('Ничего не найдено'))
-                            : ListView.separated(
-                                shrinkWrap: true,
-                                itemCount: state.filteredCities.length,
-                                separatorBuilder: (context, index) => AppSpacing.verticalSpace12,
-                                itemBuilder: (context, index) => GestureDetector(
-                                  onTap: () {
-                                    state.setCity(
-                                      placeId: state.filteredCities.elementAt(index).placeId ?? '',
-                                      cityTitle: state.filteredCities.elementAt(index).structuredFormatting?.mainText ?? '',
-                                    );
-                                    FocusScope.of(context).unfocus();
-                                  },
-                                  child: Text(
-                                    state.filteredCities.elementAt(index).structuredFormatting?.mainText ?? 'null',
-                                    style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, fontWeight: FontWeight.w400),
                                   ),
                                 ),
-                              ),
-                        color: AppColors.white.withOpacity(0.1),
-                      ),
-                    AppSpacing.verticalSpace24,
-                    Text(
-                      'Ваше имя',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    AppSpacing.verticalSpace16,
-                    CustomTextField(
-                      onChanged: (value) => state.changePartnerName(value),
-                      controller: state.nameController,
-                      hint: 'Введите имя',
-                    ),
-                    AppSpacing.verticalSpace20,
-                    TextButton(
-                      onPressed: () => state.resetData(),
-                      child: Text(
-                        'Сбросить',
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              fontWeight: FontWeight.normal,
-                              color: AppColors.white.withOpacity(0.7),
-                            ),
-                      ),
-                    ),
-                    if (state.hasValidationError) AppSpacing.verticalSpace16,
-                    if (state.hasValidationError)
+                          color: AppColors.white.withOpacity(0.1),
+                        ),
+                      AppSpacing.verticalSpace24,
                       Text(
-                        state.validationErrorMessage,
-                        style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.red),
-                        textAlign: TextAlign.center,
+                        'Ваше имя',
+                        style: Theme.of(context).textTheme.headline6,
                       ),
-                  ],
+                      AppSpacing.verticalSpace16,
+                      CustomTextField(
+                        onChanged: (value) => state.changePartnerName(value),
+                        controller: state.nameController,
+                        hint: 'Введите имя',
+                      ),
+                      AppSpacing.verticalSpace20,
+                      TextButton(
+                        onPressed: () => state.resetData(),
+                        child: Text(
+                          'Сбросить',
+                          style: Theme.of(context).textTheme.headline6?.copyWith(
+                                fontWeight: FontWeight.normal,
+                                color: AppColors.white.withOpacity(0.7),
+                              ),
+                        ),
+                      ),
+                      if (state.hasValidationError) AppSpacing.verticalSpace16,
+                      if (state.hasValidationError)
+                        Text(
+                          state.validationErrorMessage,
+                          style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.red),
+                          textAlign: TextAlign.center,
+                        ),
+                      if (state.hasKeyboard) ...[
+                        AppSpacing.verticalSpace32,
+                        AppSpacing.verticalSpace32,
+                        AppSpacing.verticalSpace32,
+                        AppSpacing.verticalSpace32,
+                        AppSpacing.verticalSpace32,
+                        AppSpacing.verticalSpace32,
+                      ],
+                    ],
+                  ),
+                  color: AppColors.deepBlue,
                 ),
-                color: AppColors.deepBlue,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
       bottomSheet: Consumer<ComparisonDataPageState>(
         builder: (context, state, child) {
           if (MediaQuery.of(context).viewInsets.bottom > 0) {
-            return SizedBox();
+            return const SizedBox();
           } else {
             return SafeArea(
               minimum: AppInsets.paddingAll16,

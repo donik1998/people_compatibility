@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
 import 'package:people_compatibility/core/models/birthday_data.dart';
 import 'package:people_compatibility/core/models/city_geocode_response.dart';
@@ -13,6 +14,23 @@ import 'package:people_compatibility/presentation/utils/enums.dart';
 import 'package:people_compatibility/presentation/utils/extensions.dart';
 
 class ComparisonDataPageState extends BaseNotifier {
+  ComparisonDataPageState() {
+    keyboardSubscription = keyboardVisibilityController.onChange.listen((isVisible) {
+      if (isVisible) {
+        setHasKeyboard(true);
+        scrollController.animateTo(
+          scrollController.offset + 250,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.decelerate,
+        );
+      } else {
+        setHasKeyboard(false);
+      }
+    });
+  }
+  KeyboardVisibilityController keyboardVisibilityController = KeyboardVisibilityController();
+  late StreamSubscription<bool> keyboardSubscription;
+  final ScrollController scrollController = ScrollController();
   late final TextEditingController nameController = TextEditingController(text: male.name);
   late final TextEditingController countryController = TextEditingController(text: male.country);
   late final TextEditingController cityController = TextEditingController(text: male.city.title);
@@ -41,6 +59,8 @@ class ComparisonDataPageState extends BaseNotifier {
     city: BirthLocation(),
   );
 
+  bool hasKeyboard = false;
+
   String validationErrorMessage = '';
 
   GenderSwitcherState genderSwitcherState = GenderSwitcherState.male;
@@ -61,6 +81,11 @@ class ComparisonDataPageState extends BaseNotifier {
 
   bool get selectedPersonExactTimeKnown =>
       genderSwitcherState == GenderSwitcherState.male ? male.exactTimeUnknown : female.exactTimeUnknown;
+
+  void setHasKeyboard(bool value) {
+    hasKeyboard = value;
+    notifyListeners();
+  }
 
   void setHasValidationError(bool value) {
     hasValidationError = value;
@@ -194,6 +219,8 @@ class ComparisonDataPageState extends BaseNotifier {
     nameController.dispose();
     cityController.dispose();
     countryController.dispose();
+    scrollController.dispose();
+    keyboardSubscription.cancel();
     super.dispose();
   }
 
