@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
 import 'package:people_compatibility/core/models/birthday_data.dart';
@@ -15,18 +16,19 @@ import 'package:people_compatibility/presentation/utils/extensions.dart';
 
 class ComparisonDataPageState extends BaseNotifier {
   ComparisonDataPageState() {
-    keyboardSubscription = keyboardVisibilityController.onChange.listen((isVisible) {
-      if (isVisible) {
-        setHasKeyboard(true);
-        scrollController.animateTo(
-          scrollController.offset + 250,
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.decelerate,
-        );
-      } else {
-        setHasKeyboard(false);
-      }
-    });
+    // keyboardSubscription = keyboardVisibilityController.onChange.listen((isVisible) async {
+    //   if (isVisible) {
+    //     setHasKeyboard(true);
+    //     final offset = (searchResponse?.predictions?.length ?? 5) * 48 + scrollController.offset;
+    //     await scrollController.animateTo(
+    //       offset == 0 ? 150 : offset,
+    //       duration: const Duration(milliseconds: 250),
+    //       curve: Curves.decelerate,
+    //     );
+    //   } else {
+    //     setHasKeyboard(false);
+    //   }
+    // });
   }
   KeyboardVisibilityController keyboardVisibilityController = KeyboardVisibilityController();
   late StreamSubscription<bool> keyboardSubscription;
@@ -129,9 +131,18 @@ class ComparisonDataPageState extends BaseNotifier {
     setInProgress(false);
   }
 
-  void onSearchRequested(String input, String type) {
+  void onSearchRequested({
+    required String input,
+    required String type,
+    required double offset,
+  }) {
     setSearchError(false);
     setInProgress(true);
+    scrollController.animateTo(
+      offset + 48,
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.decelerate,
+    );
     if (type == 'country') {
       setCountry('');
       setSearchMode(PlaceSearchMode.country);
@@ -154,6 +165,13 @@ class ComparisonDataPageState extends BaseNotifier {
             },
             (searchResponse) => setSearchResults(searchResponse),
           );
+          if (searchResponse!.predictions!.length >= 2) {
+            await scrollController.animateTo(
+              48.0 * searchResponse!.predictions!.length,
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.decelerate,
+            );
+          }
         });
       },
     );

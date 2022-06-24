@@ -90,7 +90,11 @@ class ComparisonDataPage extends StatelessWidget {
                         ),
                         AppSpacing.verticalSpace16,
                         CustomTextField(
-                          onChanged: (value) => state.onSearchRequested(value, 'country'),
+                          onChanged: (value) => state.onSearchRequested(
+                            input: value,
+                            type: 'country',
+                            offset: context.findRenderObject()?.paintBounds.center.dy ?? 0,
+                          ),
                           controller: state.countryController,
                           hint: 'Введите страну',
                         ),
@@ -140,7 +144,11 @@ class ComparisonDataPage extends StatelessWidget {
                         AppSpacing.verticalSpace16,
                         if (state.canSearchForCity)
                           CustomTextField(
-                            onChanged: (value) => state.onSearchRequested(value, 'cities'),
+                            onChanged: (value) => state.onSearchRequested(
+                              input: value,
+                              type: 'cities',
+                              offset: context.findRenderObject()?.paintBounds.center.dy ?? 0,
+                            ),
                             controller: state.cityController,
                             hint: 'Введите город',
                           ),
@@ -216,24 +224,18 @@ class ComparisonDataPage extends StatelessWidget {
                     color: AppColors.deepBlue,
                   ),
                   if (state.hasKeyboard) ...[
-                    AppSpacing.verticalSpace32,
-                    AppSpacing.verticalSpace32,
-                    AppSpacing.verticalSpace32,
-                    AppSpacing.verticalSpace32,
-                    AppSpacing.verticalSpace32,
-                    AppSpacing.verticalSpace32,
+                    SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
                   ],
-                  AppSpacing.verticalSpace20,
-                  AppSpacing.verticalSpace20,
-                  AppSpacing.verticalSpace20,
-                  AppSpacing.verticalSpace20,
+                  AppSpacing.verticalSpace32,
+                  AppSpacing.verticalSpace32,
                 ],
               ),
             ),
           ),
         ),
       ),
-      bottomSheet: Consumer<ComparisonDataPageState>(
+      resizeToAvoidBottomInset: true,
+      bottomNavigationBar: Consumer<ComparisonDataPageState>(
         builder: (context, state, child) {
           return SafeArea(
             minimum: AppInsets.paddingAll16,
