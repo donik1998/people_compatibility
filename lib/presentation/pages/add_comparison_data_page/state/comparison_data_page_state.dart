@@ -43,8 +43,6 @@ class ComparisonDataPageState extends BaseNotifier {
     city: BirthLocation(),
   );
 
-  bool hasKeyboard = false;
-
   String validationErrorMessage = '';
 
   GenderSwitcherState genderSwitcherState = GenderSwitcherState.male;
@@ -65,11 +63,6 @@ class ComparisonDataPageState extends BaseNotifier {
 
   bool get selectedPersonExactTimeKnown =>
       genderSwitcherState == GenderSwitcherState.male ? male.exactTimeUnknown : female.exactTimeUnknown;
-
-  void setHasKeyboard(bool value) {
-    hasKeyboard = value;
-    notifyListeners();
-  }
 
   void setHasValidationError(bool value) {
     hasValidationError = value;

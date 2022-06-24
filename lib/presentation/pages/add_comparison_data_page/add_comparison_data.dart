@@ -196,17 +196,18 @@ class ComparisonDataPage extends StatelessWidget {
                         controller: state.nameController,
                         hint: 'Введите имя',
                       ),
-                      AppSpacing.verticalSpace20,
-                      TextButton(
-                        onPressed: () => state.resetData(),
-                        child: Text(
-                          'Сбросить',
-                          style: Theme.of(context).textTheme.headline6?.copyWith(
-                                fontWeight: FontWeight.normal,
-                                color: AppColors.white.withOpacity(0.7),
-                              ),
-                        ),
-                      ),
+                      AppSpacing.verticalSpace16,
+                      // AppSpacing.verticalSpace20,
+                      // TextButton(
+                      //   onPressed: () => state.resetData(),
+                      //   child: Text(
+                      //     'Сбросить',
+                      //     style: Theme.of(context).textTheme.headline6?.copyWith(
+                      //           fontWeight: FontWeight.normal,
+                      //           color: AppColors.white.withOpacity(0.7),
+                      //         ),
+                      //   ),
+                      // ),
                       if (state.hasValidationError) AppSpacing.verticalSpace16,
                       if (state.hasValidationError)
                         Text(
@@ -218,11 +219,6 @@ class ComparisonDataPage extends StatelessWidget {
                   ),
                   color: AppColors.deepBlue,
                 ),
-                if (state.hasKeyboard) ...[
-                  SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
-                ],
-                AppSpacing.verticalSpace32,
-                AppSpacing.verticalSpace32,
               ],
             ),
           ),
