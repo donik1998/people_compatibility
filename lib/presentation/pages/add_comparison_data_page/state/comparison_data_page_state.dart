@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:intl/intl.dart';
 import 'package:people_compatibility/core/models/birthday_data.dart';
 import 'package:people_compatibility/core/models/city_geocode_response.dart';
@@ -15,23 +14,6 @@ import 'package:people_compatibility/presentation/utils/enums.dart';
 import 'package:people_compatibility/presentation/utils/extensions.dart';
 
 class ComparisonDataPageState extends BaseNotifier {
-  ComparisonDataPageState() {
-    // keyboardSubscription = keyboardVisibilityController.onChange.listen((isVisible) async {
-    //   if (isVisible) {
-    //     setHasKeyboard(true);
-    //     final offset = (searchResponse?.predictions?.length ?? 5) * 48 + scrollController.offset;
-    //     await scrollController.animateTo(
-    //       offset == 0 ? 150 : offset,
-    //       duration: const Duration(milliseconds: 250),
-    //       curve: Curves.decelerate,
-    //     );
-    //   } else {
-    //     setHasKeyboard(false);
-    //   }
-    // });
-  }
-  KeyboardVisibilityController keyboardVisibilityController = KeyboardVisibilityController();
-  late StreamSubscription<bool> keyboardSubscription;
   final ScrollController scrollController = ScrollController();
   late final TextEditingController nameController = TextEditingController(text: male.name);
   late final TextEditingController countryController = TextEditingController(text: male.country);
@@ -238,7 +220,6 @@ class ComparisonDataPageState extends BaseNotifier {
     cityController.dispose();
     countryController.dispose();
     scrollController.dispose();
-    keyboardSubscription.cancel();
     super.dispose();
   }
 
