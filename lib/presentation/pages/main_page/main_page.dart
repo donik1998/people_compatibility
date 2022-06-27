@@ -1,9 +1,11 @@
 import 'dart:math';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:people_compatibility/core/models/comparison.dart';
 import 'package:people_compatibility/core/routes/app_routes.dart';
 import 'package:people_compatibility/presentation/custom_widgets/app_body_back.dart';
+import 'package:people_compatibility/presentation/custom_widgets/app_logo.dart';
 import 'package:people_compatibility/presentation/custom_widgets/comparison_card.dart';
 import 'package:people_compatibility/presentation/custom_widgets/content_card.dart';
 import 'package:people_compatibility/presentation/custom_widgets/custom_button.dart';
@@ -28,6 +30,10 @@ class MainPage extends StatelessWidget {
             children: [
               if (!state.fullSizedMode) AppSpacing.verticalSpace24,
               if (!state.fullSizedMode) AppSpacing.verticalSpace24,
+              if (!state.fullSizedMode) AppSpacing.verticalSpace8,
+              if (!state.fullSizedMode) const AppLogo(),
+              if (!state.fullSizedMode) AppSpacing.verticalSpace24,
+              if (!state.fullSizedMode) AppSpacing.verticalSpace24,
               if (!state.fullSizedMode) AppSpacing.verticalSpace24,
               if (!state.fullSizedMode)
                 TappableColoredCardWrap(
@@ -35,12 +41,9 @@ class MainPage extends StatelessWidget {
                   content: RichText(
                     text: TextSpan(
                       style: Theme.of(context).textTheme.bodyText1,
-                      children: const [
-                        TextSpan(text: 'Пройдите тест на совместимость со своим настоящим, прошлым или будущим партнёром.\n'),
-                        TextSpan(
-                          text:
-                              '\nКоэффициент не показывает личностные качества человека, он даёт оценку ваших шансов быть вместе. Программа не учитывает воспитание, окружение, факторы наследственности. И прежде всего, в делах сердечных прислушайтесь к своей интуиции, тогда у вас все получится!',
-                        ),
+                      children: [
+                        TextSpan(text: '${'main_page_complete_test_title'.tr()}\n'),
+                        TextSpan(text: '\n${'main_page_complete_test_description'.tr()}'),
                       ],
                     ),
                   ),
@@ -51,14 +54,14 @@ class MainPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'История сравнений',
+                    'comparison_history'.tr(),
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   if (state.fullSizedMode)
                     TextButton(
                       onPressed: () => state.setFullSized(false),
                       child: Text(
-                        'Свернуть',
+                        'show_less'.tr(),
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ),
@@ -86,7 +89,7 @@ class MainPage extends StatelessWidget {
                                 color: AppColors.white.withOpacity(0.1),
                                 onTap: () => state.setFullSized(true),
                                 content: Text(
-                                  'Нажмите чтобы открыть весь список',
+                                  'open_whole_list_prompt'.tr(),
                                   style: Theme.of(context).textTheme.headline6,
                                   textAlign: TextAlign.center,
                                 ),
@@ -108,7 +111,7 @@ class MainPage extends StatelessWidget {
               if (state.history != null)
                 if (state.history!.isEmpty)
                   TappableColoredCardWrap(
-                    content: const Center(child: Text('Здесь пока ничего нет')),
+                    content: Center(child: Text('nothing_yet'.tr())),
                     color: AppColors.white.withOpacity(0.1),
                   ),
               if (state.inProgress)
@@ -124,7 +127,7 @@ class MainPage extends StatelessWidget {
       bottomSheet: SafeArea(
         minimum: AppInsets.paddingAll16,
         child: CustomButton.text(
-          text: 'Рассчитать совместимость',
+          text: 'calculate_compatibility'.tr(),
           onTap: () => Navigator.pushNamed(context, AppRoutes.comparisonData),
         ),
       ),

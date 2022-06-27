@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:people_compatibility/core/models/compatibility_response.dart';
 import 'package:people_compatibility/core/models/person_details.dart';
@@ -12,33 +13,33 @@ class CalculateCompatibilityPageState extends BaseNotifier {
   int selectedIndex = 0;
 
   final List<String> compatibilityLevelTitles = [
-    'Единство взглядов',
-    'Совместный комфорт',
-    'Взаимопонимание',
-    'Забота друг о друге',
-    'Эротизм, сексуальная совместимость',
-    'Готовность к совместной деятельности, сотрудничество',
-    'Общность интересов и увлечений',
-    'Острота чувств',
-    'Уровень открытости отношений',
-    'Практичность',
-    'Свобода и доверие в отношениях',
-    'Романтичность в отношениях',
+    'shared_views'.tr(),
+    'comfort'.tr(),
+    'relationships'.tr(),
+    'care'.tr(),
+    'erotic_compatibility'.tr(),
+    'partnership'.tr(),
+    'shared_interest'.tr(),
+    'feel_sharpness'.tr(),
+    'openness'.tr(),
+    'practicality'.tr(),
+    'trust'.tr(),
+    'romance'.tr(),
   ];
 
   final List<String> compatibilityDescriptions = [
-    'Идеологическая и мировоззренческая совместимость',
-    'Уровень психологического комфорта, не основанный на чувственности. Заинтересованность в перспективных отношениях',
-    'Доверие и гармония в отношениях. Настрой «на одну волну» без сознательных усилий',
-    'Деятельно-заинтересованное отношение друг к другу, вызванное осознанием значимости этой связи',
-    'Чувственный резонанс. Сила и яркость чувственных переживаний. Желание отдавать себя партеру и владеть им',
-    'Осознание общих целей. Успешная совместная деятельность ради общего блага. Взаимная помощь и поддержка',
-    'Наличие общих взглядов на самореализацию и способы ее достижения. Необходимость ощущать наполненность жизни, расширяя сферы своей деятельности',
-    'Способность партнера питать ваши чувства, быть постоянно привлекательным',
-    'Способность принимать партнера таким, какой он есть. Взаимная искренность, уважение',
-    'Способность находить компромиссы. Готовность соответствовать потребностям партнера',
-    'Готовность принимать свободу партнера, не диктовать своих условий. Убежденность в искренности и добросовестности партнера',
-    'Возвышенно-эмоциональное отношение к партнеру, подчеркивающие альтруизм и другие нематериальные ценности. Умение уходить от будничных шаблонов в отношениях',
+    'shared_views_description'.tr(),
+    'comfort_description'.tr(),
+    'relationships_description'.tr(),
+    'care_description'.tr(),
+    'erotic_compatibility_description'.tr(),
+    'partnership_description'.tr(),
+    'shared_interest_description'.tr(),
+    'feel_sharpness_description'.tr(),
+    'openness_description'.tr(),
+    'practicality_description'.tr(),
+    'trust_description'.tr(),
+    'romance_description'.tr(),
   ];
 
   ScrollController scrollController = ScrollController();

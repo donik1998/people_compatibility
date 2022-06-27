@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:people_compatibility/core/models/birthday_data.dart';
 import 'package:people_compatibility/core/routes/app_routes.dart';
@@ -24,7 +25,15 @@ class ComparisonDataPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const Center(child: CustomBackButton()),
-        title: const Text('Ваши данные'),
+        title: Consumer<ComparisonDataPageState>(
+          builder: (context, state, child) {
+            if (state.genderSwitcherState == GenderSwitcherState.male) {
+              return Text('your_data'.tr());
+            } else {
+              return Text('partner_data'.tr());
+            }
+          },
+        ),
       ),
       body: Consumer<ComparisonDataPageState>(
         builder: (context, state, child) => AppBodyBackground(
@@ -47,7 +56,7 @@ class ComparisonDataPage extends StatelessWidget {
                       ),
                       AppSpacing.verticalSpace16,
                       Text(
-                        'Дата и время рождения',
+                        'date_and_time_of_birth'.tr(),
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       AppSpacing.verticalSpace16,
@@ -82,7 +91,7 @@ class ComparisonDataPage extends StatelessWidget {
                       ),
                       AppSpacing.verticalSpace24,
                       Text(
-                        'Место рождения',
+                        'place_of_birth'.tr(),
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       AppSpacing.verticalSpace16,
@@ -90,10 +99,11 @@ class ComparisonDataPage extends StatelessWidget {
                         onChanged: (value) => state.onSearchRequested(
                           input: value,
                           type: 'country',
+                          lang: context.locale.languageCode,
                           offset: context.findRenderObject()?.paintBounds.center.dy ?? 0,
                         ),
                         controller: state.countryController,
-                        hint: 'Введите страну',
+                        hint: 'choose_country'.tr(),
                       ),
                       if (state.inProgress && state.searchMode == PlaceSearchMode.country) AppSpacing.verticalSpace16,
                       if (state.inProgress && state.searchMode == PlaceSearchMode.country)
@@ -111,7 +121,7 @@ class ComparisonDataPage extends StatelessWidget {
                       if (state.canShowCountryResults)
                         TappableColoredCardWrap(
                           content: state.searchResponse!.predictedCountries.isEmpty
-                              ? const Center(child: Text('Ничего не найдено'))
+                              ? Center(child: Text('nothing_found'.tr()))
                               : ListView.separated(
                                   shrinkWrap: true,
                                   itemCount: state.searchResponse!.predictedCountries.length,
@@ -140,12 +150,13 @@ class ComparisonDataPage extends StatelessWidget {
                       if (state.canSearchForCity)
                         CustomTextField(
                           onChanged: (value) => state.onSearchRequested(
+                            lang: context.locale.languageCode,
                             input: value,
                             type: 'cities',
                             offset: context.findRenderObject()?.paintBounds.center.dy ?? 0,
                           ),
                           controller: state.cityController,
-                          hint: 'Введите город',
+                          hint: 'choose_city'.tr(),
                         ),
                       if (state.inProgress && state.searchMode == PlaceSearchMode.city) AppSpacing.verticalSpace16,
                       if (state.inProgress && state.searchMode == PlaceSearchMode.city)
@@ -163,7 +174,7 @@ class ComparisonDataPage extends StatelessWidget {
                       if (state.canShowCityResults)
                         TappableColoredCardWrap(
                           content: state.filteredCities.isEmpty
-                              ? const Center(child: Text('Ничего не найдено'))
+                              ? Center(child: Text('nothing_found'.tr()))
                               : ListView.separated(
                                   shrinkWrap: true,
                                   itemCount: state.filteredCities.length,
@@ -187,21 +198,21 @@ class ComparisonDataPage extends StatelessWidget {
                         ),
                       AppSpacing.verticalSpace24,
                       Text(
-                        'Ваше имя',
+                        'your_name'.tr(),
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       AppSpacing.verticalSpace16,
                       CustomTextField(
                         onChanged: (value) => state.changePartnerName(value),
                         controller: state.nameController,
-                        hint: 'Введите имя',
+                        hint: 'enter_name'.tr(),
                       ),
                       AppSpacing.verticalSpace16,
                       // AppSpacing.verticalSpace20,
                       // TextButton(
                       //   onPressed: () => state.resetData(),
                       //   child: Text(
-                      //     'Сбросить',
+                      //     'reset'.tr(),
                       //     style: Theme.of(context).textTheme.headline6?.copyWith(
                       //           fontWeight: FontWeight.normal,
                       //           color: AppColors.white.withOpacity(0.7),
@@ -249,7 +260,7 @@ class ComparisonDataPage extends StatelessWidget {
                   );
                 }
               },
-              text: state.genderSwitcherState == GenderSwitcherState.male ? 'Далее' : 'Рассчитать',
+              text: state.genderSwitcherState == GenderSwitcherState.male ? 'next'.tr() : 'calculate'.tr(),
             ),
           );
         },

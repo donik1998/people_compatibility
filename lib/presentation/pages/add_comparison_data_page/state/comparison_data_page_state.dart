@@ -109,6 +109,7 @@ class ComparisonDataPageState extends BaseNotifier {
   void onSearchRequested({
     required String input,
     required String type,
+    required String lang,
     required double offset,
   }) {
     setSearchError(false);
@@ -132,6 +133,7 @@ class ComparisonDataPageState extends BaseNotifier {
           final result = await SearchPlaceService.instance.searchPlaceByInput(
             input: input,
             type: type,
+            lang: lang,
           );
           result.fold(
             (failure) {

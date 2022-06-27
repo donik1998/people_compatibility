@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+
 class PersonDetails {
   final DateTime dateOfBirth;
   final String name;
@@ -44,7 +46,7 @@ class PersonDetails {
         'city': city.asMap,
       };
 
-  ZodiacData zodiacName() {
+  ZodiacData zodiac() {
     /// Aries (March 21 – April 19)
     final aries = (dateOfBirth.month == DateTime.march && dateOfBirth.day >= 21) ||
         (dateOfBirth.month == DateTime.april && dateOfBirth.day <= 19);
@@ -93,29 +95,29 @@ class PersonDetails {
     final pisces = (dateOfBirth.month == DateTime.february && dateOfBirth.day >= 19) ||
         (dateOfBirth.month == DateTime.march && dateOfBirth.day <= 20);
     if (aries) {
-      return ZodiacData(title: 'Овен', pathName: 'aries');
+      return ZodiacData(title: 'aries'.tr(), pathName: 'aries');
     } else if (taurus) {
-      return ZodiacData(title: 'Телец', pathName: 'taurus');
+      return ZodiacData(title: 'taurus'.tr(), pathName: 'taurus');
     } else if (gemini) {
-      return ZodiacData(title: 'Близнецы', pathName: 'gemini');
+      return ZodiacData(title: 'gemini'.tr(), pathName: 'gemini');
     } else if (cancer) {
-      return ZodiacData(title: 'Рак', pathName: 'cancer');
+      return ZodiacData(title: 'cancer'.tr(), pathName: 'cancer');
     } else if (leo) {
-      return ZodiacData(title: 'Лев', pathName: 'leo');
+      return ZodiacData(title: 'leo'.tr(), pathName: 'leo');
     } else if (virgo) {
-      return ZodiacData(title: 'Дева', pathName: 'virgo');
+      return ZodiacData(title: 'virgo'.tr(), pathName: 'virgo');
     } else if (libra) {
-      return ZodiacData(title: 'Весы', pathName: 'libra');
+      return ZodiacData(title: 'libra'.tr(), pathName: 'libra');
     } else if (scorpio) {
-      return ZodiacData(title: 'Скорпион', pathName: 'scorpio');
+      return ZodiacData(title: 'scorpio'.tr(), pathName: 'scorpio');
     } else if (sagittarius) {
-      return ZodiacData(title: 'Стрелец', pathName: 'sagittarius');
+      return ZodiacData(title: 'sagittarius'.tr(), pathName: 'sagittarius');
     } else if (capricorn) {
-      return ZodiacData(title: 'Козерог', pathName: 'capricorn');
+      return ZodiacData(title: 'capricorn'.tr(), pathName: 'capricorn');
     } else if (aquarius) {
-      return ZodiacData(title: 'Водолей', pathName: 'aquarius');
+      return ZodiacData(title: 'aquarius'.tr(), pathName: 'aquarius');
     } else if (pisces) {
-      return ZodiacData(title: 'Рыбы', pathName: 'pisces');
+      return ZodiacData(title: 'pisces'.tr(), pathName: 'pisces');
     } else {
       return ZodiacData(title: '', pathName: '');
     }

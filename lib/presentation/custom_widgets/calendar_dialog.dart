@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -46,7 +47,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
           children: [
             if (_dialogMode == CalendarDialogMode.day)
               TableCalendar(
-                locale: 'ru',
+                locale: context.locale.languageCode,
                 calendarStyle: CalendarStyle(
                   todayDecoration: const BoxDecoration(
                     shape: BoxShape.rectangle,
@@ -68,7 +69,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
                       onTap: () => setState(() => _dialogMode = CalendarDialogMode.year),
                       child: Center(
                         child: Text(
-                          DateFormat('MMMM y', 'ru').format(day),
+                          DateFormat('MMMM y', context.locale.languageCode).format(day),
                           style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w400),
                         ),
                       ),
@@ -134,7 +135,8 @@ class _CalendarDialogState extends State<CalendarDialog> {
                   itemCount: 12,
                   itemBuilder: (context, index) => TappableColoredCardWrap(
                     content: Center(
-                        child: Text(DateFormat('MMMM', 'ru').format(DateTime(_selectedDate.year, _selectedDate.month + index)))),
+                        child: Text(DateFormat('MMMM', context.locale.languageCode)
+                            .format(DateTime(_selectedDate.year, _selectedDate.month + index)))),
                     color: AppColors.deepPurple,
                     onTap: () => setState(() {
                       _dialogMode = CalendarDialogMode.day;
@@ -159,7 +161,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
                 GestureDetector(
                   onTap: () => setState(() => exactTimeUnknown = !exactTimeUnknown),
                   child: Text(
-                    'Время рождения неизвестно',
+                    'time_of_birth_unknown'.tr(),
                     style: Theme.of(context).textTheme.bodyText1?.copyWith(
                           color: AppColors.white.withOpacity(0.6),
                         ),
@@ -189,7 +191,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
                       padding: EdgeInsets.zero,
                       content: Center(
                         child: Text(
-                          'Удалить',
+                          'delete'.tr(),
                           style: Theme.of(context).textTheme.bodyText1?.copyWith(color: AppColors.textGray),
                         ),
                       ),
@@ -235,43 +237,6 @@ class _CalendarDialogState extends State<CalendarDialog> {
                               );
                             }
                           });
-                          // DatePicker.showTimePicker(
-                          //   context,
-                          //   locale: LocaleType.ru,
-                          //   currentTime: DateTime.now(),
-                          //   onCancel: () {
-                          //     print('cancel');
-                          //   },
-                          //   onConfirm: (time) {},
-                          //   onChanged: (time) {},
-                          //   theme: DatePickerTheme(
-                          //     backgroundColor: AppColors.deepBlue,
-                          //     headerColor: AppColors.deepPurple,
-                          //     itemStyle: Theme.of(context).textTheme.bodyText1!,
-                          //     cancelStyle: Theme.of(context).textTheme.headline6!,
-                          //     doneStyle: Theme.of(context).textTheme.headline6!,
-                          //   ),
-                          //   showSecondsColumn: false,
-                          // ).then((time) {
-                          //   if (time != null) {
-                          //     Navigator.pop(
-                          //       context,
-                          //       BirthdayData(
-                          //         date: DateTime(
-                          //           _selectedDate.year,
-                          //           _selectedDate.month,
-                          //           _selectedDate.day,
-                          //           time.hour,
-                          //           time.minute,
-                          //           time.second,
-                          //           time.millisecond,
-                          //           time.microsecond,
-                          //         ),
-                          //         exactTimeUnknown: false,
-                          //       ),
-                          //     );
-                          //   }
-                          // });
                         }
                       },
                       gradient: const LinearGradient(
@@ -285,7 +250,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
                       padding: EdgeInsets.zero,
                       content: Center(
                         child: Text(
-                          exactTimeUnknown ? 'Подтвердить' : 'Указать время',
+                          exactTimeUnknown ? 'approve'.tr() : 'set_time'.tr(),
                           style: Theme.of(context).textTheme.bodyText1?.copyWith(color: AppColors.textGray),
                         ),
                       ),

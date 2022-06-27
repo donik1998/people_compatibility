@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
+import 'package:people_compatibility/presentation/theme/app_gradient.dart';
 import 'package:people_compatibility/presentation/theme/app_insets.dart';
 
 class AppBodyBackground extends StatelessWidget {
@@ -26,9 +27,7 @@ class AppBodyBackground extends StatelessWidget {
               width: 314,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [AppColors.darkBlue, AppColors.purple],
-                ),
+                gradient: AppGradient.buttonGradient,
               ),
             ),
           ),

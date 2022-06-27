@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -41,10 +42,10 @@ class _PartnersSwitchCardState extends State<PartnersSwitchCard> {
               color: AppColors.nightBlue,
               name: widget.male.name,
               zodiacIcon: SvgPicture.asset(
-                'assets/images/svg/zodiac_${widget.male.zodiacName().pathName}.svg',
+                'assets/images/svg/zodiac_${widget.male.zodiac().pathName}.svg',
                 color: AppColors.white,
               ),
-              zodiacName: widget.male.zodiacName().title,
+              zodiacName: widget.male.zodiac().title,
             ),
             PartnerSwitcherTab(
               onTap: () => setState(() {
@@ -54,10 +55,10 @@ class _PartnersSwitchCardState extends State<PartnersSwitchCard> {
               color: AppColors.nightPurple,
               name: widget.female.name,
               zodiacIcon: SvgPicture.asset(
-                'assets/images/svg/zodiac_${widget.female.zodiacName().pathName}.svg',
+                'assets/images/svg/zodiac_${widget.female.zodiac().pathName}.svg',
                 color: AppColors.white,
               ),
-              zodiacName: widget.female.zodiacName().title,
+              zodiacName: widget.female.zodiac().title,
             ),
           ],
         ),
@@ -108,7 +109,7 @@ class _PartnersSwitchCardState extends State<PartnersSwitchCard> {
                       ),
                       TextSpan(
                         text: _selectedDetails.exactTimeUnknown
-                            ? 'Неизвестно'
+                            ? 'unknown'.tr()
                             : DateFormat('HH:mm').format(_selectedDetails.dateOfBirth),
                         style: Theme.of(context).textTheme.headline6,
                       ),
@@ -120,7 +121,7 @@ class _PartnersSwitchCardState extends State<PartnersSwitchCard> {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Место рождения: ',
+                        text: '${'place_of_birth'.tr()}: ',
                         style: Theme.of(context).textTheme.headline6?.copyWith(
                               color: AppColors.white.withOpacity(0.5),
                               fontWeight: FontWeight.w400,

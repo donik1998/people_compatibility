@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:people_compatibility/presentation/theme/app_border_radius.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
+import 'package:people_compatibility/presentation/theme/app_gradient.dart';
 import 'package:people_compatibility/presentation/theme/app_spacing.dart';
 
 class CoefficientChart extends StatelessWidget {
@@ -39,7 +41,7 @@ class CoefficientChart extends StatelessWidget {
           if (coefficients.isEmpty)
             Center(
               child: Text(
-                'Нет данных',
+                'no_data'.tr(),
                 style: Theme.of(context).textTheme.headline6,
               ),
             ),
@@ -65,16 +67,7 @@ class CoefficientChart extends StatelessWidget {
                             padding: const EdgeInsets.only(top: 6),
                             decoration: BoxDecoration(
                               color: initialIndex == i ? null : AppColors.chartBarColor,
-                              gradient: initialIndex == i
-                                  ? const LinearGradient(
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                      colors: [
-                                        AppColors.darkBlue,
-                                        AppColors.purple,
-                                      ],
-                                    )
-                                  : null,
+                              gradient: initialIndex == i ? AppGradient.buttonGradient : null,
                               borderRadius: AppBorderRadius.borderAll4,
                             ),
                             child: Text(

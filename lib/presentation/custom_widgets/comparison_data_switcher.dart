@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:people_compatibility/presentation/theme/app_border_radius.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
@@ -38,8 +39,8 @@ class ComparisonDataSwitcher extends StatelessWidget {
                   color: initialState == GenderSwitcherState.male ? AppColors.darkPurple : Colors.transparent,
                   borderRadius: AppBorderRadius.max,
                 ),
-                child: const Center(
-                  child: Text('Мужчина'),
+                child: Center(
+                  child: Text('male'.tr()),
                 ),
               ),
             ),
@@ -57,8 +58,8 @@ class ComparisonDataSwitcher extends StatelessWidget {
                   color: initialState == GenderSwitcherState.female ? AppColors.purple : Colors.transparent,
                   borderRadius: AppBorderRadius.max,
                 ),
-                child: const Center(
-                  child: Text('Женщина'),
+                child: Center(
+                  child: Text('female'.tr()),
                 ),
               ),
             ),

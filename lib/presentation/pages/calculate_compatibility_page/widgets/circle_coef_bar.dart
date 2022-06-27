@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_insets.dart';
@@ -43,7 +44,7 @@ class CircleCoefficientBar extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline4?.copyWith(fontSize: 32),
               ),
               TextSpan(
-                text: '\nбалла',
+                text: '\n${'points'.tr()}',
                 style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18),
               ),
             ],
