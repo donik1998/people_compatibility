@@ -6,7 +6,7 @@ import 'package:retrofit/http.dart';
 
 part 'compatibility_api.g.dart';
 
-@RestApi(baseUrl: 'https://uhnem.com')
+@RestApi(baseUrl: 'https://siastro.com')
 abstract class PeopleCompatibilityApiClient {
   static PeopleCompatibilityApiClient get instance => _PeopleCompatibilityApiClient(_dio);
 

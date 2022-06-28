@@ -82,7 +82,7 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
                 width: 40,
                 onTap: () {
                   final response = context.read<CalculateCompatibilityPageState>().calculationResponse;
-                  _shareLink(response, context);
+                  _shareLink(response: response, context: context, args: args);
                 },
                 child: SvgPicture.asset('assets/images/svg/share.svg'),
               ),
@@ -216,7 +216,11 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
                       const SizedBox(),
                     ],
                   ),
-                  onTap: () => _shareLink(state.calculationResponse, context),
+                  onTap: () => _shareLink(
+                    response: state.calculationResponse,
+                    context: context,
+                    args: args,
+                  ),
                 ),
               ],
             );
@@ -226,11 +230,29 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
     );
   }
 
-  void _shareLink(CompatibilityResponse? response, BuildContext context) {
+  void _shareLink({
+    CompatibilityResponse? response,
+    required BuildContext context,
+    required CalculateCompatibilityPageArguments args,
+  }) {
+    final uri = Uri.parse(response?.requestUrl ?? '');
+    Map<String, dynamic> parameters = Map<String, dynamic>.from(uri.queryParameters);
+    parameters.addAll({
+      'city1_name': args.maleData.city.title,
+      'city2_name': args.maleData.city.title,
+      'lang': context.locale.languageCode,
+    });
+    // final properUri = Uri.parse(
+    //     'https://siastro.com/result.php?sex1=M&sex2=F&day1=04&day2=06&month1=05&month2=06&year1=1985&year2=2020&hour1=00&hour2=00&minute1=00&minute2=00&notime1=0&notime2=0&name1=Имя1&name2=Имя2&long1=37.6167&long2=37.6167&city1_name=Москва&city2_name=Владивосток&lang=ru');
+    // print('properUri.authority == endUri.authority: ${properUri.authority == endUri.authority}');
+    // print(endUri.toString());
+    // for (var element in endUri.queryParameters.keys) {
+    //   print('properUri has $element: ${properUri.queryParameters.containsKey(element)}');
+    final endUri = Uri.https(uri.authority, 'result.php', parameters);
     if (response != null) {
       FlutterShare.share(
         title: 'share'.tr(),
-        linkUrl: '${response.requestUrl}&Lang=${context.locale.languageCode}',
+        linkUrl: endUri.toString(),
       );
     }
   }

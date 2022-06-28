@@ -10,7 +10,7 @@ part of 'compatibility_api.dart';
 
 class _PeopleCompatibilityApiClient implements PeopleCompatibilityApiClient {
   _PeopleCompatibilityApiClient(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'https://uhnem.com';
+    baseUrl ??= 'https://siastro.com';
   }
 
   final Dio _dio;
