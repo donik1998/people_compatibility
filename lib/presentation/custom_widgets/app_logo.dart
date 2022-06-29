@@ -29,7 +29,7 @@ class AppLogo extends StatelessWidget {
             ),
           ),
         ),
-        AppSpacing.horizontalSpace8,
+        AppSpacing.horizontalSpace4,
         const Text(
           'Astro.com',
           style: TextStyle(

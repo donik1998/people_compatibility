@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:people_compatibility/presentation/theme/app_border_radius.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
@@ -90,11 +89,6 @@ class _ExpandableDescriptionItemState extends State<ExpandableDescriptionItem> {
                   fontWeight: FontWeight.w400,
                   color: AppColors.white.withOpacity(0.5),
                 ),
-          ),
-          AppSpacing.verticalSpace24,
-          Text(
-            'details'.tr(),
-            style: Theme.of(context).textTheme.headline6?.copyWith(color: AppColors.white.withOpacity(0.5)),
           ),
         ],
       ],

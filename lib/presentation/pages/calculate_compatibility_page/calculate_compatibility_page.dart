@@ -242,6 +242,7 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
       'city2_name': args.maleData.city.title,
       'lang': context.locale.languageCode,
     });
+    parameters.remove('key');
     // final properUri = Uri.parse(
     //     'https://siastro.com/result.php?sex1=M&sex2=F&day1=04&day2=06&month1=05&month2=06&year1=1985&year2=2020&hour1=00&hour2=00&minute1=00&minute2=00&notime1=0&notime2=0&name1=Имя1&name2=Имя2&long1=37.6167&long2=37.6167&city1_name=Москва&city2_name=Владивосток&lang=ru');
     // print('properUri.authority == endUri.authority: ${properUri.authority == endUri.authority}');

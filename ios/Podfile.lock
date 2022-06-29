@@ -1,4 +1,6 @@
 PODS:
+  - devicelocale (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_share (0.0.1):
     - Flutter
@@ -12,6 +14,7 @@ PODS:
     - FMDB (>= 2.7.5)
 
 DEPENDENCIES:
+  - devicelocale (from `.symlinks/plugins/devicelocale/ios`)
   - Flutter (from `Flutter`)
   - flutter_share (from `.symlinks/plugins/flutter_share/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
@@ -22,6 +25,8 @@ SPEC REPOS:
     - FMDB
 
 EXTERNAL SOURCES:
+  devicelocale:
+    :path: ".symlinks/plugins/devicelocale/ios"
   Flutter:
     :path: Flutter
   flutter_share:
@@ -32,6 +37,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
+  devicelocale: b22617f40038496deffba44747101255cee005b0
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_share: 4be0208963c60b537e6255ed2ce1faae61cd9ac2
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a

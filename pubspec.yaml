@@ -28,6 +28,7 @@ dependencies:
   moor_generator: ^4.6.0+1
   flutter_share: ^2.0.0
   easy_localization: ^3.0.1
+  devicelocale: ^0.5.2
 
 dev_dependencies:
   flutter_test:

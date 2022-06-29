@@ -1,3 +1,4 @@
+import 'package:devicelocale/devicelocale.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:people_compatibility/core/routes/app_routes.dart';
@@ -15,15 +16,16 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   EasyLocalization.ensureInitialized();
+  final localeName = await Devicelocale.currentLocale;
   runApp(
     EasyLocalization(
       child: const MyApp(),
       supportedLocales: const [
-        Locale('ru', 'RU'),
-        Locale('en', 'US'),
+        Locale('ru'),
+        Locale('en'),
       ],
-      fallbackLocale: const Locale('en', 'US'),
-      startLocale: const Locale('en', 'US'),
+      fallbackLocale: const Locale('en'),
+      startLocale: Locale('en'),
       useFallbackTranslations: true,
       path: 'assets/translations',
       saveLocale: true,
