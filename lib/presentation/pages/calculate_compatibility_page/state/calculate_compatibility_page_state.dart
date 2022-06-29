@@ -13,11 +13,11 @@ class CalculateCompatibilityPageState extends BaseNotifier {
   int selectedIndex = 0;
 
   final List<String> compatibilityLevelTitles = [
-    'shared_views'.tr(),
+    'erotic_compatibility'.tr(),
     'comfort'.tr(),
     'relationships'.tr(),
     'care'.tr(),
-    'erotic_compatibility'.tr(),
+    'shared_views'.tr(),
     'partnership'.tr(),
     'shared_interest'.tr(),
     'feel_sharpness'.tr(),
@@ -28,11 +28,11 @@ class CalculateCompatibilityPageState extends BaseNotifier {
   ];
 
   final List<String> compatibilityDescriptions = [
-    'shared_views_description'.tr(),
+    'erotic_compatibility_description'.tr(),
     'comfort_description'.tr(),
     'relationships_description'.tr(),
     'care_description'.tr(),
-    'erotic_compatibility_description'.tr(),
+    'shared_views_description'.tr(),
     'partnership_description'.tr(),
     'shared_interest_description'.tr(),
     'feel_sharpness_description'.tr(),
