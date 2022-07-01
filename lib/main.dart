@@ -28,7 +28,6 @@ Future<void> main() async {
       startLocale: Locale(localeName!.substring(0, 2)),
       useFallbackTranslations: true,
       path: 'assets/translations',
-      saveLocale: true,
     ),
   );
 }
@@ -36,7 +35,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

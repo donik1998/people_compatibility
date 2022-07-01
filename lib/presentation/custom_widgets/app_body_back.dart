@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_gradient.dart';
-import 'package:people_compatibility/presentation/theme/app_insets.dart';
 
 class AppBodyBackground extends StatelessWidget {
   final Widget child;
@@ -51,10 +50,7 @@ class AppBodyBackground extends StatelessWidget {
               color: AppColors.deepBlue.withOpacity(0.9),
             ),
           ),
-          Padding(
-            padding: AppInsets.paddingAll24,
-            child: child,
-          ),
+          child,
         ],
       ),
     );

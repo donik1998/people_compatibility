@@ -11,4 +11,6 @@ class AppInsets {
 
   static const horizontal18 = EdgeInsets.symmetric(horizontal: 18);
   static const horizontal24 = EdgeInsets.symmetric(horizontal: 24);
+
+  static const bottomButton = EdgeInsets.fromLTRB(16, 0, 16, 20);
 }

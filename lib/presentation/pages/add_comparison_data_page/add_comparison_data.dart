@@ -239,7 +239,7 @@ class ComparisonDataPage extends StatelessWidget {
       bottomNavigationBar: Consumer<ComparisonDataPageState>(
         builder: (context, state, child) {
           return SafeArea(
-            minimum: AppInsets.paddingAll16,
+            minimum: AppInsets.bottomButton,
             child: CustomButton.text(
               onTap: () {
                 if (state.genderSwitcherState == GenderSwitcherState.male) {
