@@ -60,10 +60,7 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
             return CustomScrollView(
               slivers: [
                 SliverAppBar(
-                  title: Text(
-                    'result'.tr(),
-                    style: Theme.of(context).textTheme.headline5?.copyWith(fontSize: 20),
-                  ),
+                  title: Text('result'.tr()),
                   leadingWidth: 64,
                   leading: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -86,10 +83,11 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
                         child: CustomButton.child(
                           height: 40,
                           width: 40,
-                          onTap: () {
-                            final response = context.read<CalculateCompatibilityPageState>().calculationResponse;
-                            _shareLink(response: response, context: context, args: args);
-                          },
+                          onTap: () => _shareLink(
+                            response: context.read<CalculateCompatibilityPageState>().calculationResponse,
+                            context: context,
+                            args: args,
+                          ),
                           child: SvgPicture.asset('assets/images/svg/share.svg'),
                         ),
                       ),
@@ -134,7 +132,9 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
                               AppSpacing.verticalSpace20,
                               Text(
                                 'total_index'.tr(namedArgs: {'value': '${state.calculationResponse?.koeffSum}'}),
-                                style: Theme.of(context).textTheme.headline5,
+                                style: Theme.of(context).textTheme.headline5?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                    ),
                               ),
                               AppSpacing.verticalSpace24,
                               CircleCoefficientBar(
@@ -193,7 +193,10 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
                                 color: AppColors.white.withOpacity(0.1),
                                 content: Text(
                                   'index_k_description'.tr(),
-                                  style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15),
+                                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                        fontSize: 15,
+                                        color: AppColors.white.withOpacity(0.8),
+                                      ),
                                 ),
                               ),
                               AppSpacing.verticalSpace20,

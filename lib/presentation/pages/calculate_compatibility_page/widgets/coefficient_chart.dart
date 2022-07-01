@@ -72,8 +72,7 @@ class CoefficientChart extends StatelessWidget {
                             ),
                             child: Text(
                               coefficients.elementAt(i).toString(),
-                              style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                                    fontWeight: FontWeight.w600,
+                              style: Theme.of(context).textTheme.headline5?.copyWith(
                                     fontSize: 11,
                                     color: initialIndex == i ? AppColors.white : AppColors.white.withOpacity(0.4),
                                   ),
@@ -83,8 +82,7 @@ class CoefficientChart extends StatelessWidget {
                           AppSpacing.verticalSpace6,
                           Text(
                             'L${i + 1}',
-                            style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                                  fontWeight: FontWeight.w600,
+                            style: Theme.of(context).textTheme.headline5?.copyWith(
                                   fontSize: 11,
                                   color: initialIndex == i ? AppColors.white : AppColors.white.withOpacity(0.4),
                                 ),

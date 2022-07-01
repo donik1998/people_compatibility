@@ -56,7 +56,7 @@ class _ExpandableCompatibilityCardState extends State<ExpandableCompatibilityCar
                     child: Center(
                       child: Text(
                         'L${widget.levelNumber}',
-                        style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 12),
+                        style: Theme.of(context).textTheme.headline5?.copyWith(fontSize: 12),
                       ),
                     ),
                   ),
@@ -66,7 +66,7 @@ class _ExpandableCompatibilityCardState extends State<ExpandableCompatibilityCar
               Expanded(
                 child: Text(
                   widget.title,
-                  style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 14),
+                  style: Theme.of(context).textTheme.headline5?.copyWith(fontSize: 14),
                 ),
               ),
             ],
@@ -86,7 +86,7 @@ class _ExpandableCompatibilityCardState extends State<ExpandableCompatibilityCar
                 child: Center(
                   child: Text(
                     '${widget.score}',
-                    style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 15),
+                    style: Theme.of(context).textTheme.headline5?.copyWith(fontSize: 15),
                   ),
                 ),
               ),
@@ -98,7 +98,7 @@ class _ExpandableCompatibilityCardState extends State<ExpandableCompatibilityCar
                   content: Center(
                     child: Text(
                       'details'.tr(),
-                      style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 14),
+                      style: Theme.of(context).textTheme.headline5?.copyWith(fontSize: 14),
                     ),
                   ),
                 ),
@@ -109,13 +109,19 @@ class _ExpandableCompatibilityCardState extends State<ExpandableCompatibilityCar
           if (_expanded)
             Text(
               widget.description,
-              style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w400),
+              style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                    fontSize: 16,
+                    color: AppColors.white.withOpacity(0.5),
+                  ),
             ),
           if (_expanded) AppSpacing.verticalSpace16,
           if (_expanded)
             Text(
               'index_caution'.tr(),
-              style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w400),
+              style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                    fontSize: 16,
+                    color: AppColors.white.withOpacity(0.5),
+                  ),
             ),
         ],
       ),

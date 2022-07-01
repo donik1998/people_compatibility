@@ -58,7 +58,9 @@ class _ExpandableDescriptionItemState extends State<ExpandableDescriptionItem> {
                 children: [
                   Text(
                     widget.title,
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                   ),
                   const Spacer(),
                   if (_expanded)
@@ -85,8 +87,8 @@ class _ExpandableDescriptionItemState extends State<ExpandableDescriptionItem> {
           AppSpacing.verticalSpace16,
           Text(
             widget.description,
-            style: Theme.of(context).textTheme.headline6?.copyWith(
-                  fontWeight: FontWeight.w400,
+            style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                  fontSize: 16,
                   color: AppColors.white.withOpacity(0.5),
                 ),
           ),

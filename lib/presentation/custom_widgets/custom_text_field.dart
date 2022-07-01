@@ -22,7 +22,7 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       enabled: enabled,
-      style: Theme.of(context).textTheme.headline6,
+      style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16),
       controller: controller,
       readOnly: readOnly ?? false,
       onChanged: onChanged,

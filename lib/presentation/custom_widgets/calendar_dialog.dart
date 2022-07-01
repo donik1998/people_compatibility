@@ -70,7 +70,7 @@ class _CalendarDialogState extends State<CalendarDialog> {
                       child: Center(
                         child: Text(
                           DateFormat('MMMM y', context.locale.languageCode).format(day),
-                          style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w400),
+                          style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 18),
                         ),
                       ),
                     );
@@ -124,13 +124,12 @@ class _CalendarDialogState extends State<CalendarDialog> {
               ),
             if (_dialogMode == CalendarDialogMode.month)
               SizedBox(
-                height: 250,
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     mainAxisSpacing: 16,
                     crossAxisSpacing: 16,
-                    childAspectRatio: (MediaQuery.of(context).size.width / 3) / 64,
+                    childAspectRatio: (MediaQuery.of(context).size.width / 3) / 72,
                   ),
                   itemCount: 12,
                   itemBuilder: (context, index) => TappableColoredCardWrap(
@@ -162,8 +161,9 @@ class _CalendarDialogState extends State<CalendarDialog> {
                   onTap: () => setState(() => exactTimeUnknown = !exactTimeUnknown),
                   child: Text(
                     'time_of_birth_unknown'.tr(),
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
                           color: AppColors.white.withOpacity(0.6),
+                          fontSize: 14,
                         ),
                   ),
                 ),
@@ -174,7 +174,10 @@ class _CalendarDialogState extends State<CalendarDialog> {
               content: Text(
                 DateFormat('dd.MM.yyyy, HH:mm').format(_selectedDate),
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(color: AppColors.dirtyWhite),
+                style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                      color: AppColors.dirtyWhite,
+                      fontSize: 14,
+                    ),
               ),
               color: AppColors.deepPurple,
             ),
@@ -192,7 +195,10 @@ class _CalendarDialogState extends State<CalendarDialog> {
                       content: Center(
                         child: Text(
                           'delete'.tr(),
-                          style: Theme.of(context).textTheme.bodyText1?.copyWith(color: AppColors.textGray),
+                          style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                color: AppColors.textGray,
+                                fontSize: 14,
+                              ),
                         ),
                       ),
                       color: AppColors.deepPurple,
@@ -251,7 +257,10 @@ class _CalendarDialogState extends State<CalendarDialog> {
                       content: Center(
                         child: Text(
                           exactTimeUnknown ? 'approve'.tr() : 'set_time'.tr(),
-                          style: Theme.of(context).textTheme.bodyText1?.copyWith(color: AppColors.textGray),
+                          style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                color: AppColors.textGray,
+                                fontSize: 14,
+                              ),
                         ),
                       ),
                       color: AppColors.deepPurple,

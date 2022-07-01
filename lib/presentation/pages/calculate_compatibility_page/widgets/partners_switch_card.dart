@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:people_compatibility/core/models/person_details.dart';
 import 'package:people_compatibility/presentation/custom_widgets/content_card.dart';
 import 'package:people_compatibility/presentation/pages/calculate_compatibility_page/widgets/partner_switcher_tab.dart';
@@ -39,11 +38,12 @@ class _PartnersSwitchCardState extends State<PartnersSwitchCard> {
                 _selectedDetails = widget.male;
                 canShow = true;
               }),
+              enabled: _selectedDetails == widget.male,
               color: AppColors.nightBlue,
               name: widget.male.name,
               zodiacIcon: SvgPicture.asset(
                 'assets/images/svg/zodiac_${widget.male.zodiac().pathName}.svg',
-                color: AppColors.white,
+                color: _selectedDetails == widget.male ? AppColors.white : AppColors.white.withOpacity(0.5),
               ),
               zodiacName: widget.male.zodiac().title,
             ),
@@ -52,11 +52,12 @@ class _PartnersSwitchCardState extends State<PartnersSwitchCard> {
                 _selectedDetails = widget.female;
                 canShow = true;
               }),
+              enabled: _selectedDetails == widget.female,
               color: AppColors.nightPurple,
               name: widget.female.name,
               zodiacIcon: SvgPicture.asset(
                 'assets/images/svg/zodiac_${widget.female.zodiac().pathName}.svg',
-                color: AppColors.white,
+                color: _selectedDetails == widget.female ? AppColors.white : AppColors.white.withOpacity(0.5),
               ),
               zodiacName: widget.female.zodiac().title,
             ),
@@ -80,18 +81,22 @@ class _PartnersSwitchCardState extends State<PartnersSwitchCard> {
                     children: [
                       TextSpan(
                         text: 'Дата рождения: ',
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
                               color: AppColors.white.withOpacity(0.5),
-                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
                             ),
                       ),
                       TextSpan(
                         text: DateFormat('dd.MM.yyyy').format(_selectedDetails.dateOfBirth),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                              fontSize: 16,
+                            ),
                       ),
                       TextSpan(
                         text: ' (${DateTime.now().difference(_selectedDetails.dateOfBirth).inDays ~/ 365})',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                              fontSize: 16,
+                            ),
                       ),
                     ],
                   ),
@@ -102,16 +107,15 @@ class _PartnersSwitchCardState extends State<PartnersSwitchCard> {
                     children: [
                       TextSpan(
                         text: 'Время рождения: ',
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: AppColors.white.withOpacity(0.5),
-                              fontWeight: FontWeight.w400,
-                            ),
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(color: AppColors.white.withOpacity(0.5), fontSize: 16),
                       ),
                       TextSpan(
                         text: _selectedDetails.exactTimeUnknown
                             ? 'unknown'.tr()
                             : DateFormat('HH:mm').format(_selectedDetails.dateOfBirth),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                              fontSize: 16,
+                            ),
                       ),
                     ],
                   ),
@@ -122,14 +126,16 @@ class _PartnersSwitchCardState extends State<PartnersSwitchCard> {
                     children: [
                       TextSpan(
                         text: '${'place_of_birth'.tr()}: ',
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
                               color: AppColors.white.withOpacity(0.5),
-                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
                             ),
                       ),
                       TextSpan(
                         text: '${_selectedDetails.country}, ${_selectedDetails.city.title}',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                              fontSize: 16,
+                            ),
                       ),
                     ],
                   ),

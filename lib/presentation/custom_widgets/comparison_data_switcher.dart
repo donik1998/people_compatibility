@@ -40,7 +40,10 @@ class ComparisonDataSwitcher extends StatelessWidget {
                   borderRadius: AppBorderRadius.max,
                 ),
                 child: Center(
-                  child: Text('male'.tr()),
+                  child: Text(
+                    'male'.tr(),
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16),
+                  ),
                 ),
               ),
             ),
@@ -59,7 +62,10 @@ class ComparisonDataSwitcher extends StatelessWidget {
                   borderRadius: AppBorderRadius.max,
                 ),
                 child: Center(
-                  child: Text('female'.tr()),
+                  child: Text(
+                    'female'.tr(),
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16),
+                  ),
                 ),
               ),
             ),

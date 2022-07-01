@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_spacing.dart';
 
 class PartnerSwitcherTab extends StatelessWidget {
@@ -7,11 +8,13 @@ class PartnerSwitcherTab extends StatelessWidget {
   final Widget zodiacIcon;
   final Color color;
   final VoidCallback onTap;
+  final bool enabled;
 
   const PartnerSwitcherTab({
     Key? key,
     required this.name,
     required this.onTap,
+    required this.enabled,
     required this.color,
     required this.zodiacName,
     required this.zodiacIcon,
@@ -35,7 +38,10 @@ class PartnerSwitcherTab extends StatelessWidget {
             children: [
               Text(
                 name,
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontWeight: FontWeight.w600),
+                style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: enabled ? AppColors.white : AppColors.white.withOpacity(0.5),
+                    ),
               ),
               AppSpacing.verticalSpace6,
               Row(
@@ -46,7 +52,9 @@ class PartnerSwitcherTab extends StatelessWidget {
                   AppSpacing.horizontalSpace8,
                   Text(
                     zodiacName,
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                          color: enabled ? AppColors.white : AppColors.white.withOpacity(0.5),
+                        ),
                   ),
                 ],
               ),

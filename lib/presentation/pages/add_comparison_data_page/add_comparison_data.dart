@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:people_compatibility/core/models/birthday_data.dart';
 import 'package:people_compatibility/core/routes/app_routes.dart';
 import 'package:people_compatibility/presentation/custom_widgets/app_body_back.dart';
@@ -57,7 +58,7 @@ class ComparisonDataPage extends StatelessWidget {
                       AppSpacing.verticalSpace16,
                       Text(
                         'date_and_time_of_birth'.tr(),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 16),
                       ),
                       AppSpacing.verticalSpace16,
                       TappableColoredCardWrap(
@@ -68,13 +69,10 @@ class ComparisonDataPage extends StatelessWidget {
                           children: [
                             Text(
                               state.selectedPersonBirthday,
-                              style: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.w400),
+                              style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16),
                             ),
                             IconButton(
-                              icon: const Icon(
-                                Icons.calendar_month,
-                                color: AppColors.white,
-                              ),
+                              icon: SvgPicture.asset('assets/images/svg/calendar.svg'),
                               onPressed: () => showDialog<BirthdayData>(
                                 context: context,
                                 builder: (context) => CalendarDialog(
@@ -92,7 +90,7 @@ class ComparisonDataPage extends StatelessWidget {
                       AppSpacing.verticalSpace24,
                       Text(
                         'place_of_birth'.tr(),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 16),
                       ),
                       AppSpacing.verticalSpace16,
                       CustomTextField(
@@ -121,7 +119,16 @@ class ComparisonDataPage extends StatelessWidget {
                       if (state.canShowCountryResults)
                         TappableColoredCardWrap(
                           content: state.searchResponse!.predictedCountries.isEmpty
-                              ? Center(child: Text('nothing_found'.tr()))
+                              ? Center(
+                                  child: Text(
+                                    'nothing_found'.tr(),
+                                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w400,
+                                          color: AppColors.white.withOpacity(0.5),
+                                        ),
+                                  ),
+                                )
                               : ListView.separated(
                                   shrinkWrap: true,
                                   itemCount: state.searchResponse!.predictedCountries.length,
@@ -138,8 +145,11 @@ class ComparisonDataPage extends StatelessWidget {
                                       child: Text(
                                         state.searchResponse!.predictedCountries.elementAt(index).structuredFormatting?.mainText ??
                                             'null',
-                                        style:
-                                            Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, fontWeight: FontWeight.w400),
+                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w400,
+                                              color: AppColors.white.withOpacity(0.5),
+                                            ),
                                       ),
                                     );
                                   },
@@ -174,7 +184,16 @@ class ComparisonDataPage extends StatelessWidget {
                       if (state.canShowCityResults)
                         TappableColoredCardWrap(
                           content: state.filteredCities.isEmpty
-                              ? Center(child: Text('nothing_found'.tr()))
+                              ? Center(
+                                  child: Text(
+                                    'nothing_found'.tr(),
+                                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w400,
+                                          color: AppColors.white.withOpacity(0.5),
+                                        ),
+                                  ),
+                                )
                               : ListView.separated(
                                   shrinkWrap: true,
                                   itemCount: state.filteredCities.length,
@@ -189,8 +208,11 @@ class ComparisonDataPage extends StatelessWidget {
                                     },
                                     child: Text(
                                       state.filteredCities.elementAt(index).structuredFormatting?.mainText ?? 'null',
-                                      style:
-                                          Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, fontWeight: FontWeight.w400),
+                                      style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w400,
+                                            color: AppColors.white.withOpacity(0.5),
+                                          ),
                                     ),
                                   ),
                                 ),
@@ -199,7 +221,7 @@ class ComparisonDataPage extends StatelessWidget {
                       AppSpacing.verticalSpace24,
                       Text(
                         'your_name'.tr(),
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.headline5?.copyWith(fontSize: 18),
                       ),
                       AppSpacing.verticalSpace16,
                       CustomTextField(
