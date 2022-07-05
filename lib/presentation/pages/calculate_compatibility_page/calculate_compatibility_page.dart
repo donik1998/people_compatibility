@@ -58,6 +58,7 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
         child: Consumer<CalculateCompatibilityPageState>(
           builder: (context, state, child) {
             return CustomScrollView(
+              controller: state.scrollController,
               slivers: [
                 SliverAppBar(
                   title: Text('result'.tr()),
