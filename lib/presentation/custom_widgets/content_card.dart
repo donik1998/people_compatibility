@@ -9,6 +9,8 @@ class TappableColoredCardWrap extends StatelessWidget {
   final BorderRadius borderRadius;
   final VoidCallback? onTap;
   final Gradient? gradient;
+  final double? width;
+  final double? height;
 
   const TappableColoredCardWrap({
     Key? key,
@@ -18,6 +20,8 @@ class TappableColoredCardWrap extends StatelessWidget {
     this.color,
     this.padding = AppInsets.paddingAll16,
     this.borderRadius = AppBorderRadius.borderAll16,
+    this.width,
+    this.height,
   }) : super(key: key);
 
   @override
@@ -27,6 +31,8 @@ class TappableColoredCardWrap extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         padding: padding,
+        width: width,
+        height: height,
         decoration: BoxDecoration(
           color: color,
           gradient: gradient,

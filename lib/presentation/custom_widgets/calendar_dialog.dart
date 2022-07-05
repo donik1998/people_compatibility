@@ -123,26 +123,30 @@ class _CalendarDialogState extends State<CalendarDialog> {
                 ),
               ),
             if (_dialogMode == CalendarDialogMode.month)
-              SizedBox(
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 16,
-                    childAspectRatio: (MediaQuery.of(context).size.width / 3) / 72,
-                  ),
-                  itemCount: 12,
-                  itemBuilder: (context, index) => TappableColoredCardWrap(
-                    content: Center(
-                        child: Text(DateFormat('MMMM', context.locale.languageCode)
-                            .format(DateTime(_selectedDate.year, _selectedDate.month + index)))),
-                    color: AppColors.deepPurple,
-                    onTap: () => setState(() {
-                      _dialogMode = CalendarDialogMode.day;
-                      _selectedDate = DateTime(_selectedDate.year, _selectedDate.month + index);
-                    }),
-                  ),
-                ),
+              LayoutBuilder(
+                builder: (context, size) {
+                  return Center(
+                    child: Wrap(
+                      spacing: 16,
+                      runSpacing: 16,
+                      children: [
+                        for (int index = 0; index < 12; index++)
+                          TappableColoredCardWrap(
+                            height: 48,
+                            width: (size.maxWidth - 40) / 3,
+                            content: Center(
+                                child: Text(DateFormat('MMMM', context.locale.languageCode)
+                                    .format(DateTime(_selectedDate.year, _selectedDate.month + index)))),
+                            color: AppColors.deepPurple,
+                            onTap: () => setState(() {
+                              _dialogMode = CalendarDialogMode.day;
+                              _selectedDate = DateTime(_selectedDate.year, _selectedDate.month + index);
+                            }),
+                          ),
+                      ],
+                    ),
+                  );
+                },
               ),
             AppSpacing.verticalSpace16,
             Row(
