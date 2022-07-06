@@ -282,8 +282,7 @@ class ComparisonDataPageState extends BaseNotifier {
   }
 
   void validateMaleData() {
-    setHasValidationError(false);
-    setValidationErrorMessage('');
+    print(male.name);
     final maleLocationIsValid = male.city.isValidLocation && male.country.isNotEmpty;
     final maleNameValid = male.name.isNotEmpty;
     final maleBirthdayIsValid = male.dateOfBirth.isBefore(DateTime.now()) && !male.dateOfBirth.isSameDay(DateTime.now());
@@ -298,11 +297,10 @@ class ComparisonDataPageState extends BaseNotifier {
       setHasValidationError(true);
       setValidationErrorMessage('У партнера мужчины неправильно указан день рождения');
     }
+    notifyListeners();
   }
 
   void validateFemaleData() {
-    setHasValidationError(false);
-    setValidationErrorMessage('');
     final femaleLocationIsValid = female.city.isValidLocation && female.country.isNotEmpty;
     final femaleNameValid = female.name.isNotEmpty;
     final femaleBirthdayIsValid = female.dateOfBirth.isBefore(DateTime.now()) && !female.dateOfBirth.isSameDay(DateTime.now());

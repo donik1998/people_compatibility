@@ -40,6 +40,7 @@ class ComparisonDataPage extends StatelessWidget {
         builder: (context, state, child) => AppBodyBackground(
           child: SingleChildScrollView(
             controller: state.scrollController,
+            padding: AppInsets.horizontal24,
             child: Column(
               children: [
                 AppSpacing.verticalSpace20,
@@ -266,10 +267,16 @@ class ComparisonDataPage extends StatelessWidget {
               onTap: () {
                 if (state.genderSwitcherState == GenderSwitcherState.male) {
                   state.validateMaleData();
-                  state.setGenderSwitcherState(GenderSwitcherState.female);
+                  if (state.maleDataIsValid) {
+                    state.setGenderSwitcherState(GenderSwitcherState.female);
+                  }
                 } else {
                   state.validateMaleData();
                   state.validateFemaleData();
+                }
+                print(state.hasValidationError);
+                if (state.genderSwitcherState == GenderSwitcherState.female && state.hasValidationError) {
+                  state.setGenderSwitcherState(GenderSwitcherState.male);
                 }
                 if (state.maleDataIsValid && state.femaleDataIsValid) {
                   Navigator.pushNamed(
