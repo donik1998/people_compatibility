@@ -49,7 +49,7 @@ class ComparisonDataPageState extends BaseNotifier {
 
   PlaceSearchMode searchMode = PlaceSearchMode.country;
 
-  bool hasValidationError = false;
+  bool get hasValidationError => !maleDataIsValid || !femaleDataIsValid;
 
   bool maleDataIsValid = false;
 
@@ -63,11 +63,6 @@ class ComparisonDataPageState extends BaseNotifier {
 
   bool get selectedPersonExactTimeKnown =>
       genderSwitcherState == GenderSwitcherState.male ? male.exactTimeUnknown : female.exactTimeUnknown;
-
-  void setHasValidationError(bool value) {
-    hasValidationError = value;
-    notifyListeners();
-  }
 
   void setValidationErrorMessage(String message) {
     validationErrorMessage = message;
@@ -282,22 +277,20 @@ class ComparisonDataPageState extends BaseNotifier {
   }
 
   void validateMaleData() {
-    print(male.name);
     final maleLocationIsValid = male.city.isValidLocation && male.country.isNotEmpty;
     final maleNameValid = male.name.isNotEmpty;
     final maleBirthdayIsValid = male.dateOfBirth.isBefore(DateTime.now()) && !male.dateOfBirth.isSameDay(DateTime.now());
     maleDataIsValid = maleLocationIsValid && maleNameValid && maleBirthdayIsValid;
+    notifyListeners();
     if (!maleLocationIsValid) {
-      setHasValidationError(true);
       setValidationErrorMessage('У партнера мужчины не указаны координаты места проживания');
-    } else if (!maleNameValid) {
-      setHasValidationError(true);
+    }
+    if (!maleNameValid) {
       setValidationErrorMessage('У партнера мужчины не указано имя');
-    } else if (!maleBirthdayIsValid) {
-      setHasValidationError(true);
+    }
+    if (!maleBirthdayIsValid) {
       setValidationErrorMessage('У партнера мужчины неправильно указан день рождения');
     }
-    notifyListeners();
   }
 
   void validateFemaleData() {
@@ -305,14 +298,14 @@ class ComparisonDataPageState extends BaseNotifier {
     final femaleNameValid = female.name.isNotEmpty;
     final femaleBirthdayIsValid = female.dateOfBirth.isBefore(DateTime.now()) && !female.dateOfBirth.isSameDay(DateTime.now());
     femaleDataIsValid = femaleLocationIsValid && femaleNameValid && femaleBirthdayIsValid;
+    notifyListeners();
     if (!femaleLocationIsValid) {
-      setHasValidationError(true);
       setValidationErrorMessage('У партнера женщины не указаны координаты места проживания');
-    } else if (!femaleNameValid) {
-      setHasValidationError(true);
+    }
+    if (!femaleNameValid) {
       setValidationErrorMessage('У партнера женщины не указано имя');
-    } else if (!femaleBirthdayIsValid) {
-      setHasValidationError(true);
+    }
+    if (!femaleBirthdayIsValid) {
       setValidationErrorMessage('У партнера женщины неправильно указан день рождения');
     }
   }

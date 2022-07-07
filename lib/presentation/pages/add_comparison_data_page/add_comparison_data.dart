@@ -267,15 +267,17 @@ class ComparisonDataPage extends StatelessWidget {
               onTap: () {
                 if (state.genderSwitcherState == GenderSwitcherState.male) {
                   state.validateMaleData();
-                  if (state.maleDataIsValid) {
-                    state.setGenderSwitcherState(GenderSwitcherState.female);
-                  }
+                  state.validateFemaleData();
                 } else {
                   state.validateMaleData();
                   state.validateFemaleData();
                 }
-                print(state.hasValidationError);
-                if (state.genderSwitcherState == GenderSwitcherState.female && state.hasValidationError) {
+                print(state.femaleDataIsValid);
+                print(state.maleDataIsValid);
+                if (!state.femaleDataIsValid) {
+                  state.setGenderSwitcherState(GenderSwitcherState.female);
+                }
+                if (!state.maleDataIsValid) {
                   state.setGenderSwitcherState(GenderSwitcherState.male);
                 }
                 if (state.maleDataIsValid && state.femaleDataIsValid) {
