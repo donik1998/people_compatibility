@@ -1,7 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:people_compatibility/core/models/city_geocode_response.dart';
 import 'package:people_compatibility/core/models/city_search_response.dart';
+import 'package:people_compatibility/core/models/place_details.dart';
+import 'package:people_compatibility/core/models/place_search_response.dart';
 import 'package:people_compatibility/data/failure.dart';
 import 'package:people_compatibility/data/places_api.dart';
 
@@ -12,6 +15,14 @@ abstract class SearchPlaceRepository {
     required String type,
   });
   Future<Either<Failure, CityGeocodeResponse>> getCityLocationById(String placeId);
+  Future<Either<Failure, PlaceDetails>> getPlaceDetails({
+    required String placeId,
+    required String lang,
+  });
+  Future<Either<Failure, CitySearchResponse>> getCityWithinCountry({
+    required String countryCode,
+    required String input,
+  });
 }
 
 class SearchPlaceService implements SearchPlaceRepository {
@@ -30,7 +41,7 @@ class SearchPlaceService implements SearchPlaceRepository {
     )
         .attempt()
         .map((either) => either.leftMap((err) {
-              Failure failure = Failure(message: 'Ошибка запроса');
+              Failure failure = Failure(message: 'request_error'.tr());
               if (err is DioError) failure = Failure(message: err.message);
               return failure;
             }))
@@ -41,7 +52,38 @@ class SearchPlaceService implements SearchPlaceRepository {
     return await Task<CityGeocodeResponse>(() => GooglePlacesApiClient.instance.getCityLocation(placeId))
         .attempt()
         .map((either) => either.leftMap((err) {
-              Failure failure = Failure(message: 'Ошибка запроса');
+              Failure failure = Failure(message: 'request_error'.tr());
+              if (err is DioError) failure = Failure(message: err.message);
+              return failure;
+            }))
+        .run();
+  }
+
+  @override
+  Future<Either<Failure, PlaceDetails>> getPlaceDetails({
+    required String placeId,
+    required String lang,
+  }) async {
+    return await Task<PlaceDetails>(() => GooglePlacesApiClient.instance.getPlaceDetailsById(placeId, lang))
+        .attempt()
+        .map((either) => either.leftMap((err) {
+              print(err.toString());
+              Failure failure = Failure(message: 'request_error'.tr());
+              if (err is DioError) failure = Failure(message: err.message);
+              return failure;
+            }))
+        .run();
+  }
+
+  @override
+  Future<Either<Failure, CitySearchResponse>> getCityWithinCountry({
+    required String countryCode,
+    required String input,
+  }) async {
+    return await Task<CitySearchResponse>(() => GooglePlacesApiClient.instance.getCityOfCountry(input, countryCode))
+        .attempt()
+        .map((either) => either.leftMap((err) {
+              Failure failure = Failure(message: 'request_error'.tr());
               if (err is DioError) failure = Failure(message: err.message);
               return failure;
             }))

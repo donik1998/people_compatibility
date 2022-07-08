@@ -8,6 +8,7 @@ import 'package:people_compatibility/core/models/birthday_data.dart';
 import 'package:people_compatibility/core/models/city_geocode_response.dart';
 import 'package:people_compatibility/core/models/city_search_response.dart';
 import 'package:people_compatibility/core/models/person_details.dart';
+import 'package:people_compatibility/core/models/place_search_response.dart';
 import 'package:people_compatibility/domain/remote/search_place_repository.dart';
 import 'package:people_compatibility/presentation/provider/base_notifier.dart';
 import 'package:people_compatibility/presentation/utils/async_debouncer.dart';
@@ -21,7 +22,7 @@ class ComparisonDataPageState extends BaseNotifier {
   late final TextEditingController cityController = TextEditingController(text: male.city.title);
   Completer completer = Completer();
   PlaceSearchResponse? searchResponse;
-  List<Predictions> filteredCities = List.empty(growable: true);
+  List<SearchPrediction> filteredCities = List.empty(growable: true);
   bool searchError = false;
   CityGeocodeResponse? cityLocationResponse;
   final Debouncer callDebouncer = Debouncer(milliseconds: 250);
@@ -48,6 +49,8 @@ class ComparisonDataPageState extends BaseNotifier {
 
   String femaleValidationErrorMessage = '';
 
+  String countryCode = '';
+
   GenderSwitcherState genderSwitcherState = GenderSwitcherState.male;
 
   PlaceSearchMode searchMode = PlaceSearchMode.country;
@@ -60,12 +63,17 @@ class ComparisonDataPageState extends BaseNotifier {
 
   bool get canShowCountryResults => searchResponse != null && countryController.text.isNotEmpty && !countryIsChosen && !inProgress;
 
-  bool get canShowCityResults => searchResponse != null && cityController.text.isNotEmpty && !cityIsChosen && !inProgress;
+  bool get canShowCityResults => filteredCities.isNotEmpty && cityController.text.isNotEmpty && !cityIsChosen && !inProgress;
 
   bool get canSearchForCity => genderSwitcherState == GenderSwitcherState.male ? male.country.isNotEmpty : female.country.isNotEmpty;
 
   bool get selectedPersonExactTimeKnown =>
       genderSwitcherState == GenderSwitcherState.male ? male.exactTimeUnknown : female.exactTimeUnknown;
+
+  void setCountryCode(String code) {
+    countryCode = code;
+    notifyListeners();
+  }
 
   void setMaleValidationError(String error) {
     maleValidationErrorMessage = error;
@@ -99,14 +107,12 @@ class ComparisonDataPageState extends BaseNotifier {
 
   void setSearchResults(PlaceSearchResponse response) {
     searchResponse = response;
-    if (searchMode == PlaceSearchMode.city) {
-      if (genderSwitcherState == GenderSwitcherState.male) {
-        filteredCities = searchResponse?.filteredByCountryCities(male.country) ?? [];
-      } else {
-        filteredCities = searchResponse?.filteredByCountryCities(female.country) ?? [];
-      }
-    }
     setInProgress(false);
+  }
+
+  void setFilteredCities(CitySearchResponse response) {
+    filteredCities = response.predictions ?? [];
+    notifyListeners();
   }
 
   void onSearchRequested({
@@ -123,38 +129,64 @@ class ComparisonDataPageState extends BaseNotifier {
       curve: Curves.decelerate,
     );
     if (type == 'country') {
-      setCountry('');
+      setCountry('', lang: lang);
       setSearchMode(PlaceSearchMode.country);
+      Future.delayed(
+        const Duration(milliseconds: 250),
+        () {
+          callDebouncer.run(() async {
+            final result = await SearchPlaceService.instance.searchPlaceByInput(
+              input: input,
+              type: type,
+              lang: lang,
+            );
+            result.fold(
+              (failure) {
+                setSearchError(true);
+                setErrorMessage(failure.message);
+              },
+              (searchResponse) => setSearchResults(searchResponse),
+            );
+            if (searchResponse!.predictions!.length >= 2) {
+              await scrollController.animateTo(
+                48.0 * searchResponse!.predictions!.length,
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.decelerate,
+              );
+            }
+          });
+        },
+      );
     }
     if (type == 'cities') {
       setSearchMode(PlaceSearchMode.city);
-    }
-    Future.delayed(
-      const Duration(milliseconds: 250),
-      () {
-        callDebouncer.run(() async {
-          final result = await SearchPlaceService.instance.searchPlaceByInput(
-            input: input,
-            type: type,
-            lang: lang,
-          );
-          result.fold(
-            (failure) {
-              setSearchError(true);
-              setErrorMessage(failure.message);
-            },
-            (searchResponse) => setSearchResults(searchResponse),
-          );
-          if (searchResponse!.predictions!.length >= 2) {
-            await scrollController.animateTo(
-              48.0 * searchResponse!.predictions!.length,
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.decelerate,
+      Future.delayed(
+        const Duration(milliseconds: 250),
+        () {
+          callDebouncer.run(() async {
+            final result = await SearchPlaceService.instance.getCityWithinCountry(
+              input: input,
+              countryCode: 'country:$countryCode',
             );
-          }
-        });
-      },
-    );
+            result.fold(
+              (failure) {
+                setSearchError(true);
+                setErrorMessage(failure.message);
+              },
+              (searchResponse) => setFilteredCities(searchResponse),
+            );
+            setInProgress(false);
+            if (filteredCities.length >= 2) {
+              await scrollController.animateTo(
+                48.0 * filteredCities.length,
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.decelerate,
+              );
+            }
+          });
+        },
+      );
+    }
   }
 
   void setGenderSwitcherState(GenderSwitcherState value) {
@@ -245,7 +277,7 @@ class ComparisonDataPageState extends BaseNotifier {
   bool get countryIsChosen => genderSwitcherState == GenderSwitcherState.male ? male.country.isNotEmpty : female.country.isNotEmpty;
   bool get cityIsChosen => genderSwitcherState == GenderSwitcherState.male ? male.city.title.isNotEmpty : female.city.title.isNotEmpty;
 
-  void setCountry(String country) {
+  void setCountry(String country, {int? index, required String lang}) async {
     if (genderSwitcherState == GenderSwitcherState.male) {
       male = male.copyWith(country: country);
       if (country.isNotEmpty) countryController.text = male.country;
@@ -253,6 +285,24 @@ class ComparisonDataPageState extends BaseNotifier {
     if (genderSwitcherState == GenderSwitcherState.female) {
       female = female.copyWith(country: country);
       if (country.isNotEmpty) countryController.text = female.country;
+    }
+    if (index != null) {
+      if (searchResponse?.predictions?.elementAt(index).placeId?.isNotEmpty ?? false) {
+        final countryDetails = await SearchPlaceService.instance.getPlaceDetails(
+          placeId: searchResponse!.predictions!.elementAt(index).placeId!,
+          lang: lang,
+        );
+        countryDetails.fold(
+          (failure) {
+            print(failure.message);
+            setSearchError(true);
+            setErrorMessage(failure.message);
+          },
+          (details) => setCountryCode(
+            details.result?.addressComponents?.first.shortName ?? '',
+          ),
+        );
+      }
     }
     searchResponse = null;
     notifyListeners();

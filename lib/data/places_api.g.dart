@@ -18,6 +18,44 @@ class _GooglePlacesApiClient implements GooglePlacesApiClient {
   String? baseUrl;
 
   @override
+  Future<PlaceDetails> getPlaceDetailsById(placeId, lang) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'place_id': placeId,
+      r'language': lang
+    };
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PlaceDetails>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/place/details/json',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = PlaceDetails.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<CitySearchResponse> getCityOfCountry(input, country) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'input': input,
+      r'components': country
+    };
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<CitySearchResponse>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/place/autocomplete/json',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = CitySearchResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<PlaceSearchResponse> getPlaceByInput(input, lang, type) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{

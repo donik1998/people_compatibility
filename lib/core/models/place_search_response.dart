@@ -1,25 +1,27 @@
-class CitySearchResponse {
-  CitySearchResponse({
+import 'dart:convert';
+
+class PlaceSearchResponse {
+  PlaceSearchResponse({
     this.predictions,
     this.status,
   });
 
-  CitySearchResponse.fromJson(dynamic json) {
+  PlaceSearchResponse.fromJson(dynamic json) {
     if (json['predictions'] != null) {
       predictions = [];
       json['predictions'].forEach((v) {
-        predictions?.add(SearchPrediction.fromJson(v));
+        predictions?.add(Predictions.fromJson(v));
       });
     }
     status = json['status'];
   }
-  List<SearchPrediction>? predictions;
+  List<Predictions>? predictions;
   String? status;
-  CitySearchResponse copyWith({
-    List<SearchPrediction>? predictions,
+  PlaceSearchResponse copyWith({
+    List<Predictions>? predictions,
     String? status,
   }) =>
-      CitySearchResponse(
+      PlaceSearchResponse(
         predictions: predictions ?? this.predictions,
         status: status ?? this.status,
       );
@@ -31,10 +33,25 @@ class CitySearchResponse {
     map['status'] = status;
     return map;
   }
+
+  /*List<Predictions> get predictedCities =>
+      predictions?.where((element) => element.types?.contains('locality') ?? false).toList() ?? [];*/
+  List<Predictions> get predictedCountries =>
+      predictions?.where((element) => element.types?.contains('country') ?? false).toList() ?? [];
+
+  List<Predictions> filteredByCountryCities(String countryName) {
+    final cities = List<Predictions>.empty(growable: true);
+    for (Predictions prediction in predictions ?? []) {
+      for (Terms term in prediction.terms ?? []) {
+        if (term.value == countryName && (prediction.types?.contains('locality') ?? false)) cities.add(prediction);
+      }
+    }
+    return cities;
+  }
 }
 
-class SearchPrediction {
-  SearchPrediction({
+class Predictions {
+  Predictions({
     this.description,
     this.matchedSubstrings,
     this.placeId,
@@ -44,7 +61,7 @@ class SearchPrediction {
     this.types,
   });
 
-  SearchPrediction.fromJson(dynamic json) {
+  Predictions.fromJson(dynamic json) {
     description = json['description'];
     if (json['matched_substrings'] != null) {
       matchedSubstrings = [];
@@ -70,7 +87,7 @@ class SearchPrediction {
   StructuredFormatting? structuredFormatting;
   List<Terms>? terms;
   List<String>? types;
-  SearchPrediction copyWith({
+  Predictions copyWith({
     String? description,
     List<MatchedSubstrings>? matchedSubstrings,
     String? placeId,
@@ -79,7 +96,7 @@ class SearchPrediction {
     List<Terms>? terms,
     List<String>? types,
   }) =>
-      SearchPrediction(
+      Predictions(
         description: description ?? this.description,
         matchedSubstrings: matchedSubstrings ?? this.matchedSubstrings,
         placeId: placeId ?? this.placeId,
@@ -176,6 +193,9 @@ class StructuredFormatting {
   }
 }
 
+MainTextMatchedSubstrings mainTextMatchedSubstringsFromJson(String str) => MainTextMatchedSubstrings.fromJson(json.decode(str));
+String mainTextMatchedSubstringsToJson(MainTextMatchedSubstrings data) => json.encode(data.toJson());
+
 class MainTextMatchedSubstrings {
   MainTextMatchedSubstrings({
     this.length,
@@ -203,6 +223,9 @@ class MainTextMatchedSubstrings {
     return map;
   }
 }
+
+MatchedSubstrings matchedSubstringsFromJson(String str) => MatchedSubstrings.fromJson(json.decode(str));
+String matchedSubstringsToJson(MatchedSubstrings data) => json.encode(data.toJson());
 
 class MatchedSubstrings {
   MatchedSubstrings({
