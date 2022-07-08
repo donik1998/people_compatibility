@@ -43,7 +43,9 @@ class ComparisonDataPageState extends BaseNotifier {
     city: BirthLocation(),
   );
 
-  String validationErrorMessage = '';
+  String maleValidationErrorMessage = '';
+
+  String femaleValidationErrorMessage = '';
 
   GenderSwitcherState genderSwitcherState = GenderSwitcherState.male;
 
@@ -64,8 +66,13 @@ class ComparisonDataPageState extends BaseNotifier {
   bool get selectedPersonExactTimeKnown =>
       genderSwitcherState == GenderSwitcherState.male ? male.exactTimeUnknown : female.exactTimeUnknown;
 
-  void setValidationErrorMessage(String message) {
-    validationErrorMessage = message;
+  void setMaleValidationError(String error) {
+    maleValidationErrorMessage = error;
+    notifyListeners();
+  }
+
+  void setFemaleValidationError(String error) {
+    femaleValidationErrorMessage = error;
     notifyListeners();
   }
 
@@ -283,13 +290,13 @@ class ComparisonDataPageState extends BaseNotifier {
     maleDataIsValid = maleLocationIsValid && maleNameValid && maleBirthdayIsValid;
     notifyListeners();
     if (!maleLocationIsValid) {
-      setValidationErrorMessage('У партнера мужчины не указаны координаты места проживания');
+      setMaleValidationError('У партнера мужчины не указаны координаты места проживания');
     }
     if (!maleNameValid) {
-      setValidationErrorMessage('У партнера мужчины не указано имя');
+      setMaleValidationError('У партнера мужчины не указано имя');
     }
     if (!maleBirthdayIsValid) {
-      setValidationErrorMessage('У партнера мужчины неправильно указан день рождения');
+      setMaleValidationError('У партнера мужчины неправильно указан день рождения');
     }
   }
 
@@ -300,13 +307,13 @@ class ComparisonDataPageState extends BaseNotifier {
     femaleDataIsValid = femaleLocationIsValid && femaleNameValid && femaleBirthdayIsValid;
     notifyListeners();
     if (!femaleLocationIsValid) {
-      setValidationErrorMessage('У партнера женщины не указаны координаты места проживания');
+      setFemaleValidationError('У партнера женщины не указаны координаты места проживания');
     }
     if (!femaleNameValid) {
-      setValidationErrorMessage('У партнера женщины не указано имя');
+      setFemaleValidationError('У партнера женщины не указано имя');
     }
     if (!femaleBirthdayIsValid) {
-      setValidationErrorMessage('У партнера женщины неправильно указан день рождения');
+      setFemaleValidationError('У партнера женщины неправильно указан день рождения');
     }
   }
 

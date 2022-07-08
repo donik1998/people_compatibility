@@ -242,13 +242,33 @@ class ComparisonDataPage extends StatelessWidget {
                       //         ),
                       //   ),
                       // ),
-                      if (state.hasValidationError) AppSpacing.verticalSpace16,
-                      if (state.hasValidationError)
-                        Text(
-                          state.validationErrorMessage,
-                          style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.red),
-                          textAlign: TextAlign.center,
-                        ),
+                      if (state.hasValidationError) ...[
+                        AppSpacing.verticalSpace16,
+                        if (state.maleDataIsValid && state.genderSwitcherState == GenderSwitcherState.male)
+                          Text(
+                            'Данные партнера заполнены верно',
+                            style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.greenAccent),
+                            textAlign: TextAlign.center,
+                          ),
+                        if (!state.maleDataIsValid)
+                          Text(
+                            state.maleValidationErrorMessage,
+                            style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.red),
+                            textAlign: TextAlign.center,
+                          ),
+                        if (state.femaleDataIsValid && state.genderSwitcherState == GenderSwitcherState.female)
+                          Text(
+                            'Данные партнера заполнены верно',
+                            style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.greenAccent),
+                            textAlign: TextAlign.center,
+                          ),
+                        if (!state.femaleDataIsValid)
+                          Text(
+                            state.femaleValidationErrorMessage,
+                            style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.red),
+                            textAlign: TextAlign.center,
+                          ),
+                      ],
                     ],
                   ),
                   color: AppColors.deepBlue,
@@ -267,13 +287,10 @@ class ComparisonDataPage extends StatelessWidget {
               onTap: () {
                 if (state.genderSwitcherState == GenderSwitcherState.male) {
                   state.validateMaleData();
-                  state.validateFemaleData();
-                } else {
-                  state.validateMaleData();
+                }
+                if (state.genderSwitcherState == GenderSwitcherState.female) {
                   state.validateFemaleData();
                 }
-                print(state.femaleDataIsValid);
-                print(state.maleDataIsValid);
                 if (!state.femaleDataIsValid) {
                   state.setGenderSwitcherState(GenderSwitcherState.female);
                 }
