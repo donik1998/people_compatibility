@@ -309,12 +309,15 @@ class ComparisonDataPageState extends BaseNotifier {
     notifyListeners();
     if (!femaleLocationIsValid) {
       setFemaleValidationError('female_partner_location_invalid'.tr());
+      print('female_partner_location_invalid');
     }
     if (!femaleNameValid) {
       setFemaleValidationError('female_partner_name_invalid'.tr());
+      print('female_partner_name_invalid');
     }
     if (!femaleBirthdayIsValid) {
       setFemaleValidationError('female_partner_birthday_invalid'.tr());
+      print('female_partner_birthday_invalid');
     }
   }
 

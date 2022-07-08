@@ -244,13 +244,13 @@ class ComparisonDataPage extends StatelessWidget {
                       // ),
                       if (state.hasValidationError) ...[
                         AppSpacing.verticalSpace16,
-                        if (state.maleDataIsValid && state.genderSwitcherState == GenderSwitcherState.male)
+                        if (state.maleDataIsValid)
                           Text(
                             'male_partner_data_is_valid'.tr(),
                             style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.greenAccent),
                             textAlign: TextAlign.center,
                           ),
-                        if (!state.maleDataIsValid)
+                        if (!state.maleDataIsValid && state.genderSwitcherState == GenderSwitcherState.male)
                           Text(
                             state.maleValidationErrorMessage,
                             style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.red),
