@@ -246,7 +246,7 @@ class ComparisonDataPage extends StatelessWidget {
                         AppSpacing.verticalSpace16,
                         if (state.maleDataIsValid && state.genderSwitcherState == GenderSwitcherState.male)
                           Text(
-                            'Данные партнера заполнены верно',
+                            'male_partner_data_is_valid'.tr(),
                             style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.greenAccent),
                             textAlign: TextAlign.center,
                           ),
@@ -258,7 +258,7 @@ class ComparisonDataPage extends StatelessWidget {
                           ),
                         if (state.femaleDataIsValid && state.genderSwitcherState == GenderSwitcherState.female)
                           Text(
-                            'Данные партнера заполнены верно',
+                            'female_partner_data_is_valid'.tr(),
                             style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.greenAccent),
                             textAlign: TextAlign.center,
                           ),

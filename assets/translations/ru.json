@@ -87,5 +87,13 @@
   "sagittarius":"Стрелец",
   "capricorn":"Козерог",
   "aquarius":"Водолей",
-  "pisces":"Рыбы"
+  "pisces":"Рыбы",
+  "male_partner_data_is_valid":"The details of the male partner are filled in correctly",
+  "female_partner_data_is_valid": "The details of the female partner are filled in correctly",
+  "male_partner_location_invalid":"The partner of male partner does not have the coordinates of the place of residence",
+  "male_partner_name_invalid": "Male partner's name field is filled in correctly",
+  "male_partner_birthday_invalid": "Male partner's birthday is incorrect",
+  "female_partner_location_invalid":"Female partner does not have the coordinates of the place of residence",
+  "female_partner_name_invalid": "Female partner's name field is filled in correctly",
+  "female_partner_birthday_invalid": "Male partner's birthday is incorrect"
 }

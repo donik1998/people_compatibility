@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -290,13 +291,13 @@ class ComparisonDataPageState extends BaseNotifier {
     maleDataIsValid = maleLocationIsValid && maleNameValid && maleBirthdayIsValid;
     notifyListeners();
     if (!maleLocationIsValid) {
-      setMaleValidationError('У партнера мужчины не указаны координаты места проживания');
+      setMaleValidationError('male_partner_location_invalid'.tr());
     }
     if (!maleNameValid) {
-      setMaleValidationError('У партнера мужчины не указано имя');
+      setMaleValidationError('male_partner_name_invalid'.tr());
     }
     if (!maleBirthdayIsValid) {
-      setMaleValidationError('У партнера мужчины неправильно указан день рождения');
+      setMaleValidationError('male_partner_birthday_invalid'.tr());
     }
   }
 
@@ -307,13 +308,13 @@ class ComparisonDataPageState extends BaseNotifier {
     femaleDataIsValid = femaleLocationIsValid && femaleNameValid && femaleBirthdayIsValid;
     notifyListeners();
     if (!femaleLocationIsValid) {
-      setFemaleValidationError('У партнера женщины не указаны координаты места проживания');
+      setFemaleValidationError('female_partner_location_invalid'.tr());
     }
     if (!femaleNameValid) {
-      setFemaleValidationError('У партнера женщины не указано имя');
+      setFemaleValidationError('female_partner_name_invalid'.tr());
     }
     if (!femaleBirthdayIsValid) {
-      setFemaleValidationError('У партнера женщины неправильно указан день рождения');
+      setFemaleValidationError('female_partner_birthday_invalid'.tr());
     }
   }
 
