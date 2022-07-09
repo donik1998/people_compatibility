@@ -140,7 +140,7 @@ class ComparisonDataPage extends StatelessWidget {
                                         state.setCountry(
                                           state.searchResponse!.predictedCountries.elementAt(index).structuredFormatting?.mainText ??
                                               'null',
-                                          index: index,
+                                          placeId: state.searchResponse?.predictedCountries.elementAt(index).placeId,
                                           lang: context.locale.languageCode,
                                         );
                                         FocusScope.of(context).unfocus();
@@ -210,7 +210,11 @@ class ComparisonDataPage extends StatelessWidget {
                                       FocusScope.of(context).unfocus();
                                     },
                                     child: Text(
-                                      state.filteredCities.elementAt(index).structuredFormatting?.mainText ?? 'null',
+                                      state.filteredCities
+                                              .elementAt(index)
+                                              .description
+                                              ?.substring(0, state.filteredCities.elementAt(index).description?.lastIndexOf(',')) ??
+                                          'null',
                                       style: Theme.of(context).textTheme.bodyText1?.copyWith(
                                             fontSize: 15,
                                             fontWeight: FontWeight.w400,

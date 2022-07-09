@@ -35,6 +35,7 @@ abstract class GooglePlacesApiClient {
     @Query('input') String input,
     @Query('components') String country,
     @Query('types') String type,
+    @Query('language') String lang,
   );
 
   @GET('/place/queryautocomplete/json')

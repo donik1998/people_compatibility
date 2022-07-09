@@ -167,6 +167,7 @@ class ComparisonDataPageState extends BaseNotifier {
             final result = await SearchPlaceService.instance.getCityWithinCountry(
               input: input,
               countryCode: 'country:$countryCode',
+              lang: lang,
             );
             result.fold(
               (failure) {
@@ -277,7 +278,7 @@ class ComparisonDataPageState extends BaseNotifier {
   bool get countryIsChosen => genderSwitcherState == GenderSwitcherState.male ? male.country.isNotEmpty : female.country.isNotEmpty;
   bool get cityIsChosen => genderSwitcherState == GenderSwitcherState.male ? male.city.title.isNotEmpty : female.city.title.isNotEmpty;
 
-  void setCountry(String country, {int? index, required String lang}) async {
+  void setCountry(String country, {String? placeId, required String lang}) async {
     if (genderSwitcherState == GenderSwitcherState.male) {
       male = male.copyWith(country: country);
       if (country.isNotEmpty) countryController.text = male.country;
@@ -286,10 +287,11 @@ class ComparisonDataPageState extends BaseNotifier {
       female = female.copyWith(country: country);
       if (country.isNotEmpty) countryController.text = female.country;
     }
-    if (index != null) {
-      if (searchResponse?.predictions?.elementAt(index).placeId?.isNotEmpty ?? false) {
+    if (placeId != null) {
+      if (placeId.isNotEmpty) {
+        setInProgress(true);
         final countryDetails = await SearchPlaceService.instance.getPlaceDetails(
-          placeId: searchResponse!.predictions!.elementAt(index).placeId!,
+          placeId: placeId,
           lang: lang,
         );
         countryDetails.fold(
@@ -304,6 +306,7 @@ class ComparisonDataPageState extends BaseNotifier {
         );
       }
     }
+    setInProgress(false);
     searchResponse = null;
     notifyListeners();
   }
