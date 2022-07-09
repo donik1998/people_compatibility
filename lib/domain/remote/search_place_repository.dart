@@ -80,7 +80,7 @@ class SearchPlaceService implements SearchPlaceRepository {
     required String countryCode,
     required String input,
   }) async {
-    return await Task<CitySearchResponse>(() => GooglePlacesApiClient.instance.getCityOfCountry(input, countryCode))
+    return await Task<CitySearchResponse>(() => GooglePlacesApiClient.instance.getCityOfCountry(input, countryCode, 'locality'))
         .attempt()
         .map((either) => either.leftMap((err) {
               Failure failure = Failure(message: 'request_error'.tr());

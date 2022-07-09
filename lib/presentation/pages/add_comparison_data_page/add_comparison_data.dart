@@ -114,7 +114,7 @@ class ComparisonDataPage extends StatelessWidget {
                       if (state.searchError && state.searchMode == PlaceSearchMode.country)
                         TappableColoredCardWrap(
                           color: AppColors.white.withOpacity(0.1),
-                          content: Center(child: Text(state.errorMessage)),
+                          content: Center(child: Text('request_error'.tr())),
                         ),
                       if (state.canShowCountryResults) AppSpacing.verticalSpace16,
                       if (state.canShowCountryResults)
@@ -181,7 +181,7 @@ class ComparisonDataPage extends StatelessWidget {
                       if (state.searchError && state.searchMode == PlaceSearchMode.city)
                         TappableColoredCardWrap(
                           color: AppColors.white.withOpacity(0.1),
-                          content: Center(child: Text(state.errorMessage)),
+                          content: Center(child: Text('request_error'.tr())),
                         ),
                       if (state.canShowCityResults) AppSpacing.verticalSpace16,
                       if (state.canShowCityResults)

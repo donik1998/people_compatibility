@@ -34,6 +34,7 @@ abstract class GooglePlacesApiClient {
   Future<CitySearchResponse> getCityOfCountry(
     @Query('input') String input,
     @Query('components') String country,
+    @Query('types') String type,
   );
 
   @GET('/place/queryautocomplete/json')

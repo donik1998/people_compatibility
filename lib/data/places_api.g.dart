@@ -37,11 +37,12 @@ class _GooglePlacesApiClient implements GooglePlacesApiClient {
   }
 
   @override
-  Future<CitySearchResponse> getCityOfCountry(input, country) async {
+  Future<CitySearchResponse> getCityOfCountry(input, country, type) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'input': input,
-      r'components': country
+      r'components': country,
+      r'types': type
     };
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
