@@ -95,5 +95,5 @@
   "male_partner_birthday_invalid": "У партнера мужчины неправильно указан день рождения",
   "female_partner_location_invalid":"У партнера женщины не указаны координаты места проживания",
   "female_partner_name_invalid": "У партнера женщины не указано имя",
-  "female_partner_birthday_invalid": "У партнера мужчины неправильно указан день рождения"
+  "female_partner_birthday_invalid": "У партнера женщины неправильно указан день рождения"
 }

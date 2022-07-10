@@ -252,13 +252,13 @@ class ComparisonDataPage extends StatelessWidget {
                       if (!state.maleDataIsValid && state.genderSwitcherState == GenderSwitcherState.male)
                         Text(
                           state.maleValidationErrorMessage,
-                          style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.red),
+                          style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16, color: Colors.red),
                           textAlign: TextAlign.center,
                         ),
                       if (!state.femaleDataIsValid && state.genderSwitcherState == GenderSwitcherState.female)
                         Text(
                           state.femaleValidationErrorMessage,
-                          style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Colors.red),
+                          style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16, color: Colors.red),
                           textAlign: TextAlign.center,
                         ),
                     ],
