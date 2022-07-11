@@ -1,7 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:people_compatibility/core/models/birthday_data.dart';
 import 'package:people_compatibility/presentation/custom_widgets/content_card.dart';
 import 'package:people_compatibility/presentation/custom_widgets/time_picker_sheet.dart';

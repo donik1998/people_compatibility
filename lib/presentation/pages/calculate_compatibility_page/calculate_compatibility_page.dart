@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:people_compatibility/core/models/compatibility_response.dart';
-import 'package:people_compatibility/core/models/person_details.dart';
 import 'package:people_compatibility/core/routes/app_routes.dart';
 import 'package:people_compatibility/domain/remote/people_compatibility_service.dart';
 import 'package:people_compatibility/presentation/custom_widgets/app_body_back.dart';
@@ -287,21 +286,4 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
       );
     }
   }
-}
-
-class SecondPartnerDataPageArguments {
-  final PersonDetails maleData;
-
-  SecondPartnerDataPageArguments({required this.maleData});
-}
-
-class CalculateCompatibilityPageArguments {
-  final PersonDetails maleData, femaleData;
-  final bool shouldSaveToLocalDb;
-
-  CalculateCompatibilityPageArguments({
-    required this.maleData,
-    required this.femaleData,
-    this.shouldSaveToLocalDb = true,
-  });
 }

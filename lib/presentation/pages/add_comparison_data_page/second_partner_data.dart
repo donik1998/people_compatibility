@@ -11,7 +11,6 @@ import 'package:people_compatibility/presentation/custom_widgets/custom_back_but
 import 'package:people_compatibility/presentation/custom_widgets/custom_button.dart';
 import 'package:people_compatibility/presentation/custom_widgets/custom_text_field.dart';
 import 'package:people_compatibility/presentation/pages/add_comparison_data_page/state/first_gender_comparison_data_state.dart';
-import 'package:people_compatibility/presentation/pages/calculate_compatibility_page/calculate_compatibility_page.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_insets.dart';
 import 'package:people_compatibility/presentation/theme/app_spacing.dart';

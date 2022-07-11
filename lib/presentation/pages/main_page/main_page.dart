@@ -9,7 +9,6 @@ import 'package:people_compatibility/presentation/custom_widgets/app_logo.dart';
 import 'package:people_compatibility/presentation/custom_widgets/comparison_card.dart';
 import 'package:people_compatibility/presentation/custom_widgets/content_card.dart';
 import 'package:people_compatibility/presentation/custom_widgets/custom_button.dart';
-import 'package:people_compatibility/presentation/pages/calculate_compatibility_page/calculate_compatibility_page.dart';
 import 'package:people_compatibility/presentation/pages/main_page/state/main_page_state.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_insets.dart';

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:people_compatibility/presentation/custom_widgets/content_card.dart';
+import 'package:people_compatibility/presentation/pages/calculate_compatibility_page/widgets/responsive_text.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_gradient.dart';
 import 'package:people_compatibility/presentation/theme/app_spacing.dart';
@@ -54,8 +55,8 @@ class _ExpandableCompatibilityCardState extends State<ExpandableCompatibilityCar
                       shape: BoxShape.circle,
                     ),
                     child: Center(
-                      child: Text(
-                        'L${widget.levelNumber}',
+                      child: ResponsiveText(
+                        text: 'L${widget.levelNumber}',
                         style: Theme.of(context).textTheme.headline5?.copyWith(fontSize: 12),
                       ),
                     ),

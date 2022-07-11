@@ -9,7 +9,7 @@ part of 'compatibility_api.dart';
 // ignore_for_file: unnecessary_brace_in_string_interps
 
 class _PeopleCompatibilityApiClient implements PeopleCompatibilityApiClient {
-  _PeopleCompatibilityApiClient(this._dio, {this.baseUrl}) {
+  _PeopleCompatibilityApiClient(this._dio) {
     baseUrl ??= 'https://siastro.com';
   }
 
@@ -65,20 +65,16 @@ class _PeopleCompatibilityApiClient implements PeopleCompatibilityApiClient {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<CompatibilityResponse>(
-            Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, '/api/',
-                    queryParameters: queryParameters, data: _data)
-                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_setStreamType<CompatibilityResponse>(
+        Options(method: 'GET', headers: _headers, extra: _extra)
+            .compose(_dio.options, '/api/', queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = CompatibilityResponse.fromJson(_result.data!);
     return value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
-    if (T != dynamic &&
-        !(requestOptions.responseType == ResponseType.bytes ||
-            requestOptions.responseType == ResponseType.stream)) {
+    if (T != dynamic && !(requestOptions.responseType == ResponseType.bytes || requestOptions.responseType == ResponseType.stream)) {
       if (T == String) {
         requestOptions.responseType = ResponseType.plain;
       } else {

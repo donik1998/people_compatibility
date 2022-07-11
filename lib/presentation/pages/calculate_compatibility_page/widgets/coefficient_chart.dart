@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:people_compatibility/presentation/pages/calculate_compatibility_page/widgets/responsive_text.dart';
 import 'package:people_compatibility/presentation/theme/app_border_radius.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_gradient.dart';
@@ -40,8 +41,8 @@ class CoefficientChart extends StatelessWidget {
           ),
           if (coefficients.isEmpty)
             Center(
-              child: Text(
-                'no_data'.tr(),
+              child: ResponsiveText(
+                text: 'no_data'.tr(),
                 style: Theme.of(context).textTheme.headline6,
               ),
             ),
@@ -70,8 +71,8 @@ class CoefficientChart extends StatelessWidget {
                               gradient: initialIndex == i ? AppGradient.buttonGradient : null,
                               borderRadius: AppBorderRadius.borderAll4,
                             ),
-                            child: Text(
-                              coefficients.elementAt(i).toString(),
+                            child: ResponsiveText(
+                              text: coefficients.elementAt(i).toString(),
                               style: Theme.of(context).textTheme.headline5?.copyWith(
                                     fontSize: 11,
                                     color: initialIndex == i ? AppColors.white : AppColors.white.withOpacity(0.4),
@@ -80,8 +81,8 @@ class CoefficientChart extends StatelessWidget {
                             ),
                           ),
                           AppSpacing.verticalSpace6,
-                          Text(
-                            'L${i + 1}',
+                          ResponsiveText(
+                            text: 'L${i + 1}',
                             style: Theme.of(context).textTheme.headline5?.copyWith(
                                   fontSize: 11,
                                   color: initialIndex == i ? AppColors.white : AppColors.white.withOpacity(0.4),
