@@ -15,11 +15,11 @@ import 'package:people_compatibility/presentation/utils/async_debouncer.dart';
 import 'package:people_compatibility/presentation/utils/enums.dart';
 import 'package:people_compatibility/presentation/utils/extensions.dart';
 
-class ComparisonDataPageState extends BaseNotifier {
+class PartnerDataState extends BaseNotifier {
   final ScrollController scrollController = ScrollController();
-  late final TextEditingController nameController = TextEditingController(text: male.name);
-  late final TextEditingController countryController = TextEditingController(text: male.country);
-  late final TextEditingController cityController = TextEditingController(text: male.city.title);
+  late final TextEditingController nameController = TextEditingController(text: partnerData.name);
+  late final TextEditingController countryController = TextEditingController(text: partnerData.country);
+  late final TextEditingController cityController = TextEditingController(text: partnerData.city.title);
   Completer completer = Completer();
   PlaceSearchResponse? searchResponse;
   List<SearchPrediction> filteredCities = List.empty(growable: true);
@@ -27,27 +27,17 @@ class ComparisonDataPageState extends BaseNotifier {
   CityGeocodeResponse? cityLocationResponse;
   final Debouncer callDebouncer = Debouncer(milliseconds: 250);
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  String errorMessage = '';
 
-  PersonDetails male = PersonDetails(
+  PersonDetails partnerData = PersonDetails(
     exactTimeUnknown: false,
+    gender: 'M',
     dateOfBirth: DateTime.now(),
     name: '',
     country: '',
     city: BirthLocation(),
   );
 
-  PersonDetails female = PersonDetails(
-    exactTimeUnknown: false,
-    dateOfBirth: DateTime.now(),
-    name: '',
-    country: '',
-    city: BirthLocation(),
-  );
-
-  String maleValidationErrorMessage = '';
-
-  String femaleValidationErrorMessage = '';
+  String partnerValidationErrorMessage = '';
 
   String countryCode = '';
 
@@ -55,43 +45,26 @@ class ComparisonDataPageState extends BaseNotifier {
 
   PlaceSearchMode searchMode = PlaceSearchMode.country;
 
-  bool get hasValidationError => !maleDataIsValid || !femaleDataIsValid;
-
-  bool maleDataIsValid = false;
-
-  bool femaleDataIsValid = false;
+  bool partnerDataIsValid = false;
 
   bool get canShowCountryResults => searchResponse != null && countryController.text.isNotEmpty && !countryIsChosen && !inProgress;
 
   bool get canShowCityResults => filteredCities.isNotEmpty && cityController.text.isNotEmpty && !cityIsChosen && !inProgress;
 
-  bool get canSearchForCity => genderSwitcherState == GenderSwitcherState.male ? male.country.isNotEmpty : female.country.isNotEmpty;
-
-  bool get selectedPersonExactTimeKnown =>
-      genderSwitcherState == GenderSwitcherState.male ? male.exactTimeUnknown : female.exactTimeUnknown;
+  bool get canSearchForCity => partnerData.country.isNotEmpty;
 
   void setCountryCode(String code) {
     countryCode = code;
     notifyListeners();
   }
 
-  void setMaleValidationError(String error) {
-    maleValidationErrorMessage = error;
-    notifyListeners();
-  }
-
-  void setFemaleValidationError(String error) {
-    femaleValidationErrorMessage = error;
+  void setPartnerDataValidationError(String error) {
+    partnerValidationErrorMessage = error;
     notifyListeners();
   }
 
   void setCityLocationResponse(CityGeocodeResponse response) {
     cityLocationResponse = response;
-    notifyListeners();
-  }
-
-  void setErrorMessage(String error) {
-    errorMessage = error;
     notifyListeners();
   }
 
@@ -143,7 +116,6 @@ class ComparisonDataPageState extends BaseNotifier {
             result.fold(
               (failure) {
                 setSearchError(true);
-                setErrorMessage(failure.message);
               },
               (searchResponse) => setSearchResults(searchResponse),
             );
@@ -172,7 +144,6 @@ class ComparisonDataPageState extends BaseNotifier {
             result.fold(
               (failure) {
                 setSearchError(true);
-                setErrorMessage(failure.message);
               },
               (searchResponse) => setFilteredCities(searchResponse),
             );
@@ -192,53 +163,22 @@ class ComparisonDataPageState extends BaseNotifier {
 
   void setGenderSwitcherState(GenderSwitcherState value) {
     genderSwitcherState = value;
-    if (genderSwitcherState == GenderSwitcherState.male) {
-      switchData(male);
+    if (value == GenderSwitcherState.male) {
+      partnerData = partnerData.copyWith(gender: 'M');
     } else {
-      switchData(female);
+      partnerData = partnerData.copyWith(gender: 'F');
     }
-    notifyListeners();
-  }
-
-  void switchData(PersonDetails data) {
-    nameController.text = data.name;
-    countryController.text = data.country;
-    cityController.text = data.city.title;
-  }
-
-  void saveFemaleData() {
-    female = female.copyWith(
-      name: nameController.text,
-      country: countryController.text,
-    );
-    notifyListeners();
-  }
-
-  void saveMaleData() {
-    male = male.copyWith(
-      name: nameController.text,
-      country: countryController.text,
-    );
     notifyListeners();
   }
 
   void resetData() {
-    if (genderSwitcherState == GenderSwitcherState.male) {
-      male = male.copyWith(
-        dateOfBirth: DateTime.now().subtract(const Duration(days: 365 * 18)),
-        name: '',
-        country: '',
-        city: BirthLocation(),
-      );
-    }
-    if (genderSwitcherState == GenderSwitcherState.female) {
-      female = female.copyWith(
-        dateOfBirth: DateTime.now().subtract(const Duration(days: 365 * 18)),
-        name: '',
-        country: '',
-        city: BirthLocation(),
-      );
-    }
+    partnerData = partnerData.copyWith(
+      dateOfBirth: DateTime.now().subtract(const Duration(days: 365 * 18)),
+      name: '',
+      country: '',
+      city: BirthLocation(),
+      gender: 'M',
+    );
     nameController.clear();
     countryController.clear();
     cityController.clear();
@@ -255,38 +195,20 @@ class ComparisonDataPageState extends BaseNotifier {
   }
 
   void updateBirthday(BirthdayData value) {
-    if (genderSwitcherState == GenderSwitcherState.male) {
-      male = male.copyWith(dateOfBirth: value.date, exactTimeUnknown: value.exactTimeUnknown);
-      notifyListeners();
-    }
-    if (genderSwitcherState == GenderSwitcherState.female) {
-      female = female.copyWith(dateOfBirth: value.date, exactTimeUnknown: value.exactTimeUnknown);
-      notifyListeners();
-    }
+    partnerData = partnerData.copyWith(dateOfBirth: value.date, exactTimeUnknown: value.exactTimeUnknown);
+    notifyListeners();
   }
 
-  String get selectedPersonBirthday => genderSwitcherState == GenderSwitcherState.male
-      ? male.exactTimeUnknown
-          ? DateFormat('dd.MM.yyyy').format(male.dateOfBirth)
-          : DateFormat('dd.MM.yyyy, HH:mm').format(male.dateOfBirth)
-      : female.exactTimeUnknown
-          ? DateFormat('dd.MM.yyyy').format(female.dateOfBirth)
-          : DateFormat('dd.MM.yyyy, HH:mm').format(female.dateOfBirth);
+  String get selectedPersonBirthday => partnerData.exactTimeUnknown
+      ? DateFormat('dd.MM.yyyy').format(partnerData.dateOfBirth)
+      : DateFormat('dd.MM.yyyy, HH:mm').format(partnerData.dateOfBirth);
 
-  DateTime get selectedPersonDateOfBirth => genderSwitcherState == GenderSwitcherState.male ? male.dateOfBirth : female.dateOfBirth;
-
-  bool get countryIsChosen => genderSwitcherState == GenderSwitcherState.male ? male.country.isNotEmpty : female.country.isNotEmpty;
-  bool get cityIsChosen => genderSwitcherState == GenderSwitcherState.male ? male.city.title.isNotEmpty : female.city.title.isNotEmpty;
+  bool get countryIsChosen => partnerData.country.isNotEmpty;
+  bool get cityIsChosen => partnerData.city.title.isNotEmpty;
 
   void setCountry(String country, {String? placeId, required String lang}) async {
-    if (genderSwitcherState == GenderSwitcherState.male) {
-      male = male.copyWith(country: country);
-      if (country.isNotEmpty) countryController.text = male.country;
-    }
-    if (genderSwitcherState == GenderSwitcherState.female) {
-      female = female.copyWith(country: country);
-      if (country.isNotEmpty) countryController.text = female.country;
-    }
+    partnerData = partnerData.copyWith(country: country);
+    if (country.isNotEmpty) countryController.text = partnerData.country;
     if (placeId != null) {
       if (placeId.isNotEmpty) {
         setInProgress(true);
@@ -296,9 +218,7 @@ class ComparisonDataPageState extends BaseNotifier {
         );
         countryDetails.fold(
           (failure) {
-            print(failure.message);
             setSearchError(true);
-            setErrorMessage(failure.message);
           },
           (details) => setCountryCode(
             details.result?.addressComponents?.first.shortName ?? '',
@@ -319,69 +239,35 @@ class ComparisonDataPageState extends BaseNotifier {
     city.fold(
       (err) {
         setSearchError(true);
-        setErrorMessage(err.message);
       },
       (r) => setCityLocationResponse(r),
     );
     final lat = cityLocationResponse!.results!.first.geometry?.location?.lat ?? 0;
     final lon = cityLocationResponse!.results!.first.geometry?.location?.lng ?? 0;
-    if (genderSwitcherState == GenderSwitcherState.male) {
-      male = male.copyWith(city: BirthLocation(title: cityTitle, lat: lat, lon: lon));
-      cityController.text = male.city.title;
-      notifyListeners();
-    }
-    if (genderSwitcherState == GenderSwitcherState.female) {
-      female = female.copyWith(city: BirthLocation(title: cityTitle, lat: lat, lon: lon));
-      cityController.text = female.city.title;
-      notifyListeners();
-    }
+    partnerData = partnerData.copyWith(city: BirthLocation(title: cityTitle, lat: lat, lon: lon));
+    cityController.text = partnerData.city.title;
+    notifyListeners();
   }
 
-  void validateMaleData() {
-    final maleLocationIsValid = male.city.isValidLocation && male.country.isNotEmpty;
-    final maleNameValid = male.name.isNotEmpty;
-    final maleBirthdayIsValid = male.dateOfBirth.isBefore(DateTime.now()) && !male.dateOfBirth.isSameDay(DateTime.now());
-    maleDataIsValid = maleLocationIsValid && maleNameValid && maleBirthdayIsValid;
+  void validatePartnerData() {
+    final maleLocationIsValid = partnerData.city.isValidLocation && partnerData.country.isNotEmpty;
+    final maleNameValid = partnerData.name.isNotEmpty;
+    final maleBirthdayIsValid = partnerData.dateOfBirth.isBefore(DateTime.now()) && !partnerData.dateOfBirth.isSameDay(DateTime.now());
+    partnerDataIsValid = maleLocationIsValid && maleNameValid && maleBirthdayIsValid;
     notifyListeners();
     if (!maleLocationIsValid) {
-      setMaleValidationError('male_partner_location_invalid'.tr());
+      setPartnerDataValidationError('partner_location_invalid'.tr());
     }
     if (!maleNameValid) {
-      setMaleValidationError('male_partner_name_invalid'.tr());
+      setPartnerDataValidationError('partner_name_invalid'.tr());
     }
     if (!maleBirthdayIsValid) {
-      setMaleValidationError('male_partner_birthday_invalid'.tr());
-    }
-  }
-
-  void validateFemaleData() {
-    final femaleLocationIsValid = female.city.isValidLocation && female.country.isNotEmpty;
-    final femaleNameValid = female.name.isNotEmpty;
-    final femaleBirthdayIsValid = female.dateOfBirth.isBefore(DateTime.now()) && !female.dateOfBirth.isSameDay(DateTime.now());
-    femaleDataIsValid = femaleLocationIsValid && femaleNameValid && femaleBirthdayIsValid;
-    notifyListeners();
-    if (!femaleLocationIsValid) {
-      setFemaleValidationError('female_partner_location_invalid'.tr());
-      print('female_partner_location_invalid');
-    }
-    if (!femaleNameValid) {
-      setFemaleValidationError('female_partner_name_invalid'.tr());
-      print('female_partner_name_invalid');
-    }
-    if (!femaleBirthdayIsValid) {
-      setFemaleValidationError('female_partner_birthday_invalid'.tr());
-      print('female_partner_birthday_invalid');
+      setPartnerDataValidationError('partner_birthday_invalid'.tr());
     }
   }
 
   void changePartnerName(String value) {
-    if (genderSwitcherState == GenderSwitcherState.male) {
-      male = male.copyWith(name: value);
-      notifyListeners();
-    }
-    if (genderSwitcherState == GenderSwitcherState.female) {
-      female = female.copyWith(name: value);
-      notifyListeners();
-    }
+    partnerData = partnerData.copyWith(name: value);
+    notifyListeners();
   }
 }

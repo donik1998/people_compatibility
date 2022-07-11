@@ -4,11 +4,11 @@ import 'package:people_compatibility/presentation/theme/app_border_radius.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/utils/enums.dart';
 
-class ComparisonDataSwitcher extends StatelessWidget {
+class ComparisonGenderSwitcher extends StatelessWidget {
   final ValueChanged<GenderSwitcherState> onSwitched;
   final GenderSwitcherState initialState;
 
-  const ComparisonDataSwitcher({
+  const ComparisonGenderSwitcher({
     Key? key,
     required this.onSwitched,
     required this.initialState,

@@ -10,7 +10,7 @@ import 'package:people_compatibility/presentation/custom_widgets/content_card.da
 import 'package:people_compatibility/presentation/custom_widgets/custom_back_button.dart';
 import 'package:people_compatibility/presentation/custom_widgets/custom_button.dart';
 import 'package:people_compatibility/presentation/custom_widgets/custom_text_field.dart';
-import 'package:people_compatibility/presentation/pages/add_comparison_data_page/state/comparison_data_page_state.dart';
+import 'package:people_compatibility/presentation/pages/add_comparison_data_page/state/first_gender_comparison_data_state.dart';
 import 'package:people_compatibility/presentation/pages/calculate_compatibility_page/calculate_compatibility_page.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_insets.dart';
@@ -18,25 +18,17 @@ import 'package:people_compatibility/presentation/theme/app_spacing.dart';
 import 'package:people_compatibility/presentation/utils/enums.dart';
 import 'package:provider/provider.dart';
 
-class ComparisonDataPage extends StatelessWidget {
-  const ComparisonDataPage({Key? key}) : super(key: key);
+class SecondComparisonDataPage extends StatelessWidget {
+  const SecondComparisonDataPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: const Center(child: CustomBackButton()),
-        title: Consumer<ComparisonDataPageState>(
-          builder: (context, state, child) {
-            if (state.genderSwitcherState == GenderSwitcherState.male) {
-              return Text('your_data'.tr());
-            } else {
-              return Text('partner_data'.tr());
-            }
-          },
-        ),
+        title: Text('your_data'.tr()),
       ),
-      body: Consumer<ComparisonDataPageState>(
+      body: Consumer<PartnerDataState>(
         builder: (context, state, child) => AppBodyBackground(
           child: SingleChildScrollView(
             controller: state.scrollController,
@@ -52,7 +44,7 @@ class ComparisonDataPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       AppSpacing.verticalSpace16,
-                      ComparisonDataSwitcher(
+                      ComparisonGenderSwitcher(
                         initialState: state.genderSwitcherState,
                         onSwitched: (switcherState) => state.setGenderSwitcherState(switcherState),
                       ),
@@ -77,8 +69,8 @@ class ComparisonDataPage extends StatelessWidget {
                               onPressed: () => showDialog<BirthdayData>(
                                 context: context,
                                 builder: (context) => CalendarDialog(
-                                  initialDate: state.selectedPersonDateOfBirth,
-                                  exactTimeKnownInitially: state.selectedPersonExactTimeKnown,
+                                  initialDate: state.partnerData.dateOfBirth,
+                                  exactTimeKnownInitially: state.partnerData.exactTimeUnknown,
                                 ),
                               ).then((birthdayData) async {
                                 if (birthdayData != null) state.updateBirthday(birthdayData);
@@ -248,19 +240,14 @@ class ComparisonDataPage extends StatelessWidget {
                       //         ),
                       //   ),
                       // ),
-                      if (state.hasValidationError) AppSpacing.verticalSpace16,
-                      if (!state.maleDataIsValid && state.genderSwitcherState == GenderSwitcherState.male)
+                      if (!state.partnerDataIsValid) ...[
+                        AppSpacing.verticalSpace16,
                         Text(
-                          state.maleValidationErrorMessage,
+                          state.partnerValidationErrorMessage,
                           style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16, color: Colors.red),
                           textAlign: TextAlign.center,
                         ),
-                      if (!state.femaleDataIsValid && state.genderSwitcherState == GenderSwitcherState.female)
-                        Text(
-                          state.femaleValidationErrorMessage,
-                          style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16, color: Colors.red),
-                          textAlign: TextAlign.center,
-                        ),
+                      ],
                     ],
                   ),
                   color: AppColors.deepBlue,
@@ -271,36 +258,26 @@ class ComparisonDataPage extends StatelessWidget {
         ),
       ),
       resizeToAvoidBottomInset: true,
-      bottomNavigationBar: Consumer<ComparisonDataPageState>(
+      bottomNavigationBar: Consumer<PartnerDataState>(
         builder: (context, state, child) {
           return SafeArea(
             minimum: AppInsets.bottomButton,
             child: CustomButton.text(
               onTap: () {
-                if (state.genderSwitcherState == GenderSwitcherState.male) {
-                  state.validateMaleData();
-                }
-                if (state.genderSwitcherState == GenderSwitcherState.female) {
-                  state.validateFemaleData();
-                }
-                if (!state.femaleDataIsValid) {
-                  state.setGenderSwitcherState(GenderSwitcherState.female);
-                }
-                if (!state.maleDataIsValid) {
-                  state.setGenderSwitcherState(GenderSwitcherState.male);
-                }
-                if (state.maleDataIsValid && state.femaleDataIsValid) {
+                state.validatePartnerData();
+                if (state.partnerDataIsValid) {
+                  final args = ModalRoute.of(context)?.settings.arguments as SecondPartnerDataPageArguments;
                   Navigator.pushNamed(
                     context,
                     AppRoutes.calculateCompatibility,
                     arguments: CalculateCompatibilityPageArguments(
-                      maleData: context.read<ComparisonDataPageState>().male,
-                      femaleData: context.read<ComparisonDataPageState>().female,
+                      maleData: args.maleData,
+                      femaleData: state.partnerData,
                     ),
                   );
                 }
               },
-              text: state.genderSwitcherState == GenderSwitcherState.male ? 'next'.tr() : 'calculate'.tr(),
+              text: 'calculate'.tr(),
             ),
           );
         },

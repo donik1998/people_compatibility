@@ -4,11 +4,13 @@ class PersonDetails {
   final DateTime dateOfBirth;
   final String name;
   final String country;
+  final String gender;
   final BirthLocation city;
   final bool exactTimeUnknown;
 
   PersonDetails({
     required this.dateOfBirth,
+    required this.gender,
     required this.name,
     required this.country,
     required this.exactTimeUnknown,
@@ -18,11 +20,13 @@ class PersonDetails {
   PersonDetails copyWith({
     DateTime? dateOfBirth,
     String? name,
+    String? gender,
     String? country,
     BirthLocation? city,
     bool? exactTimeUnknown,
   }) =>
       PersonDetails(
+        gender: gender ?? this.gender,
         dateOfBirth: dateOfBirth ?? this.dateOfBirth,
         name: name ?? this.name,
         country: country ?? this.country,
@@ -34,16 +38,18 @@ class PersonDetails {
         dateOfBirth: DateTime.parse(json['date_of_birth']),
         name: json['name'],
         country: json['country'],
-        exactTimeUnknown: json['exact_time_known'],
+        exactTimeUnknown: json['exact_time_unknown'],
         city: BirthLocation.fromJson(json['city']),
+        gender: json['gender'],
       );
 
   Map<String, dynamic> get asMap => {
         'name': name,
         'country': country,
-        'exact_time_known': exactTimeUnknown,
+        'exact_time_unknown': exactTimeUnknown,
         'date_of_birth': dateOfBirth.toIso8601String(),
         'city': city.asMap,
+        'gender': gender,
       };
 
   ZodiacData zodiac() {

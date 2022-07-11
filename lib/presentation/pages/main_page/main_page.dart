@@ -131,7 +131,7 @@ class MainPage extends StatelessWidget {
         minimum: AppInsets.bottomButton,
         child: CustomButton.text(
           text: 'calculate_compatibility'.tr(),
-          onTap: () => Navigator.pushNamed(context, AppRoutes.comparisonData),
+          onTap: () => Navigator.pushNamed(context, AppRoutes.firstPartnerComparisonData),
         ),
       ),
     );

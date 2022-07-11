@@ -6,7 +6,7 @@
   "open_whole_list_prompt": "Tap to open the whole list",
   "nothing_yet": "Nothing here yet",
   "calculate_compatibility":"Calculate compatibility",
-  "your_data": "Your data",
+  "your_data": "Partner data",
   "date_and_time_of_birth" : "Date and time of birth",
   "place_of_birth":"Place of birth",
   "choose_country":"Country",
@@ -88,12 +88,7 @@
   "capricorn":"Capricorn",
   "aquarius":"Aquarius",
   "pisces":"Pisces",
-  "male_partner_data_is_valid":"The details of the male partner are filled correctly",
-  "female_partner_data_is_valid": "The details of the female partner are filled correctly",
-  "male_partner_location_invalid":"The partner of male partner does not have the coordinates of the place of residence",
-  "male_partner_name_invalid": "Male partner's name field is filled in correctly",
-  "male_partner_birthday_invalid": "Male partner's birthday is incorrect",
-  "female_partner_location_invalid":"Female partner does not have the coordinates of the place of residence",
-  "female_partner_name_invalid": "Female partner's name field is filled in correctly",
-  "female_partner_birthday_invalid": "Female partner's birthday is incorrect"
+  "partner_location_invalid": "Partner's coordinates of the place of residence are not mentioned",
+  "partner_name_invalid":"Partner's name is filled incorrectly",
+  "partner_birthday_invalid": "Partner's birthday is incorrect"
 }

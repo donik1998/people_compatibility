@@ -6,7 +6,7 @@
   "open_whole_list_prompt": "Нажмите чтобы открыть весь список",
   "nothing_yet": "Здесь пока ничего нет",
   "calculate_compatibility":"Рассчитать совместимость",
-  "your_data": "Ваши данные",
+  "your_data": "Данные партнера",
   "date_and_time_of_birth" : "Дата и время рождения",
   "place_of_birth":"Место рождения",
   "choose_country":"Введите страну",
@@ -88,12 +88,7 @@
   "capricorn":"Козерог",
   "aquarius":"Водолей",
   "pisces":"Рыбы",
-  "male_partner_data_is_valid":"Данные партнера мужчины указаны верно",
-  "female_partner_data_is_valid": "Данные партнера женщины указаны верно",
-  "male_partner_location_invalid":"У партнера мужчины не указаны координаты места проживания",
-  "male_partner_name_invalid": "У партнера мужчины не указано имя",
-  "male_partner_birthday_invalid": "У партнера мужчины неправильно указан день рождения",
-  "female_partner_location_invalid":"У партнера женщины не указаны координаты места проживания",
-  "female_partner_name_invalid": "У партнера женщины не указано имя",
-  "female_partner_birthday_invalid": "У партнера женщины неправильно указан день рождения"
+  "partner_location_invalid": "Координаты места проживания партнера не указаны",
+  "partner_name_invalid": "Имя партнера не указано",
+  "partner_birthday_invalid": "День рождения партнера указан неверно"
 }

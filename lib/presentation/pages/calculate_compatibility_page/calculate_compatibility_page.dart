@@ -269,7 +269,7 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
     Map<String, dynamic> parameters = Map<String, dynamic>.from(uri.queryParameters);
     parameters.addAll({
       'city1_name': args.maleData.city.title,
-      'city2_name': args.maleData.city.title,
+      'city2_name': args.femaleData.city.title,
       'lang': context.locale.languageCode,
     });
     parameters.remove('key');
@@ -287,6 +287,12 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
       );
     }
   }
+}
+
+class SecondPartnerDataPageArguments {
+  final PersonDetails maleData;
+
+  SecondPartnerDataPageArguments({required this.maleData});
 }
 
 class CalculateCompatibilityPageArguments {
