@@ -27,7 +27,7 @@ class FirstComparisonDataPage extends StatelessWidget {
         leading: const Center(child: CustomBackButton()),
         title: Text('your_data'.tr()),
       ),
-      body: Consumer<PartnerDataState>(
+      body: Consumer<FirstPartnerDataState>(
         builder: (context, state, child) => AppBodyBackground(
           child: SingleChildScrollView(
             controller: state.scrollController,
@@ -257,7 +257,7 @@ class FirstComparisonDataPage extends StatelessWidget {
         ),
       ),
       resizeToAvoidBottomInset: true,
-      bottomNavigationBar: Consumer<PartnerDataState>(
+      bottomNavigationBar: Consumer<FirstPartnerDataState>(
         builder: (context, state, child) {
           return SafeArea(
             minimum: AppInsets.bottomButton,
@@ -269,7 +269,7 @@ class FirstComparisonDataPage extends StatelessWidget {
                     context,
                     AppRoutes.secondPartnerComparisonData,
                     arguments: SecondPartnerDataPageArguments(
-                      maleData: context.read<PartnerDataState>().partnerData,
+                      maleData: context.read<FirstPartnerDataState>().partnerData,
                     ),
                   );
                 }

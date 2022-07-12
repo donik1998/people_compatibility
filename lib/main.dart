@@ -5,6 +5,7 @@ import 'package:people_compatibility/core/routes/app_routes.dart';
 import 'package:people_compatibility/presentation/pages/add_comparison_data_page/first_partner_data.dart';
 import 'package:people_compatibility/presentation/pages/add_comparison_data_page/second_partner_data.dart';
 import 'package:people_compatibility/presentation/pages/add_comparison_data_page/state/first_gender_comparison_data_state.dart';
+import 'package:people_compatibility/presentation/pages/add_comparison_data_page/state/second_gender_comparison_data_state.dart';
 import 'package:people_compatibility/presentation/pages/calculate_compatibility_page/calculate_compatibility_page.dart';
 import 'package:people_compatibility/presentation/pages/calculate_compatibility_page/state/calculate_compatibility_page_state.dart';
 import 'package:people_compatibility/presentation/pages/main_page/main_page.dart';
@@ -104,11 +105,11 @@ class MyApp extends StatelessWidget {
               child: const MainPage(),
             ),
         AppRoutes.firstPartnerComparisonData: (context) => ChangeNotifierProvider(
-              create: (_) => PartnerDataState(),
+              create: (_) => FirstPartnerDataState(),
               child: const FirstComparisonDataPage(),
             ),
         AppRoutes.secondPartnerComparisonData: (context) => ChangeNotifierProvider(
-              create: (_) => PartnerDataState(),
+              create: (_) => SecondPartnerDataState(),
               child: const SecondComparisonDataPage(),
             ),
         AppRoutes.calculateCompatibility: (context) => ChangeNotifierProvider(

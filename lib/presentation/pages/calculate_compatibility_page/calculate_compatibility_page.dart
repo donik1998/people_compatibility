@@ -131,7 +131,10 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
                               AppSpacing.verticalSpace20,
                               AppSpacing.verticalSpace20,
                               Text(
-                                'total_index'.tr(namedArgs: {'value': '${state.calculationResponse?.koeffSum}'}),
+                                'total_index'.plural(
+                                  state.calculationResponse?.koeffSum ?? 0,
+                                  namedArgs: {'value': '${state.calculationResponse?.koeffSum}'},
+                                ),
                                 style: Theme.of(context).textTheme.headline5?.copyWith(
                                       fontWeight: FontWeight.w700,
                                     ),

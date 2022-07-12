@@ -44,7 +44,7 @@ class CircleCoefficientBar extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline4?.copyWith(fontSize: 32),
               ),
               TextSpan(
-                text: '\n${'points'.tr()}',
+                text: '\n${'points'.plural(coefficient)}',
                 style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18),
               ),
             ],

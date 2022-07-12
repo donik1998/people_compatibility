@@ -14,7 +14,7 @@ import 'package:people_compatibility/presentation/utils/async_debouncer.dart';
 import 'package:people_compatibility/presentation/utils/enums.dart';
 import 'package:people_compatibility/presentation/utils/extensions.dart';
 
-class FirstPartnerDataState extends BaseNotifier {
+class SecondPartnerDataState extends BaseNotifier {
   final ScrollController scrollController = ScrollController();
   late final TextEditingController nameController = TextEditingController(text: partnerData.name);
   late final TextEditingController countryController = TextEditingController(text: partnerData.country);

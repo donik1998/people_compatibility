@@ -10,7 +10,7 @@ import 'package:people_compatibility/presentation/custom_widgets/content_card.da
 import 'package:people_compatibility/presentation/custom_widgets/custom_back_button.dart';
 import 'package:people_compatibility/presentation/custom_widgets/custom_button.dart';
 import 'package:people_compatibility/presentation/custom_widgets/custom_text_field.dart';
-import 'package:people_compatibility/presentation/pages/add_comparison_data_page/state/first_gender_comparison_data_state.dart';
+import 'package:people_compatibility/presentation/pages/add_comparison_data_page/state/second_gender_comparison_data_state.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_insets.dart';
 import 'package:people_compatibility/presentation/theme/app_spacing.dart';
@@ -22,12 +22,13 @@ class SecondComparisonDataPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)?.settings.arguments as SecondPartnerDataPageArguments;
     return Scaffold(
       appBar: AppBar(
         leading: const Center(child: CustomBackButton()),
         title: Text('your_data'.tr()),
       ),
-      body: Consumer<PartnerDataState>(
+      body: Consumer<SecondPartnerDataState>(
         builder: (context, state, child) => AppBodyBackground(
           child: SingleChildScrollView(
             controller: state.scrollController,
@@ -44,7 +45,7 @@ class SecondComparisonDataPage extends StatelessWidget {
                     children: [
                       AppSpacing.verticalSpace16,
                       ComparisonGenderSwitcher(
-                        initialState: state.genderSwitcherState,
+                        initialState: args.maleData.gender == 'M' ? GenderSwitcherState.female : GenderSwitcherState.male,
                         onSwitched: (switcherState) => state.setGenderSwitcherState(switcherState),
                       ),
                       AppSpacing.verticalSpace16,
@@ -257,7 +258,7 @@ class SecondComparisonDataPage extends StatelessWidget {
         ),
       ),
       resizeToAvoidBottomInset: true,
-      bottomNavigationBar: Consumer<PartnerDataState>(
+      bottomNavigationBar: Consumer<SecondPartnerDataState>(
         builder: (context, state, child) {
           return SafeArea(
             minimum: AppInsets.bottomButton,
@@ -265,7 +266,6 @@ class SecondComparisonDataPage extends StatelessWidget {
               onTap: () {
                 state.validatePartnerData();
                 if (state.partnerDataIsValid) {
-                  final args = ModalRoute.of(context)?.settings.arguments as SecondPartnerDataPageArguments;
                   Navigator.pushNamed(
                     context,
                     AppRoutes.calculateCompatibility,
