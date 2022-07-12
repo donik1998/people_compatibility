@@ -130,6 +130,7 @@ class FirstPartnerDataState extends BaseNotifier {
       );
     }
     if (type == 'cities') {
+      partnerData = partnerData.copyWith(city: BirthLocation());
       setSearchMode(PlaceSearchMode.city);
       Future.delayed(
         const Duration(milliseconds: 250),
