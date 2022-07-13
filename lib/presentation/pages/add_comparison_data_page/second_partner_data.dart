@@ -32,7 +32,7 @@ class SecondComparisonDataPage extends StatelessWidget {
             ),
           ),
         ),
-        title: Text('your_data'.tr()),
+        title: Text('partner_data'.tr()),
       ),
       body: Consumer<SecondPartnerDataState>(
         builder: (context, state, child) => AppBodyBackground(
