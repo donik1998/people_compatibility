@@ -15,6 +15,8 @@ import 'package:people_compatibility/presentation/utils/enums.dart';
 import 'package:people_compatibility/presentation/utils/extensions.dart';
 
 class SecondPartnerDataState extends BaseNotifier {
+  final PersonDetails firstPartnerData;
+  final PersonDetails? oldData;
   final ScrollController scrollController = ScrollController();
   late final TextEditingController nameController = TextEditingController(text: partnerData.name);
   late final TextEditingController countryController = TextEditingController(text: partnerData.country);
@@ -40,17 +42,27 @@ class SecondPartnerDataState extends BaseNotifier {
 
   String countryCode = '';
 
-  GenderSwitcherState genderSwitcherState = GenderSwitcherState.male;
+  late GenderSwitcherState genderSwitcherState;
 
   PlaceSearchMode searchMode = PlaceSearchMode.country;
 
   bool partnerDataIsValid = false;
 
-  bool get canShowCountryResults => searchResponse != null && countryController.text.isNotEmpty && !countryIsChosen && !inProgress;
-
-  bool get canShowCityResults => filteredCities.isNotEmpty && cityController.text.isNotEmpty && !cityIsChosen && !inProgress;
-
-  bool get canSearchForCity => partnerData.country.isNotEmpty;
+  SecondPartnerDataState({required this.firstPartnerData, this.oldData}) {
+    genderSwitcherState = firstPartnerData.gender == 'M' ? GenderSwitcherState.female : GenderSwitcherState.male;
+    if (oldData != null) {
+      partnerData = oldData!;
+      countryController.text = partnerData.country;
+      cityController.text = partnerData.city.title;
+      updateBirthday(
+        BirthdayData(
+          date: partnerData.dateOfBirth,
+          exactTimeUnknown: partnerData.exactTimeUnknown,
+        ),
+      );
+      notifyListeners();
+    }
+  }
 
   void setCountryCode(String code) {
     countryCode = code;
@@ -198,13 +210,6 @@ class SecondPartnerDataState extends BaseNotifier {
     notifyListeners();
   }
 
-  String get selectedPersonBirthday => partnerData.exactTimeUnknown
-      ? DateFormat('dd.MM.yyyy').format(partnerData.dateOfBirth)
-      : DateFormat('dd.MM.yyyy, HH:mm').format(partnerData.dateOfBirth);
-
-  bool get countryIsChosen => partnerData.country.isNotEmpty;
-  bool get cityIsChosen => partnerData.city.title.isNotEmpty;
-
   void setCountry(String country, {String? placeId, required String lang}) async {
     partnerData = partnerData.copyWith(country: country);
     if (country.isNotEmpty) countryController.text = partnerData.country;
@@ -269,4 +274,18 @@ class SecondPartnerDataState extends BaseNotifier {
     partnerData = partnerData.copyWith(name: value);
     notifyListeners();
   }
+
+  String get selectedPersonBirthday => partnerData.exactTimeUnknown
+      ? DateFormat('dd.MM.yyyy').format(partnerData.dateOfBirth)
+      : DateFormat('dd.MM.yyyy, HH:mm').format(partnerData.dateOfBirth);
+
+  bool get countryIsChosen => partnerData.country.isNotEmpty;
+
+  bool get cityIsChosen => partnerData.city.title.isNotEmpty;
+
+  bool get canShowCountryResults => searchResponse != null && countryController.text.isNotEmpty && !countryIsChosen && !inProgress;
+
+  bool get canShowCityResults => filteredCities.isNotEmpty && cityController.text.isNotEmpty && !cityIsChosen && !inProgress;
+
+  bool get canSearchForCity => partnerData.country.isNotEmpty;
 }

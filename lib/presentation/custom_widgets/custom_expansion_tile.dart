@@ -3,26 +3,21 @@ import 'package:people_compatibility/presentation/theme/app_border_radius.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_spacing.dart';
 
-class ExpandableDescriptionItem extends StatefulWidget {
+class ExpandableDescriptionItem extends StatelessWidget {
   final String title;
   final String description;
   final String descriptionTitle;
-  final bool initiallyExpanded;
+  final bool expanded;
+  final VoidCallback onExpansionChanged;
 
   const ExpandableDescriptionItem({
     Key? key,
     required this.title,
     required this.description,
+    required this.onExpansionChanged,
     required this.descriptionTitle,
-    required this.initiallyExpanded,
+    required this.expanded,
   }) : super(key: key);
-
-  @override
-  State<ExpandableDescriptionItem> createState() => _ExpandableDescriptionItemState();
-}
-
-class _ExpandableDescriptionItemState extends State<ExpandableDescriptionItem> {
-  late bool _expanded = widget.initiallyExpanded;
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +30,14 @@ class _ExpandableDescriptionItemState extends State<ExpandableDescriptionItem> {
           borderRadius: AppBorderRadius.borderAll12,
           color: AppColors.white.withOpacity(0.1),
           child: InkWell(
-            onTap: () => setState(() => _expanded = !_expanded),
+            onTap: onExpansionChanged,
             borderRadius: AppBorderRadius.borderAll12,
             child: Ink(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
               decoration: BoxDecoration(
-                color: _expanded ? null : AppColors.white.withOpacity(0.1),
+                color: expanded ? null : AppColors.white.withOpacity(0.1),
                 borderRadius: AppBorderRadius.borderAll12,
-                gradient: _expanded
+                gradient: expanded
                     ? const LinearGradient(
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
@@ -57,18 +52,18 @@ class _ExpandableDescriptionItemState extends State<ExpandableDescriptionItem> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Text(
-                    widget.title,
+                    title,
                     style: Theme.of(context).textTheme.headline6?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                   ),
                   const Spacer(),
-                  if (_expanded)
+                  if (expanded)
                     const Icon(
                       Icons.keyboard_arrow_up,
                       color: AppColors.white,
                     ),
-                  if (!_expanded)
+                  if (!expanded)
                     const Icon(
                       Icons.keyboard_arrow_down,
                       color: AppColors.white,
@@ -78,15 +73,15 @@ class _ExpandableDescriptionItemState extends State<ExpandableDescriptionItem> {
             ),
           ),
         ),
-        if (_expanded) ...[
+        if (expanded) ...[
           AppSpacing.verticalSpace24,
           Text(
-            widget.descriptionTitle,
+            descriptionTitle,
             style: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
           ),
           AppSpacing.verticalSpace16,
           Text(
-            widget.description,
+            description,
             style: Theme.of(context).textTheme.bodyText2?.copyWith(
                   fontSize: 16,
                   color: AppColors.white.withOpacity(0.5),

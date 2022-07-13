@@ -10,7 +10,9 @@ class CalculateCompatibilityPageState extends BaseNotifier {
 
   bool hasError = false;
 
-  int selectedIndex = 0;
+  int selectedBarIndex = 0;
+
+  int expandedIndex = 0;
 
   final List<String> compatibilityLevelTitles = [
     'erotic_compatibility'.tr(),
@@ -60,6 +62,28 @@ class CalculateCompatibilityPageState extends BaseNotifier {
         response: response,
       );
     }
+    setExpandedIndexFromKoeff(response.koeffSum ?? -1);
+  }
+
+  void setExpandedIndexFromKoeff(int koeff) {
+    if (koeff > 400 && expandedIndex != 0) {
+      setExpandedIndex(0);
+    }
+    if (koeff >= 300 && koeff < 400 && expandedIndex != 1) {
+      setExpandedIndex(1);
+    }
+    if (koeff >= 200 && koeff < 300 && expandedIndex != 2) {
+      setExpandedIndex(2);
+    }
+    if (koeff >= 100 && koeff < 200 && expandedIndex != 3) {
+      setExpandedIndex(3);
+    }
+    if (koeff >= 50 && koeff < 100 && expandedIndex != 4) {
+      setExpandedIndex(4);
+    }
+    if (koeff >= 0 && koeff < 50 && expandedIndex != 5) {
+      setExpandedIndex(5);
+    }
   }
 
   void setError(bool value) {
@@ -67,8 +91,17 @@ class CalculateCompatibilityPageState extends BaseNotifier {
     notifyListeners();
   }
 
-  void setSelectedIndex(int index) {
-    selectedIndex = index;
+  void setSelectedBarIndex(int index) {
+    selectedBarIndex = index;
+    notifyListeners();
+  }
+
+  void setExpandedIndex(int value) {
+    if (expandedIndex == value) {
+      expandedIndex = -1;
+    } else {
+      expandedIndex = value;
+    }
     notifyListeners();
   }
 }

@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:people_compatibility/core/models/birthday_data.dart';
-import 'package:people_compatibility/core/routes/app_routes.dart';
+import 'package:people_compatibility/core/models/person_details.dart';
 import 'package:people_compatibility/presentation/custom_widgets/app_body_back.dart';
 import 'package:people_compatibility/presentation/custom_widgets/calendar_dialog.dart';
 import 'package:people_compatibility/presentation/custom_widgets/comparison_data_switcher.dart';
@@ -10,7 +10,9 @@ import 'package:people_compatibility/presentation/custom_widgets/content_card.da
 import 'package:people_compatibility/presentation/custom_widgets/custom_back_button.dart';
 import 'package:people_compatibility/presentation/custom_widgets/custom_button.dart';
 import 'package:people_compatibility/presentation/custom_widgets/custom_text_field.dart';
+import 'package:people_compatibility/presentation/pages/add_comparison_data_page/second_partner_data.dart';
 import 'package:people_compatibility/presentation/pages/add_comparison_data_page/state/first_gender_comparison_data_state.dart';
+import 'package:people_compatibility/presentation/pages/add_comparison_data_page/state/second_gender_comparison_data_state.dart';
 import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/theme/app_insets.dart';
 import 'package:people_compatibility/presentation/theme/app_spacing.dart';
@@ -265,13 +267,22 @@ class FirstComparisonDataPage extends StatelessWidget {
               onTap: () {
                 state.validatePartnerData();
                 if (state.partnerDataIsValid) {
-                  Navigator.pushNamed(
+                  Navigator.push(
                     context,
-                    AppRoutes.secondPartnerComparisonData,
-                    arguments: SecondPartnerDataPageArguments(
-                      maleData: context.read<FirstPartnerDataState>().partnerData,
+                    MaterialPageRoute(
+                      builder: (context) => ChangeNotifierProvider(
+                        create: (_) => SecondPartnerDataState(
+                          firstPartnerData: state.partnerData,
+                          oldData: state.secondStepData,
+                        ),
+                        child: const SecondComparisonDataPage(),
+                      ),
                     ),
-                  );
+                  ).then((value) {
+                    if (value is PersonDetails) {
+                      state.setSecondStepPartnerData(value);
+                    }
+                  });
                 }
               },
               text: 'next'.tr(),

@@ -5,14 +5,7 @@ class AppRoutes {
 
   static const initial = '/';
   static const firstPartnerComparisonData = '/first_partner_comparison_data';
-  static const secondPartnerComparisonData = '/second_partner_comparison_data';
   static const calculateCompatibility = '/calculate_compatibility';
-}
-
-class SecondPartnerDataPageArguments {
-  final PersonDetails maleData;
-
-  SecondPartnerDataPageArguments({required this.maleData});
 }
 
 class CalculateCompatibilityPageArguments {

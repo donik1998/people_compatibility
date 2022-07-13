@@ -140,53 +140,65 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
                                     ),
                               ),
                               AppSpacing.verticalSpace24,
-                              CircleCoefficientBar(
+                              CircleCoefficientButton(
                                 coefficient: state.calculationResponse?.koeffSum ?? 0,
+                                onTap: () {
+                                  state.setExpandedIndexFromKoeff(state.calculationResponse?.koeffSum ?? -1);
+                                  if (!state.expandedIndex.isNegative) {
+                                    final offsetToCircleCoeffButton = context.findRenderObject()?.paintBounds.center.dy ?? 0;
+                                    state.scrollController.animateTo(
+                                      offsetToCircleCoeffButton + (75.0 * state.expandedIndex),
+                                      duration: const Duration(milliseconds: 250),
+                                      curve: Curves.decelerate,
+                                    );
+                                  }
+                                },
                               ),
                               AppSpacing.verticalSpace20,
                               AppSpacing.verticalSpace20,
                               ExpandableDescriptionItem(
-                                initiallyExpanded: (state.calculationResponse?.koeffSum ?? 0) > 400,
+                                onExpansionChanged: () => state.setExpandedIndex(0),
+                                expanded: state.expandedIndex == 0,
                                 title: 'more_than_400_index_title'.tr(),
                                 descriptionTitle: 'more_than_400_index_description_title'.tr(),
                                 description: 'more_than_400_index_description_body'.tr(),
                               ),
                               AppSpacing.verticalSpace16,
                               ExpandableDescriptionItem(
-                                initiallyExpanded: (state.calculationResponse?.koeffSum ?? 0) >= 300 &&
-                                    (state.calculationResponse?.koeffSum ?? 0) < 400,
+                                onExpansionChanged: () => state.setExpandedIndex(1),
+                                expanded: state.expandedIndex == 1,
                                 title: 'more_than_300_index_title'.tr(),
                                 descriptionTitle: 'more_than_300_index_description_title'.tr(),
                                 description: 'more_than_300_index_description_body'.tr(),
                               ),
                               AppSpacing.verticalSpace16,
                               ExpandableDescriptionItem(
-                                initiallyExpanded: (state.calculationResponse?.koeffSum ?? 0) >= 200 &&
-                                    (state.calculationResponse?.koeffSum ?? 0) < 300,
+                                onExpansionChanged: () => state.setExpandedIndex(2),
+                                expanded: state.expandedIndex == 2,
                                 title: 'more_than_200_index_title'.tr(),
                                 descriptionTitle: 'more_than_200_index_description_title'.tr(),
                                 description: 'more_than_200_index_description_body'.tr(),
                               ),
                               AppSpacing.verticalSpace16,
                               ExpandableDescriptionItem(
-                                initiallyExpanded: (state.calculationResponse?.koeffSum ?? 0) >= 100 &&
-                                    (state.calculationResponse?.koeffSum ?? 0) < 200,
+                                onExpansionChanged: () => state.setExpandedIndex(3),
+                                expanded: state.expandedIndex == 3,
                                 title: 'more_than_100_index_title'.tr(),
                                 descriptionTitle: 'more_than_100_index_description_title'.tr(),
                                 description: 'more_than_100_index_description_body'.tr(),
                               ),
                               AppSpacing.verticalSpace16,
                               ExpandableDescriptionItem(
-                                initiallyExpanded: (state.calculationResponse?.koeffSum ?? 0) >= 50 &&
-                                    (state.calculationResponse?.koeffSum ?? 0) < 100,
+                                onExpansionChanged: () => state.setExpandedIndex(4),
+                                expanded: state.expandedIndex == 4,
                                 title: 'more_than_50_index_title'.tr(),
                                 descriptionTitle: 'more_than_50_index_description_title'.tr(),
                                 description: 'more_than_50_index_description_body'.tr(),
                               ),
                               AppSpacing.verticalSpace16,
                               ExpandableDescriptionItem(
-                                initiallyExpanded:
-                                    (state.calculationResponse?.koeffSum ?? 0) >= 0 && (state.calculationResponse?.koeffSum ?? 0) < 50,
+                                onExpansionChanged: () => state.setExpandedIndex(5),
+                                expanded: state.expandedIndex == 5,
                                 title: 'more_than_0_index_title'.tr(),
                                 descriptionTitle: 'more_than_0_index_description_title'.tr(),
                                 description: 'more_than_0_index_description_body'.tr(),
@@ -205,9 +217,9 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
                               AppSpacing.verticalSpace20,
                               AppSpacing.verticalSpace20,
                               CoefficientChart(
-                                initialIndex: state.selectedIndex,
+                                initialIndex: state.selectedBarIndex,
                                 onBarSelected: (index) {
-                                  state.setSelectedIndex(index);
+                                  state.setSelectedBarIndex(index);
                                   state.scrollController.animateTo(
                                     state.scrollController.offset + index * 150,
                                     duration: const Duration(milliseconds: 250),

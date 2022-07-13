@@ -22,10 +22,16 @@ class SecondComparisonDataPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as SecondPartnerDataPageArguments;
     return Scaffold(
       appBar: AppBar(
-        leading: const Center(child: CustomBackButton()),
+        leading: Center(
+          child: CustomBackButton(
+            onTap: () => Navigator.pop(
+              context,
+              context.read<SecondPartnerDataState>().partnerData,
+            ),
+          ),
+        ),
         title: Text('your_data'.tr()),
       ),
       body: Consumer<SecondPartnerDataState>(
@@ -45,7 +51,7 @@ class SecondComparisonDataPage extends StatelessWidget {
                     children: [
                       AppSpacing.verticalSpace16,
                       ComparisonGenderSwitcher(
-                        initialState: args.maleData.gender == 'M' ? GenderSwitcherState.female : GenderSwitcherState.male,
+                        initialState: state.genderSwitcherState,
                         onSwitched: (switcherState) => state.setGenderSwitcherState(switcherState),
                       ),
                       AppSpacing.verticalSpace16,
@@ -270,7 +276,7 @@ class SecondComparisonDataPage extends StatelessWidget {
                     context,
                     AppRoutes.calculateCompatibility,
                     arguments: CalculateCompatibilityPageArguments(
-                      maleData: args.maleData,
+                      maleData: state.firstPartnerData,
                       femaleData: state.partnerData,
                     ),
                   );

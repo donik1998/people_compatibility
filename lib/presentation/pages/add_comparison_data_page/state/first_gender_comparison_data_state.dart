@@ -26,7 +26,7 @@ class FirstPartnerDataState extends BaseNotifier {
   CityGeocodeResponse? cityLocationResponse;
   final Debouncer callDebouncer = Debouncer(milliseconds: 250);
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+  PersonDetails? secondStepData;
   PersonDetails partnerData = PersonDetails(
     exactTimeUnknown: false,
     gender: 'M',
@@ -268,6 +268,11 @@ class FirstPartnerDataState extends BaseNotifier {
 
   void changePartnerName(String value) {
     partnerData = partnerData.copyWith(name: value);
+    notifyListeners();
+  }
+
+  void setSecondStepPartnerData(PersonDetails value) {
+    secondStepData = value;
     notifyListeners();
   }
 }
