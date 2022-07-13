@@ -275,4 +275,13 @@ class FirstPartnerDataState extends BaseNotifier {
     secondStepData = value;
     notifyListeners();
   }
+
+  String getCityName(String description) {
+    print(description.contains(','));
+    if (description.contains(',')) {
+      return description.substring(0, description.lastIndexOf(','));
+    } else {
+      return description;
+    }
+  }
 }

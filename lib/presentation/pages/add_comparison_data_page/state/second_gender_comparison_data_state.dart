@@ -49,7 +49,11 @@ class SecondPartnerDataState extends BaseNotifier {
   bool partnerDataIsValid = false;
 
   SecondPartnerDataState({required this.firstPartnerData, this.oldData}) {
-    genderSwitcherState = firstPartnerData.gender == 'M' ? GenderSwitcherState.female : GenderSwitcherState.male;
+    if (oldData != null) {
+      genderSwitcherState = oldData!.gender == 'M' ? GenderSwitcherState.male : GenderSwitcherState.female;
+    } else {
+      genderSwitcherState = firstPartnerData.gender == 'M' ? GenderSwitcherState.female : GenderSwitcherState.male;
+    }
     if (oldData != null) {
       partnerData = oldData!;
       countryController.text = partnerData.country;
@@ -288,4 +292,13 @@ class SecondPartnerDataState extends BaseNotifier {
   bool get canShowCityResults => filteredCities.isNotEmpty && cityController.text.isNotEmpty && !cityIsChosen && !inProgress;
 
   bool get canSearchForCity => partnerData.country.isNotEmpty;
+
+  String getCityName(String description) {
+    print(description.contains(','));
+    if (description.contains(',')) {
+      return description.substring(0, description.lastIndexOf(','));
+    } else {
+      return description;
+    }
+  }
 }

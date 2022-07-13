@@ -203,11 +203,7 @@ class FirstComparisonDataPage extends StatelessWidget {
                                       FocusScope.of(context).unfocus();
                                     },
                                     child: Text(
-                                      state.filteredCities
-                                              .elementAt(index)
-                                              .description
-                                              ?.substring(0, state.filteredCities.elementAt(index).description?.lastIndexOf(',')) ??
-                                          'null',
+                                      state.getCityName(state.filteredCities.elementAt(index).description!),
                                       style: Theme.of(context).textTheme.bodyText1?.copyWith(
                                             fontSize: 15,
                                             fontWeight: FontWeight.w400,
