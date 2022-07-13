@@ -256,13 +256,13 @@ class FirstPartnerDataState extends BaseNotifier {
     partnerDataIsValid = maleLocationIsValid && maleNameValid && maleBirthdayIsValid;
     notifyListeners();
     if (!maleLocationIsValid) {
-      setPartnerDataValidationError('partner_location_invalid'.tr());
+      setPartnerDataValidationError('your_location_invalid'.tr());
     }
     if (!maleNameValid) {
-      setPartnerDataValidationError('partner_name_invalid'.tr());
+      setPartnerDataValidationError('your_name_invalid'.tr());
     }
     if (!maleBirthdayIsValid) {
-      setPartnerDataValidationError('partner_birthday_invalid'.tr());
+      setPartnerDataValidationError('your_birthday_invalid'.tr());
     }
   }
 

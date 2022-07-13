@@ -89,6 +89,9 @@
   "aquarius":"Aquarius",
   "pisces":"Pisces",
   "partner_location_invalid": "Partner's coordinates of the place of residence are not mentioned",
+  "your_location_invalid": "Your coordinates of the place of residence are not mentioned",
   "partner_name_invalid":"Partner's name is filled incorrectly",
-  "partner_birthday_invalid": "Partner's birthday is incorrect"
+  "your_name_invalid": "Your name is filled incorrectly",
+  "partner_birthday_invalid": "Partner's birthday is incorrect",
+  "your_birthday_invalid": "Your birthday is incorrect"
 }
