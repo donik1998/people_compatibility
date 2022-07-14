@@ -24,12 +24,15 @@ class SecondComparisonDataPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leadingWidth: 64,
         leading: Center(
-          child: CustomBackButton(
-            onTap: () => Navigator.pop(
-              context,
-              context.read<SecondPartnerDataState>().partnerData,
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              AppSpacing.horizontalSpace8,
+              AppSpacing.horizontalSpace16,
+              CustomBackButton(),
+            ],
           ),
         ),
         title: Text('partner_data'.tr()),

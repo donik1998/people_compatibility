@@ -56,19 +56,21 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
       appBar: AppBar(
         title: Text('result'.tr()),
         leadingWidth: 64,
-        leading: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AppSpacing.horizontalSpace16,
-            AppSpacing.horizontalSpace8,
-            CustomBackButton(
-              onTap: () => Navigator.pushNamedAndRemoveUntil(
-                context,
-                AppRoutes.initial,
-                (route) => false,
+        leading: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AppSpacing.horizontalSpace16,
+              AppSpacing.horizontalSpace8,
+              CustomBackButton(
+                onTap: () => Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoutes.initial,
+                  (route) => false,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         actions: [
           Center(

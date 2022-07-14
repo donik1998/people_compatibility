@@ -26,7 +26,17 @@ class FirstComparisonDataPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const Center(child: CustomBackButton()),
+        leadingWidth: 64,
+        leading: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              AppSpacing.horizontalSpace8,
+              AppSpacing.horizontalSpace16,
+              CustomBackButton(),
+            ],
+          ),
+        ),
         title: Text('your_data'.tr()),
       ),
       body: Consumer<FirstPartnerDataState>(
