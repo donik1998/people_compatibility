@@ -224,7 +224,10 @@ class _CalendarDialogState extends State<CalendarDialog> {
                           showModalBottomSheet(
                             isDismissible: false,
                             context: context,
-                            builder: (context) => const TimePickerSheet(),
+                            builder: (context) => TimePickerSheet(
+                              hour: widget.initialDate.hour,
+                              minute: widget.initialDate.minute,
+                            ),
                           ).then((time) {
                             if (time is DateTime) {
                               Navigator.pop(

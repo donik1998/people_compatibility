@@ -4,8 +4,13 @@ import 'package:people_compatibility/presentation/theme/app_colors.dart';
 import 'package:people_compatibility/presentation/utils/extensions.dart';
 
 class TimePickerSheet extends StatefulWidget {
+  final int hour;
+  final int minute;
+
   const TimePickerSheet({
     Key? key,
+    required this.hour,
+    required this.minute,
   }) : super(key: key);
 
   @override
@@ -64,12 +69,13 @@ class _TimePickerSheetState extends State<TimePickerSheet> {
               children: [
                 Expanded(
                   child: CupertinoPicker.builder(
+                    scrollController: FixedExtentScrollController(initialItem: widget.hour),
                     itemExtent: 48,
                     useMagnifier: true,
                     onSelectedItemChanged: (index) => setState(() => _selectedDate = _selectedDate.copyWith(hour: index)),
                     itemBuilder: (context, index) {
                       return Text(
-                        '$index'.padLeft(2,'0'),
+                        '$index'.padLeft(2, '0'),
                         style: Theme.of(context).textTheme.headline6,
                       );
                     },
@@ -84,13 +90,13 @@ class _TimePickerSheetState extends State<TimePickerSheet> {
                 ),
                 Expanded(
                   child: CupertinoPicker.builder(
+                    scrollController: FixedExtentScrollController(initialItem: widget.minute),
                     itemExtent: 48,
                     useMagnifier: true,
                     onSelectedItemChanged: (index) => setState(() => _selectedDate = _selectedDate.copyWith(minute: index)),
                     itemBuilder: (context, index) {
                       return Text(
-                        '$index'.padLeft(2,'0'),
-
+                        '$index'.padLeft(2, '0'),
                         style: Theme.of(context).textTheme.headline6,
                       );
                     },
