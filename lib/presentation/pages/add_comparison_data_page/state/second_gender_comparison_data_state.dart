@@ -54,6 +54,7 @@ class SecondPartnerDataState extends BaseNotifier {
       genderSwitcherState = oldData!.gender == 'M' ? GenderSwitcherState.male : GenderSwitcherState.female;
     } else {
       genderSwitcherState = firstPartnerData.gender == 'M' ? GenderSwitcherState.female : GenderSwitcherState.male;
+      partnerData = partnerData.copyWith(gender: firstPartnerData.gender == 'M' ? 'F' : 'M');
     }
     if (oldData != null) {
       partnerData = oldData!;
@@ -65,8 +66,8 @@ class SecondPartnerDataState extends BaseNotifier {
           exactTimeUnknown: oldData!.exactTimeUnknown,
         ),
       );
-      notifyListeners();
     }
+    notifyListeners();
   }
 
   void setCountryCode(String code) {
