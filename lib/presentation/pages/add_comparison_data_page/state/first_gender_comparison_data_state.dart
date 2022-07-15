@@ -277,7 +277,6 @@ class FirstPartnerDataState extends BaseNotifier {
   }
 
   String getCityName(String description) {
-    print(description.contains(','));
     if (description.contains(',')) {
       return description.substring(0, description.lastIndexOf(','));
     } else {
