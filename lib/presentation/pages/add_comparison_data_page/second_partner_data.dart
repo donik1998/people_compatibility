@@ -28,10 +28,15 @@ class SecondComparisonDataPage extends StatelessWidget {
         leading: Center(
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            children: const [
+            children: [
               AppSpacing.horizontalSpace8,
               AppSpacing.horizontalSpace16,
-              CustomBackButton(),
+              CustomBackButton(
+                onTap: () => Navigator.pop(
+                  context,
+                  context.read<SecondPartnerDataState>().partnerData,
+                ),
+              ),
             ],
           ),
         ),
