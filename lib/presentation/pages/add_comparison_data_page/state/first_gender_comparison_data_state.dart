@@ -28,6 +28,7 @@ class FirstPartnerDataState extends BaseNotifier {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   PersonDetails? secondStepData;
   PersonDetails partnerData = PersonDetails(
+    countryCode: '',
     exactTimeUnknown: false,
     gender: 'M',
     dateOfBirth: DateTime.now(),
@@ -54,6 +55,7 @@ class FirstPartnerDataState extends BaseNotifier {
 
   void setCountryCode(String code) {
     countryCode = code;
+    partnerData = partnerData.copyWith(countryCode: code);
     notifyListeners();
   }
 
@@ -82,8 +84,11 @@ class FirstPartnerDataState extends BaseNotifier {
     setInProgress(false);
   }
 
-  void setFilteredCities(CitySearchResponse response) {
-    filteredCities = response.predictions ?? [];
+  void setFilteredCities(CitySearchResponse? response) {
+    filteredCities = response?.predictions ?? [];
+    if (response == null) {
+      cityController.clear();
+    }
     notifyListeners();
   }
 
@@ -102,6 +107,8 @@ class FirstPartnerDataState extends BaseNotifier {
     );
     if (type == 'country') {
       setCountry('', lang: lang);
+      setFilteredCities(null);
+      partnerData = partnerData.copyWith(city: BirthLocation());
       setSearchMode(PlaceSearchMode.country);
       Future.delayed(
         const Duration(milliseconds: 250),
@@ -130,6 +137,7 @@ class FirstPartnerDataState extends BaseNotifier {
       );
     }
     if (type == 'cities') {
+      partnerData = partnerData.copyWith(city: BirthLocation());
       setSearchMode(PlaceSearchMode.city);
       Future.delayed(
         const Duration(milliseconds: 250),

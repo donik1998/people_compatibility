@@ -4,12 +4,14 @@ class PersonDetails {
   final DateTime dateOfBirth;
   final String name;
   final String country;
+  final String countryCode;
   final String gender;
   final BirthLocation city;
   final bool exactTimeUnknown;
 
   PersonDetails({
     required this.dateOfBirth,
+    required this.countryCode,
     required this.gender,
     required this.name,
     required this.country,
@@ -21,11 +23,13 @@ class PersonDetails {
     DateTime? dateOfBirth,
     String? name,
     String? gender,
+    String? countryCode,
     String? country,
     BirthLocation? city,
     bool? exactTimeUnknown,
   }) =>
       PersonDetails(
+        countryCode: countryCode ?? this.countryCode,
         gender: gender ?? this.gender,
         dateOfBirth: dateOfBirth ?? this.dateOfBirth,
         name: name ?? this.name,
@@ -41,6 +45,7 @@ class PersonDetails {
         exactTimeUnknown: json['exact_time_unknown'],
         city: BirthLocation.fromJson(json['city']),
         gender: json['gender'],
+        countryCode: '',
       );
 
   Map<String, dynamic> get asMap => {

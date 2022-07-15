@@ -30,6 +30,7 @@ class SecondPartnerDataState extends BaseNotifier {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   PersonDetails partnerData = PersonDetails(
+    countryCode: '',
     exactTimeUnknown: false,
     gender: 'M',
     dateOfBirth: DateTime.now(),
@@ -49,9 +50,12 @@ class SecondPartnerDataState extends BaseNotifier {
   bool partnerDataIsValid = false;
 
   SecondPartnerDataState({required this.firstPartnerData, this.oldData}) {
-    genderSwitcherState = firstPartnerData.gender == 'M' ? GenderSwitcherState.female : GenderSwitcherState.male;
     if (oldData != null) {
       genderSwitcherState = oldData!.gender == 'M' ? GenderSwitcherState.male : GenderSwitcherState.female;
+    } else {
+      genderSwitcherState = firstPartnerData.gender == 'M' ? GenderSwitcherState.female : GenderSwitcherState.male;
+    }
+    if (oldData != null) {
       partnerData = oldData!;
       countryController.text = oldData!.country;
       cityController.text = oldData!.city.title;
@@ -67,6 +71,7 @@ class SecondPartnerDataState extends BaseNotifier {
 
   void setCountryCode(String code) {
     countryCode = code;
+    partnerData = partnerData.copyWith(countryCode: code);
     notifyListeners();
   }
 
@@ -95,8 +100,11 @@ class SecondPartnerDataState extends BaseNotifier {
     setInProgress(false);
   }
 
-  void setFilteredCities(CitySearchResponse response) {
-    filteredCities = response.predictions ?? [];
+  void setFilteredCities(CitySearchResponse? response) {
+    filteredCities = response?.predictions ?? [];
+    if (response == null) {
+      cityController.clear();
+    }
     notifyListeners();
   }
 
@@ -114,6 +122,8 @@ class SecondPartnerDataState extends BaseNotifier {
       curve: Curves.decelerate,
     );
     if (type == 'country') {
+      setFilteredCities(null);
+      partnerData = partnerData.copyWith(city: BirthLocation());
       setCountry('', lang: lang);
       setSearchMode(PlaceSearchMode.country);
       Future.delayed(
@@ -145,13 +155,14 @@ class SecondPartnerDataState extends BaseNotifier {
     if (type == 'cities') {
       partnerData = partnerData.copyWith(city: BirthLocation());
       setSearchMode(PlaceSearchMode.city);
+      final code = countryCode.isNotEmpty ? countryCode : partnerData.countryCode;
       Future.delayed(
         const Duration(milliseconds: 250),
         () {
           callDebouncer.run(() async {
             final result = await SearchPlaceService.instance.getCityWithinCountry(
               input: input,
-              countryCode: 'country:$countryCode',
+              countryCode: 'country:$code',
               lang: lang,
             );
             result.fold(
