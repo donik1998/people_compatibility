@@ -1,6 +1,6 @@
 class Constants {
   Constants._();
 
-  static String googlePlacesApiKey = 'AIzaSyDU3hKhcqZ1LNHGD3604TBaawNp1lH4AcM';
+  static String googlePlacesApiKey = 'AIzaSyAyxg65rzQ7kjN-zLgirKRmlfMWitgNIVc';
   static String peopleCompatibilityApiKey = 'siastro48523';
 }

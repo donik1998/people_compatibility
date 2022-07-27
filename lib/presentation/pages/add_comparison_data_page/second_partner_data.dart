@@ -229,7 +229,7 @@ class SecondComparisonDataPage extends StatelessWidget {
                         ),
                       AppSpacing.verticalSpace24,
                       Text(
-                        'your_name'.tr(),
+                        'partner_name'.tr(),
                         style: Theme.of(context).textTheme.headline5?.copyWith(fontSize: 18),
                       ),
                       AppSpacing.verticalSpace16,
