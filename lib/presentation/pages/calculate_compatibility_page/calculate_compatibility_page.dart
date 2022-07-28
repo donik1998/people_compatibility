@@ -36,14 +36,15 @@ class _CalculateCompatibilityPageState extends State<CalculateCompatibilityPage>
       final state = context.read<CalculateCompatibilityPageState>();
       state.setInProgress(true);
       PeopleCompatibilityService.instance.getCompatibility(args.maleData, args.femaleData).then((result) {
-        result.fold((l) => state.setError(true), (r) {
-          state.setCalculationResponse(
+        result.fold(
+          (l) => state.setError(true),
+          (r) => state.setCalculationResponse(
             response: r,
             female: args.femaleData,
             male: args.maleData,
             shouldSaveToDd: args.shouldSaveToLocalDb,
-          );
-        });
+          ),
+        );
       });
       state.setInProgress(false);
     });
