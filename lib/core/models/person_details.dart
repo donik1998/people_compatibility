@@ -133,6 +133,9 @@ class PersonDetails {
       return ZodiacData(title: '', pathName: '');
     }
   }
+
+  @override
+  String toString() => '$name\n$dateOfBirth\n$country\n$countryCode\n$gender\n$city\n$exactTimeUnknown';
 }
 
 class BirthLocation {
