@@ -29,14 +29,14 @@ class MainPage extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if (!state.fullSizedMode) AppSpacing.verticalSpace24,
-                if (!state.fullSizedMode) AppSpacing.verticalSpace24,
-                if (!state.fullSizedMode) AppSpacing.verticalSpace8,
-                if (!state.fullSizedMode) const AppLogo(),
-                if (!state.fullSizedMode) AppSpacing.verticalSpace24,
-                if (!state.fullSizedMode) AppSpacing.verticalSpace24,
-                if (!state.fullSizedMode) AppSpacing.verticalSpace24,
-                if (!state.fullSizedMode)
+                if (!state.fullSizedMode) ...[
+                  AppSpacing.verticalSpace24,
+                  AppSpacing.verticalSpace24,
+                  AppSpacing.verticalSpace8,
+                  const AppLogo(),
+                  AppSpacing.verticalSpace24,
+                  AppSpacing.verticalSpace24,
+                  AppSpacing.verticalSpace24,
                   TappableColoredCardWrap(
                     color: AppColors.white.withOpacity(0.1),
                     content: RichText(
@@ -49,6 +49,7 @@ class MainPage extends StatelessWidget {
                       ),
                     ),
                   ),
+                ],
                 AppSpacing.verticalSpace24,
                 Row(
                   mainAxisSize: MainAxisSize.max,
